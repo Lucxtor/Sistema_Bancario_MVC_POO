@@ -6,9 +6,9 @@ class TelaSistema:
         return valida_opcao([0,1,2,3])
 
     def exibe_menu(self):
-        print("-------- Sistema Bancário  ---------")
+        print("\n-------- Sistema Bancário  ---------\n")
         print("Escolha a área que deseja acessar: ")
-        print("1 - Área de cadastros")
+        print("1 - Área de Cadastros")
         print("2 - Área de Operações")
         print("3 - Área de Funcionários")
         print("0 - Finalizar sistema")
