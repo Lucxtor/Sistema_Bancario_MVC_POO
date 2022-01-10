@@ -9,6 +9,9 @@ class TelaSistema:
             self.exibe_menu()
             opcao = int(input("Escolha a opcao:"))
         return opcao
+=======
+        return valida_opcao([0,1,2,3])
+>>>>>>> Stashed changes
 
     def exibe_menu(self):
         print("-------- Sistema Bancário  ---------")
