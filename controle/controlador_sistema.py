@@ -33,6 +33,9 @@ class ControladorSistema:
     def realizar_operacoes(self):
         self.__controlador_operacao.abre_tela()
 
+    #def gerenciar_area_funcionarios(self):
+    #   self.__controlador_area_funcionarios.abre_tela()
+
     def abre_tela(self):
         lista_opcoes = {1: self.gerenciar_cadastros, 2: self.realizar_operacoes, 3: self.teste,
                         0: self.encerra_sistema}

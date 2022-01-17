@@ -15,3 +15,4 @@ class TelaOperacao:
         print("5 - Consultar Extrato")
         print("6 - Consultar Saldo")
         print("0 - Retornar para o menu anterior")
+
