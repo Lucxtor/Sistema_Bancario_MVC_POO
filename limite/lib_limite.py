@@ -6,6 +6,6 @@ def valida_opcao(opcoesValidas):
             print("A opção digitada é invalida, por favor, tente novamente!")
         else:
             while opcao not in opcoesValidas:
-                print("A opção escolhida é invalida, por favor, tente novamente!")
+                print("A opção escolhida é inválida, por favor, tente novamente!")
                 opcao = int(input("\nEscolha uma nova opção: "))
             return opcao
