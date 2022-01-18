@@ -9,3 +9,35 @@ def valida_opcao(opcoesValidas):
                 print("A opção escolhida é inválida, por favor, tente novamente!")
                 opcao = int(input("\nEscolha uma nova opção: "))
             return opcao
+
+def cpf_valido():
+    while True:
+        cpf = input("CPF ( Digite o CPF contendo apenas números ): ")
+        if len(cpf) != 11:
+            print("Número de dígitos incorreto, verifique!")
+        else:
+            try:
+                for i in range(11):
+                    teste = int(cpf[i])
+            except:
+                print("O CPF possui dígitos incorretos, verifique!")
+            else:
+                soma = 0
+                aux = 0
+                for i in range(10, 1, -1):
+                    soma += int(cpf[aux:aux+1]) * i
+                    aux += 1
+                digito_verificador_01 = int(cpf[9])
+                digito_verificador_02 = int(cpf[10])
+                if (soma * 10) % 11 != digito_verificador_01 or (soma * 10) % 11 == 10 and digito_verificador_01 != 0:
+                    print("O CPF digitado é invalido!")
+                else:
+                    soma = 0
+                    aux = 0
+                    for i in range(11, 1, -1):
+                        soma += int(cpf[aux:aux + 1]) * i
+                        aux += 1
+                    if (soma * 10) % 11 != digito_verificador_02 or (soma * 10) % 11 == 10 and digito_verificador_02 != 0:
+                        print("O CPF digitado é invalido!")
+                    else:
+                        return cpf
