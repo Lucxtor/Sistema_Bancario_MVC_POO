@@ -16,18 +16,11 @@ class ControladorOperacao:
     def teste(self):
         print("\nEscolheu uma opção diferente de retornar ao menu anterior\n")
 
-    #def verifica_opeeracao(valor)
-    #   while(valor > conta.saldo or valor <= 0):
-    #       print("Valor inválido, tente novamente")
-    #       valor = int(input("Digite qual o valor da operação: "))
-    #   return true
-
-    #def saque(self):
-    #   valor_saque = int(input("Digite qual valor deseja sacar: "))
-    #   if(verifica_operacao(valor_saque)):
-    #   #   saldo -= valor_saque
-    #       extrato.append("Saque R$" + valor_saque)
-    #       print("saque realizado com sucesso")
+    def saque(self):
+        dados_saque = self.__tela_operacao.pega_dados_saque()
+    #       chamar controlador conta pra atualizar o saldo e gerar extrato
+    #       Passar conta, tipo, data_operacao, valor
+        self.__tela_operacao.exibe_mensagem(True)
 
     #def transferencia(self):
     #   nome_transferencia = input("Digite o nome do favorecido")
