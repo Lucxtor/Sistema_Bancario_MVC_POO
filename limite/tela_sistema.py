@@ -12,3 +12,14 @@ class TelaSistema:
         print("2 - Área de Operações")
         print("3 - Área de Funcionários")
         print("0 - Finalizar sistema")
+
+    def area_funcionarios(self):
+        self.menu_area_funcionarios()
+        return valida_opcao([0,1,2])
+
+    def menu_area_funcionarios(self):
+        print("\n-------- Área dos Funcionários  ---------\n")
+        print("Escolha a opção que deseja acessar: ")
+        print("1 - Listar Contas")
+        print("2 - Listar Clientes")
+        print("0 - Retornar para o menu anterior")
