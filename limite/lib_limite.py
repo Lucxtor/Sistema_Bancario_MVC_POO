@@ -6,7 +6,7 @@ def valida_opcao(opcoesValidas):
             print("A opção digitada é invalida, por favor, tente novamente!")
         else:
             while opcao not in opcoesValidas:
-                print("A opção escolhida é invalida, por favor, tente novamente!")
+                print("A opção escolhida é inválida, por favor, tente novamente!")
                 opcao = int(input("\nEscolha uma nova opção: "))
             return opcao
 
@@ -30,7 +30,7 @@ def cpf_valido():
                 digito_verificador_01 = int(cpf[9])
                 digito_verificador_02 = int(cpf[10])
                 if (soma * 10) % 11 != digito_verificador_01 or (soma * 10) % 11 == 10 and digito_verificador_01 != 0:
-                    print("O CPF digitado é invalido!")
+                    print("O CPF digitado é inválido!")
                 else:
                     soma = 0
                     aux = 0
@@ -38,7 +38,7 @@ def cpf_valido():
                         soma += int(cpf[aux:aux + 1]) * i
                         aux += 1
                     if (soma * 10) % 11 != digito_verificador_02 or (soma * 10) % 11 == 10 and digito_verificador_02 != 0:
-                        print("O CPF digitado é invalido!")
+                        print("O CPF digitado é inválido!")
                     else:
                         return cpf
 
@@ -47,3 +47,4 @@ def valida_operacao_saida(valor_operacao, saldo):
        print("Valor inválido, tente novamente!")
        valor_operacao = int(input("Digite qual o valor da operação: "))
    return valor_operacao
+

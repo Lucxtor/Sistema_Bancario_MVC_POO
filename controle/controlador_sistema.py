@@ -7,6 +7,7 @@ class ControladorSistema:
     def __init__(self):
         self.__tela_sistema = TelaSistema()
         self.__controlador_cadastro = ControladorCadastro(self)
+        self.__controlador_operacao = ControladorOperacao(self)
 
     @property
     def controlador_cadastro(self):
