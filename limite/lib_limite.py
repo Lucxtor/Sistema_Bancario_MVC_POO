@@ -41,3 +41,9 @@ def cpf_valido():
                         print("O CPF digitado é invalido!")
                     else:
                         return cpf
+
+def valida_operacao_saida(valor_operacao, saldo):
+   while(valor_operacao > saldo or valor_operacao <= 0):
+       print("Valor inválido, tente novamente!")
+       valor_operacao = int(input("Digite qual o valor da operação: "))
+   return valor_operacao
