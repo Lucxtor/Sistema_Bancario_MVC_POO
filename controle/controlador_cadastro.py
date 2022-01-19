@@ -27,6 +27,9 @@ class ControladorCadastro:
     def gerenciar_contas(self):
         self.__controlador_conta.abre_tela()
 
+    def listar_clientes(self):
+        self.__controlador_pessoa.listar_clientes()
+
     def abre_tela(self):
         lista_opcoes = {1: self.gerenciar_pessoas, 2: self.gerenciar_contas,
                         0: self.retorno_menu}

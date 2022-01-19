@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 
 class Pessoa(ABC):
       @abstractmethod
-      def __init__(self, codigo:str, nome: str, telefone: str, cpf: int):
+      def __init__(self, codigo:str, nome: str, data_nascimento, cpf: int):
         self.__codigo = codigo
         self.__nome = nome
-        self.__telefone = telefone
+        self.__data_nascimento = data_nascimento
         self.__cpf = cpf
 
       @property
@@ -17,8 +17,8 @@ class Pessoa(ABC):
           return self.__nome
 
       @property
-      def telefone(self):
-        return self.__telefone
+      def data_nascimento(self):
+        return self.__data_nascimento
 
       @property
       def cpf(self):
@@ -32,9 +32,9 @@ class Pessoa(ABC):
       def nome(self, nome: str):
         self.__nome = nome
 
-      @telefone.setter
-      def telefone(self, telefone: str):
-        self.__telefone = telefone
+      @data_nascimento.setter
+      def data_nascimento(self, data_nascimento: str):
+        self.__data_nascimento = data_nascimento
 
       @cpf.setter
       def cpf(self, cpf: str):
