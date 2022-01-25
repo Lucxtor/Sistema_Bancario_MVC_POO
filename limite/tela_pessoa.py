@@ -58,8 +58,7 @@ class TelaPessoa:
 
         return {"nome": nome, "senha_funcionario": senha_funcionario}
 
-    def seleciona_cpf(self):
-        return cpf_valido()
+
 
     def pega_senha_pessoa(self):
         return input("Digite a sua senha para prosseguir com a operação: ")
