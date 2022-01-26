@@ -127,7 +127,8 @@ class ControladorPessoa:
     def listar_clientes(self):
         print("lista clientes")
         for cliente in self.__clientes:
-            dados_cliente = {"codigo":cliente.codigo, "nome":cliente.nome, "data_nascimento":cliente.data_nascimento, "cpf":cliente.cpf}
+            dados_cliente = {"codigo":cliente.codigo, "nome": cliente.nome, "data_nascimento": cliente.data_nascimento,
+                             "cpf": cliente.cpf}
             self.__tela_pessoa.lista_cliente(dados_cliente)
 
     def retorno_menu(self):
