@@ -22,7 +22,7 @@ class ControladorConta:
         #Verificar se o cliente já existe
         conta = Conta(codigo, dados_conta["cpf_titular"],  dados_conta["tipo_conta"], dados_conta["senha_conta"])
         self.__contas.append(conta)
-        self.__tela_conta.mostra_mensagem("Conta criada com sucesso!")
+        self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
         self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
 
     def excluir_conta(self):
@@ -38,17 +38,28 @@ class ControladorConta:
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
-    def listar_informacoes(self):
-        pass
+    def listar_informacoes_conta(self):
+        codigo_conta = self.__tela_conta.seleciona_codigo()
+        conta = self.pega_conta_por_codigo(codigo_conta)
+        if (conta is not None):
+            senha_conta = self.__tela_conta.pega_senha_conta()
+            if conta.senha_conta == senha_conta:
+                dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
+                                 "cpf": conta.cpf_titular, "tipo": conta.tipo,}
+                self.__tela_conta.lista_conta(dados_conta)
+            else:
+                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+        else:
+            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:
-            if conta.codigo1 == codigo_conta:
+            if conta.codigo == codigo_conta:
                 return conta
         return None
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta, 3:self.listar_informacoes,
+        lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta, 3: self.listar_informacoes_conta,
                         0: self.retorno_menu}
 
         while True:

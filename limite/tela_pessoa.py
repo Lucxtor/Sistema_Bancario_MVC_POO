@@ -64,7 +64,7 @@ class TelaPessoa:
         return input("Digite a sua senha para prosseguir com a operação: ")
 
     def lista_cliente(self, dados_cliente):
-        print("Cliente:", dados_cliente["codigo"], "-", dados_cliente["nome"])
+        print("\nCliente:", dados_cliente["codigo"], "-", dados_cliente["nome"])
         print("Data de nascimento do cliente:", dados_cliente["data_nascimento"])
         print("CPF do cliente:", str(dados_cliente["cpf"])[0:3], ".", str(dados_cliente["cpf"])[3:6], ".", str(dados_cliente["cpf"])[6:9], "-", str(dados_cliente["cpf"])[9:11])
         print()
