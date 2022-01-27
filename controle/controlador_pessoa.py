@@ -25,12 +25,19 @@ class ControladorPessoa:
         return None
 
     def incluir_cliente(self):
+        cpf_unico = True
         self.__qtde_clientes += 1
         codigo = self.__qtde_clientes
         dados_cliente = self.__tela_pessoa.pega_dados_cliente()
-        cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_operacoes"])
-        self.__clientes.append(cliente)
-        self.__tela_pessoa.mostra_mensagem("Cliente cadastrado com sucesso!")
+        for cliente in self.__clientes:
+            if cliente.cpf == dados_cliente["cpf"]:
+                cpf_unico = False
+        if cpf_unico:
+            cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_operacoes"])
+            self.__clientes.append(cliente)
+            self.__tela_pessoa.mostra_mensagem("Cliente cadastrado com sucesso!")
+        else:
+            self.__tela_pessoa.mostra_mensagem("O CPF já está cadastrado como cliente, por favor verifique!")
 
     def alterar_cliente(self):
         cpf_cliente = self.__tela_pessoa.seleciona_cpf()
@@ -75,11 +82,19 @@ class ControladorPessoa:
             self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Cliente não existente!")
 
     def incluir_funcionario(self):
+        cpf_unico = True
         self.__qtde_funcionarios += 1
         codigo = self.__qtde_funcionarios
         dados_funcionario = self.__tela_pessoa.pega_dados_funcionario()
-        funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
-        self.__funcionarios.append(funcionario)
+        for funcionario in self.__funcionarios:
+            if funcionario.cpf == dados_funcionario["cpf"]:
+                cpf_unico = False
+        if cpf_unico:
+            funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
+            self.__funcionarios.append(funcionario)
+            self.__tela_pessoa.mostra_mensagem("Funcionário cadastrado com sucesso!")
+        else:
+            self.__tela_pessoa.mostra_mensagem("O CPF já está cadastrado como funcionário, por favor verifique!")
 
     def alterar_funcionario(self):
         cpf_funcionario = self.__tela_pessoa.seleciona_cpf()
@@ -100,7 +115,7 @@ class ControladorPessoa:
         cpf_funcionario = self.__tela_pessoa.seleciona_cpf()
         funcionario = self.pega_funcionario_por_cpf(cpf_funcionario)
         if (funcionario is not None):
-            senha_funcionario = self.__tela_pessoa.pega_senha_pesoa()
+            senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
             if funcionario.senha_funcionario == senha_funcionario:
                 self.__funcionario.remove(funcionario)
                 self.__tela_pessoa.mostra_mensagem("Funcionário excluido com sucesso!")
@@ -113,7 +128,7 @@ class ControladorPessoa:
         cpf_funcionario = self.__tela_pessoa.seleciona_cpf()
         funcionario = self.pega_funcionario_por_cpf(cpf_funcionario)
         if (funcionario is not None):
-            senha_funcionario = self.__tela_pessoa.pega_senha_pesoa()
+            senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
             if funcionario.senha_funcionario == senha_funcionario:
                 dados_funcionario = {"codigo": funcionario.codigo, "nome": funcionario.nome,
                                  "data_nascimento": funcionario.data_nascimento, "cpf": funcionario.cpf,
