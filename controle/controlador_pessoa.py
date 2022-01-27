@@ -4,13 +4,13 @@ from entidade.funcionario import Funcionario
 
 class ControladorPessoa:
 
-    def __init__(self, controlador_cadastro):
+    def __init__(self, controlador_sistema):
         self.__clientes = []
         self.__qtde_clientes = 0
         self.__funcionarios = []
         self.__qtde_funcionarios = 0
         self.__tela_pessoa = TelaPessoa()
-        self.__controlador_cadastro = controlador_cadastro
+        self.__controlador_sistema = controlador_sistema
 
     def pega_cliente_por_cpf(self, cpf:int):
         for cliente in self.__clientes:
@@ -147,7 +147,7 @@ class ControladorPessoa:
             self.__tela_pessoa.lista_cliente(dados_cliente)
 
     def retorno_menu(self):
-        self.__controlador_cadastro.abre_tela()
+        self.__controlador_sistema.abre_tela_cadastros()
 
     def abre_tela(self):
         lista_opcoes = {1: self.abre_tela_cliente, 2: self.abre_tela_funcionario,

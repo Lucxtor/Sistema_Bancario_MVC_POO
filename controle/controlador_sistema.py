@@ -1,21 +1,21 @@
 from limite.tela_sistema import TelaSistema
-from controle.controlador_cadastro import ControladorCadastro
-from controle.controlador_operacao import ControladorOperacao
+from controle.controlador_pessoa import ControladorPessoa
+from controle.controlador_conta import ControladorConta
 
 class ControladorSistema:
 
     def __init__(self):
         self.__tela_sistema = TelaSistema()
-        self.__controlador_cadastro = ControladorCadastro(self)
-        self.__controlador_operacao = ControladorOperacao(self)
+        self.__controlador_conta = ControladorConta(self)
+        self.__controlador_pessoa = ControladorPessoa(self)
 
     @property
-    def controlador_cadastro(self):
-        return self.__controlador_cadastro
+    def controlador_conta(self):
+        return self.__controlador_conta
 
     @property
-    def controlador_operacao(self):
-        return self.__controlador_operacao
+    def controlador_pessoa(self):
+        return self.__controlador_pessoa
 
     def inicializa_sistema(self):
         self.abre_tela()
@@ -24,13 +24,14 @@ class ControladorSistema:
         exit(0)
 
     def gerenciar_cadastros(self):
-        self.__controlador_cadastro.abre_tela()
+        self.abre_tela_cadastros()
 
     def realizar_operacoes(self):
-        self.__controlador_operacao.abre_tela()
+        pass
+        #chamar menu de operações dentro de controlador operações em controlador conta
 
     def listar_clientes(self):
-        self.__controlador_cadastro.listar_clientes()
+        self.__controlador_pessoa.listar_clientes()
 
     def exibe_area_funcionarios(self):
         # necessario exigir senha
@@ -48,5 +49,23 @@ class ControladorSistema:
 
         while True:
             opcao_escolhida = self.__tela_sistema.tela_opcoes()
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            funcao_escolhida()
+
+    def gerenciar_pessoas(self):
+        self.__controlador_pessoa.abre_tela()
+
+    def gerenciar_contas(self):
+        self.__controlador_conta.abre_tela()
+
+    def retorno_menu(self):
+        self.abre_tela()
+
+    def abre_tela_cadastros(self):
+        lista_opcoes = {1: self.gerenciar_pessoas, 2: self.gerenciar_contas,
+                        0: self.retorno_menu}
+
+        while True:
+            opcao_escolhida = self.__tela_sistema.tela_opcoes_cadastros()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()

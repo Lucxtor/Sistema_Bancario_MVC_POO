@@ -13,6 +13,17 @@ class TelaSistema:
         print("3 - Área de Funcionários")
         print("0 - Finalizar sistema")
 
+    def tela_opcoes_cadastros(self):
+        self.exibe_menu_cadastros()
+        return valida_opcao([0, 1, 2])
+
+    def exibe_menu_cadastros(self):
+        print("\n-------- Área de Cadastros ---------\n")
+        print("Escolha o cadastro que deseja gerenciar: ")
+        print("1 - Gerenciar Pessoas")
+        print("2 - Gerenciar Contas")
+        print("0 - Retornar para o menu anterior")
+
     def area_funcionarios(self):
         self.menu_area_funcionarios()
         return valida_opcao([0,1,2])

@@ -1,17 +1,24 @@
 from limite.tela_conta import TelaConta
-import random
+from controle.controlador_operacao import ControladorOperacao
 from entidade.conta import Conta
+
+import random
 
 class ControladorConta:
 
-    def __init__(self, controlador_cadastro):
+    def __init__(self, controlador_sistema):
         self.__contas = []
         self.__tela_conta = TelaConta()
-        self.__controlador_cadastro = controlador_cadastro
+        self.__controlador_sistema = controlador_sistema
+        self.__controlador_operacao = ControladorOperacao(self)
+
+    @property
+    def controlador_operacao(self):
+        return self.__controlador_operacao
 
 
     def retorno_menu(self):
-        self.__controlador_cadastro.abre_tela()
+        self.__controlador_sistema.abre_tela_cadastros()
 
     def teste(self):
         print("\nEscolheu uma opção diferente de retornar ao menu anterior\n")
