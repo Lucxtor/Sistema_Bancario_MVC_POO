@@ -1,4 +1,5 @@
 from limite.tela_operacao import TelaOperacao
+from datetime import datetime
 
 class ControladorOperacao:
 
@@ -19,7 +20,8 @@ class ControladorOperacao:
         self.__tela_operacao.exibe_mensagem(True)
 
     def deposito(self):
-        dados_deposito = self.__tela_operacao.pega_dados_deposito()
+        dados_deposito = {"tipo_opercao": 2, "data": datetime.now(), "valor": self.__tela_operacao.pega_dados_deposito()}
+        self.__controlador_conta.registrar_operacoes(dados_deposito)
 
     #def transferencia(self):
     #   nome_transferencia = input("Digite o nome do favorecido")

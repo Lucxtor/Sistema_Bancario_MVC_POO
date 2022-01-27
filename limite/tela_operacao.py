@@ -1,4 +1,4 @@
-from limite.lib_limite import valida_opcao, valida_operacao_saida
+from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada
 
 class TelaOperacao:
     def tela_opcoes(self):
@@ -20,6 +20,10 @@ class TelaOperacao:
         print("Saldo disponível R$", saldo)
         valor_saque = float(input("Digite qual valor deseja sacar: "))
         return valida_operacao_saida(valor_saque, saldo)
+
+    def pega_dados_deposito(self):
+        print("Realizar depósito:")
+        return valida_operacao_entrada()
 
     def exibe_mensagem(self, retorno):
         if retorno:

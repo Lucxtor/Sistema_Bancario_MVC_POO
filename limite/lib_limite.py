@@ -2,12 +2,12 @@ def valida_opcao(opcoesValidas):
     while True:
         try:
             opcao = int(input("\nEscolha a opção: "))
-        except:
-            print("A opção digitada é invalida, por favor, tente novamente!")
-        else:
             while opcao not in opcoesValidas:
                 print("A opção escolhida é inválida, por favor, tente novamente!")
                 opcao = int(input("\nEscolha uma nova opção: "))
+        except:
+            print("A opção digitada é invalida, por favor, tente novamente!")
+        else:
             return opcao
 
 def cpf_valido():
@@ -47,4 +47,16 @@ def valida_operacao_saida(valor_operacao, saldo):
        print("Valor inválido, tente novamente!")
        valor_operacao = int(input("Digite qual o valor da operação: "))
    return valor_operacao
+
+def valida_operacao_entrada():
+    while True:
+        try:
+            valor_operacao = float(input("Digite qual o valor da operação: "))
+            while(valor_operacao <= 0):
+                print("Valor inválido, tente novamente!")
+                valor_operacao = float(input("Digite qual o valor da operação: "))
+        except:
+            print("A opção digitada é invalida, por favor, tente novamente!")
+        else:
+            return valor_operacao
 
