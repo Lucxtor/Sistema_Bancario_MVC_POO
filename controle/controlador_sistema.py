@@ -27,8 +27,7 @@ class ControladorSistema:
         self.abre_tela_cadastros()
 
     def realizar_operacoes(self):
-        pass
-        #chamar menu de operações dentro de controlador operações em controlador conta
+        self.__controlador_conta.realizar_operacoes()
 
     def listar_clientes(self):
         self.__controlador_pessoa.listar_clientes()

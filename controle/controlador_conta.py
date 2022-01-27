@@ -16,12 +16,11 @@ class ControladorConta:
     def controlador_operacao(self):
         return self.__controlador_operacao
 
-
     def retorno_menu(self):
         self.__controlador_sistema.abre_tela_cadastros()
 
-    def teste(self):
-        print("\nEscolheu uma opção diferente de retornar ao menu anterior\n")
+    def retorno_menu_principal(self):
+        self.__controlador_sistema.abre_tela()
 
     def cadastrar_nova_conta(self):
         codigo = random.randint(1000, 9999)
@@ -58,6 +57,10 @@ class ControladorConta:
                 self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
+
+    def realizar_operacoes(self):
+        #essa função deve ser responsavél pela alteração do saldo em conta e gravar o extrato nos dados da conta
+        self.__controlador_operacao.abre_tela()
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:

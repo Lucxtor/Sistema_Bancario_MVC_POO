@@ -2,16 +2,12 @@ from limite.tela_operacao import TelaOperacao
 
 class ControladorOperacao:
 
-    def __init__(self, controlador_sistema):
+    def __init__(self, controlador_conta):
         self.__tela_operacao = TelaOperacao()
-        self.__controlador_sistema = controlador_sistema
-
-    @property
-    def controlador_conta(self):
-        return self.__controlador_conta
+        self.__controlador_conta = controlador_conta
 
     def retorno_menu(self):
-        self.__controlador_sistema.abre_tela()
+        self.__controlador_conta.retorno_menu_principal()
 
     def teste(self):
         print("\nEscolheu uma opção diferente de retornar ao menu anterior\n")
@@ -21,6 +17,9 @@ class ControladorOperacao:
     #       chamar controlador conta pra atualizar o saldo e gerar extrato
     #       Passar conta, tipo, data_operacao, valor
         self.__tela_operacao.exibe_mensagem(True)
+
+    def deposito(self):
+        dados_deposito = self.__tela_operacao.pega_dados_deposito()
 
     #def transferencia(self):
     #   nome_transferencia = input("Digite o nome do favorecido")
