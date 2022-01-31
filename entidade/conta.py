@@ -6,6 +6,7 @@ class Conta():
         self.__cpf_titular = cpf_titular
         self.__tipo = tipo
         self.__senha_conta = senha_conta
+        self.__chaves_PIX = []
 
     @property
     def agencia(self):
@@ -39,7 +40,14 @@ class Conta():
     def senha_conta(self, senha_conta: str):
         self.__senha_conta = senha_conta
 
+    @property
+    def chaves_PIX(self):
+        return self.__chaves_PIX
 
-    def adiciona_operacao(self, operacao):
-        self.__extrato.append(operacao)
+    @chaves_PIX.setter
+    def chaves_PIX(self, chaves_PIX):
+        self.__chaves_PIX = chaves_PIX
+
+    def adicionar_chave_PIX(self, chave_PIX: str):
+        self.__chaves_PIX.append(chave_PIX)
 

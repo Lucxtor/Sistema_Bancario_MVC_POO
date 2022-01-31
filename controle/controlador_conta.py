@@ -59,6 +59,19 @@ class ControladorConta:
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
+    def cadastrar_PIX(self):
+        codigo_conta = self.__tela_conta.seleciona_codigo()
+        conta = self.pega_conta_por_codigo(codigo_conta)
+        if (conta is not None):
+            senha_conta = self.__tela_conta.pega_senha_conta()
+            if conta.senha_conta == senha_conta:
+                chave_PIX = self.__tela_conta.pega_chave_PIX()
+                conta.adicionar_chave_PIX(chave_PIX)
+            else:
+                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+        else:
+            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
+
     def realizar_operacoes(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
@@ -87,8 +100,16 @@ class ControladorConta:
                 return conta
         return None
 
+    def pega_codigo_por_chave_PIX(self, chave_PIX):
+        for conta in self.__contas:
+            for chave in conta.chaves_PIX:
+                if chave == chave_PIX:
+                    return conta.codigo
+        return None
+
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta, 3: self.listar_informacoes_conta,
+        lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta,
+                        3: self.listar_informacoes_conta, 4: self.cadastrar_PIX,
                         0: self.retorno_menu}
 
         while True:
