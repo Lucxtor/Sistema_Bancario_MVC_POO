@@ -66,22 +66,20 @@ class ControladorConta:
             senha_conta = self.__tela_conta.pega_senha_conta()
             if conta.senha_conta == senha_conta:
                 self.__conta_selecionada = codigo_conta
-                self.__controlador_operacao.abre_tela()
+                self.__controlador_operacao.abre_tela(codigo_conta)
             else:
                 self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
-    def registrar_operacoes(self, dados_operacao):
-        codigo_conta = self.__codigo_conta_selecionada
+    def atualizar_saldo(self, codigo_conta, valor):
         conta = self.pega_conta_por_codigo(codigo_conta)
-        senha_conta = self.__tela_conta.pega_senha_conta()
-        if conta.senha_conta == senha_conta:
-            pass
-            #essa função deve ser responsavél pela alteração do saldo em conta e gravar o extrato nos dados da conta
-        else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        self.__controlador_operacao.abre_tela()
+        if (conta is not None):
+            senha_conta = self.__tela_conta.pega_senha_conta()
+            if conta.senha_conta == senha_conta:
+                conta.saldo += valor
+            else:
+                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:

@@ -5,7 +5,6 @@ class Conta():
         self.__saldo = 0.00
         self.__cpf_titular = cpf_titular
         self.__tipo = tipo
-        self.__extrato = []
         self.__senha_conta = senha_conta
 
     @property
@@ -27,10 +26,6 @@ class Conta():
     @property
     def tipo(self):
         return self.__tipo
-
-    @property
-    def extrato(self):
-        return self.__extrato
 
     @saldo.setter
     def saldo(self, saldo: float):

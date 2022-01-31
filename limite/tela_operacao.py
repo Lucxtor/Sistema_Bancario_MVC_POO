@@ -1,12 +1,13 @@
 from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada
 
 class TelaOperacao:
-    def tela_opcoes(self):
-        self.exibe_menu()
+    def tela_opcoes(self, codigo_conta):
+        self.exibe_menu(codigo_conta)
         return valida_opcao([0,1,2,3,4,5,6])
 
-    def exibe_menu(self):
+    def exibe_menu(self, codigo_conta):
         print("\n-------- Área de Operações ---------\n")
+        print(f'  Agência: 1234     Conta: {codigo_conta}\n')
         print("Escolha a operação que deseja efetuar: ")
         print("1 - Saque")
         print("2 - Depósito")
@@ -25,10 +26,7 @@ class TelaOperacao:
         print("Realizar depósito:")
         return valida_operacao_entrada()
 
-    def exibe_mensagem(self, retorno):
-        if retorno:
-            print("Operação realizada com sucesso")
-        else:
-            print("Falha na operação, tente novamente mais tarde")
+    def mostra_mensagem(self, msg):
+        print(msg)
 
 
