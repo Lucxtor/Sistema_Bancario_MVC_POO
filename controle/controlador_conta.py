@@ -88,11 +88,14 @@ class ControladorConta:
     def atualizar_saldo(self, codigo_conta, valor):
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
-                conta.saldo += valor
+            if valor < 0:
+                senha_conta = self.__tela_conta.pega_senha_conta()
+                if conta.senha_conta == senha_conta:
+                    conta.saldo += valor
+                else:
+                    self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
             else:
-                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                conta.saldo += valor
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:
@@ -106,6 +109,10 @@ class ControladorConta:
                 if chave == chave_PIX:
                     return conta.codigo
         return None
+
+    def pega_saldo_por_codigo(self, codigo_conta):
+        conta = self.pega_conta_por_codigo(codigo_conta)
+        return conta.saldo
 
     def abre_tela(self):
         lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta,
