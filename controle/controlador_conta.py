@@ -59,6 +59,19 @@ class ControladorConta:
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
+    def cadastrar_PIX(self):
+        codigo_conta = self.__tela_conta.seleciona_codigo()
+        conta = self.pega_conta_por_codigo(codigo_conta)
+        if (conta is not None):
+            senha_conta = self.__tela_conta.pega_senha_conta()
+            if conta.senha_conta == senha_conta:
+                chave_PIX = self.__tela_conta.pega_chave_PIX()
+                conta.adicionar_chave_PIX(chave_PIX)
+            else:
+                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+        else:
+            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
+
     def realizar_operacoes(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
@@ -66,22 +79,23 @@ class ControladorConta:
             senha_conta = self.__tela_conta.pega_senha_conta()
             if conta.senha_conta == senha_conta:
                 self.__conta_selecionada = codigo_conta
-                self.__controlador_operacao.abre_tela()
+                self.__controlador_operacao.abre_tela(codigo_conta)
             else:
                 self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
-    def registrar_operacoes(self, dados_operacao):
-        codigo_conta = self.__codigo_conta_selecionada
+    def atualizar_saldo(self, codigo_conta, valor):
         conta = self.pega_conta_por_codigo(codigo_conta)
-        senha_conta = self.__tela_conta.pega_senha_conta()
-        if conta.senha_conta == senha_conta:
-            pass
-            #essa função deve ser responsavél pela alteração do saldo em conta e gravar o extrato nos dados da conta
-        else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        self.__controlador_operacao.abre_tela()
+        if (conta is not None):
+            if valor < 0:
+                senha_conta = self.__tela_conta.pega_senha_conta()
+                if conta.senha_conta == senha_conta:
+                    conta.saldo += valor
+                else:
+                    self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+            else:
+                conta.saldo += valor
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:
@@ -89,8 +103,20 @@ class ControladorConta:
                 return conta
         return None
 
+    def pega_codigo_por_chave_PIX(self, chave_PIX):
+        for conta in self.__contas:
+            for chave in conta.chaves_PIX:
+                if chave == chave_PIX:
+                    return conta.codigo
+        return None
+
+    def pega_saldo_por_codigo(self, codigo_conta):
+        conta = self.pega_conta_por_codigo(codigo_conta)
+        return conta.saldo
+
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta, 3: self.listar_informacoes_conta,
+        lista_opcoes = {1: self.cadastrar_nova_conta, 2: self.excluir_conta,
+                        3: self.listar_informacoes_conta, 4: self.cadastrar_PIX,
                         0: self.retorno_menu}
 
         while True:

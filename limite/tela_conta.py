@@ -3,7 +3,7 @@ from limite.lib_limite import valida_opcao, cpf_valido
 class TelaConta:
     def tela_opcoes(self):
         self.exibe_menu()
-        return valida_opcao([0,1,2,3])
+        return valida_opcao([0,1,2,3,4])
 
     def exibe_menu(self):
         print("\n-------- Gerenciamento de conta ---------\n")
@@ -11,6 +11,7 @@ class TelaConta:
         print("1 - Cadastrar nova conta")
         print("2 - Excluir conta")
         print("3 - Listar informações")
+        print("4 - Cadastrar chave PIX")
         print("0 - Retornar para o menu anterior")
 
 
@@ -47,3 +48,6 @@ class TelaConta:
             tipo_conta = "Salário"
         print("\nConta:", dados_conta["codigo"], "-", tipo_conta, "- Agência:", dados_conta["agencia"])
         print(f"CPF do titular: {str(dados_conta['cpf'])[0:3]}.{str(dados_conta['cpf'])[3:6]}.{str(dados_conta['cpf'])[6:9]}-{str(dados_conta['cpf'])[9:11]}")
+
+    def pega_chave_PIX(self):
+        return input("Digite a chave PIX que deseja cadastrar: ")
