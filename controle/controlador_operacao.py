@@ -17,8 +17,11 @@ class ControladorOperacao:
         print("\nEscolheu uma opção diferente de retornar ao menu anterior\n")
 
     def saque(self, conta, opcao_escolhida):
-        dados_saque = self.__tela_operacao.pega_dados_saida()
-    #       fazer semelhante ao deposito passando valor negativo para a função atualiza saldo
+        saldo_saque = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
+        valor = self.__tela_operacao.pega_dados_saida(saldo_saque)
+        operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, "", "")
+        self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
+        self.__operacoes.append(operacao)
         self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
 
     def deposito(self, conta, opcao_escolhida):
@@ -28,22 +31,19 @@ class ControladorOperacao:
         self.__operacoes.append(operacao)
         self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
 
-    #def transferencia(self):
-    #   nome_transferencia = input("Digite o nome do favorecido")
-    #   cpf_transferencia = input("Digite o CPF do favorecido")
-    #   if(cpf_transferencia encontrado na lista de cpf):
-    #       listar números e tipos de conta daquele cpf
-    #       conta_transferencia = input("Digite qual das contas receberá a transferência")
-    #       while(número inválido):
-    #       print("número inválido, digite apenas ...")
-    #       valor_transferencia = int(input("Digite qual valor deseja transferir: "))
-    #       if(verifica_operacao(valor_transferencia)):
-    #           saldo -= valor_transferencia
-    #           saldo_favorecido += valor_transferencia
-    #           extrato.append("Transferência R$" + valor_saque + " " + nome_transferência )
-    #           print("transferência para " + nome_transferencia + " realizada com sucesso!")
-    #   else():
-    #       print("CPF não encontrado nos registros. Verifique os dados e tente novamente")
+    def transferencia(self, conta, opcao_escolhida):
+        codigo_conta_destino = self.__tela_operacao.pega_codigo_conta_destino()
+        conta_destino = self.__controlador_conta.pega_conta_por_codigo(codigo_conta_destino)
+        if conta_destino is not None:
+            saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
+            valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
+            operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino)
+            self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
+            self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
+            self.__operacoes.append(operacao)
+            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+        else:
+            self.__tela_operacao.mostra_mensagem("O código da conta é invalido ou incorreto!")
 
     def transferencia_PIX(self, conta, opcao_escolhida):
         chave_PIX = self.__tela_operacao.pega_chave_PIX()
