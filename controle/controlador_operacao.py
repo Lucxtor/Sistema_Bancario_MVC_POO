@@ -59,9 +59,9 @@ class ControladorOperacao:
         else:
             self.__tela_operacao.mostra_mensagem("A chave PIX é invalida ou incorreta!")
 
-    #def verificar_extrato(self):
-    #    for i in range(extrato):
-    #       print(i)
+    def consultar_extrato(self, conta, opcao_escolhida):
+        for i in range(len(self.__operacoes)):
+            print(self.__operacoes[i].conta.codigo, self.__operacoes[i].tipo, self.__operacoes[i].data_operacao, self.__operacoes[i].valor, self.__operacoes[i].conta_destino, self.__operacoes[i].chave)
 
     def consultar_saldo(self, conta, opcao_escolhida):
         saldo_final = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
@@ -84,7 +84,7 @@ class ControladorOperacao:
 
     def abre_tela(self, conta):
         lista_opcoes = {1: self.saque, 2: self.deposito, 3: self.transferencia,
-                        4: self.transferencia_PIX, 5: self.teste, 6: self.consultar_saldo,
+                        4: self.transferencia_PIX, 5: self.consultar_extrato, 6: self.consultar_saldo,
                         0: self.retorno_menu}
 
         while True:
