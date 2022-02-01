@@ -1,24 +1,22 @@
-from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada
+from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada, TIPOS_OPERACOES
 
 class TelaOperacao:
-    def tela_opcoes(self, codigo_conta):
-        self.exibe_menu(codigo_conta)
+    def tela_opcoes(self, agencia_conta, codigo_conta):
+        self.exibe_menu(agencia_conta, codigo_conta)
         return valida_opcao([0,1,2,3,4,5,6])
 
-    def exibe_menu(self, codigo_conta):
+    def exibe_menu(self, agencia_conta, codigo_conta):
         print("\n-------- Área de Operações ---------\n")
-        print(f'   Agência: 1234     Conta: {codigo_conta}\n')
+        print(f'   Agência: {agencia_conta}     Conta: {codigo_conta}\n')
         print("Escolha a operação que deseja efetuar: ")
-        print("1 - Saque")
-        print("2 - Depósito")
-        print("3 - Transferência Bancaria")
-        print("4 - Transferência PIX")
+        for opcao, descricao in TIPOS_OPERACOES.items():
+            print(opcao, "-", descricao)
         print("5 - Consultar Extrato")
         print("6 - Consultar Saldo")
         print("0 - Retornar para o menu anterior")
 
     def pega_dados_saida(self, saldo):
-        print("Saldo disponível R$", saldo)
+        print(f'Saldo disponível R$ {saldo:.2f}')
         return valida_operacao_saida(saldo)
 
     def pega_dados_deposito(self):

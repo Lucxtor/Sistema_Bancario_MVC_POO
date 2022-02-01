@@ -1,3 +1,5 @@
+TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
+
 def valida_opcao(opcoesValidas):
     while True:
         try:

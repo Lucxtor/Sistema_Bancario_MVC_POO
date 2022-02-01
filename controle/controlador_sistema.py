@@ -60,6 +60,9 @@ class ControladorSistema:
     def retorno_menu(self):
         self.abre_tela()
 
+    def retorna_cliente(self, cpf):
+        return self.__controlador_pessoa.pega_cliente_por_cpf(cpf)
+
     def abre_tela_cadastros(self):
         lista_opcoes = {1: self.gerenciar_pessoas, 2: self.gerenciar_contas,
                         0: self.retorno_menu}

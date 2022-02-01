@@ -8,7 +8,6 @@ class ControladorConta:
 
     def __init__(self, controlador_sistema):
         self.__contas = []
-        self.__codigo_conta_selecionada = 0
         self.__tela_conta = TelaConta()
         self.__controlador_sistema = controlador_sistema
         self.__controlador_operacao = ControladorOperacao(self)
@@ -26,11 +25,14 @@ class ControladorConta:
     def cadastrar_nova_conta(self):
         codigo = random.randint(1000, 9999)
         dados_conta = self.__tela_conta.pega_dados_conta()
-        #Verificar se o cliente já existe
-        conta = Conta(codigo, dados_conta["cpf_titular"],  dados_conta["tipo_conta"], dados_conta["senha_conta"])
-        self.__contas.append(conta)
-        self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
-        self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
+        cliente = self.__controlador_sistema.retorna_cliente(dados_conta["cpf_titular"])
+        if cliente is not None:
+            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_conta"])
+            self.__contas.append(conta)
+            self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
+            self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
+        else:
+            self.__tela_conta.mostra_mensagem("Cliente não foi encontrado!")
 
     def excluir_conta(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
@@ -78,8 +80,7 @@ class ControladorConta:
         if (conta is not None):
             senha_conta = self.__tela_conta.pega_senha_conta()
             if conta.senha_conta == senha_conta:
-                self.__conta_selecionada = codigo_conta
-                self.__controlador_operacao.abre_tela(codigo_conta)
+                self.__controlador_operacao.abre_tela(conta)
             else:
                 self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
         else:
@@ -103,11 +104,11 @@ class ControladorConta:
                 return conta
         return None
 
-    def pega_codigo_por_chave_PIX(self, chave_PIX):
+    def pega_conta_por_chave_PIX(self, chave_PIX):
         for conta in self.__contas:
             for chave in conta.chaves_PIX:
                 if chave == chave_PIX:
-                    return conta.codigo
+                    return conta
         return None
 
     def pega_saldo_por_codigo(self, codigo_conta):
