@@ -93,10 +93,13 @@ class ControladorConta:
                 senha_conta = self.__tela_conta.pega_senha_conta()
                 if conta.senha_conta == senha_conta:
                     conta.saldo += valor
+                    return True
                 else:
                     self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                    return False
             else:
                 conta.saldo += valor
+                return True
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:

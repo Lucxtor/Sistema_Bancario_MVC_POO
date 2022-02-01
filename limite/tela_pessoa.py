@@ -1,4 +1,5 @@
 from limite.lib_limite import valida_opcao, cpf_valido
+from datetime import datetime
 
 class TelaPessoa:
     def tela_opcoes(self):
@@ -28,7 +29,8 @@ class TelaPessoa:
     def pega_dados_cliente(self):
         print("-------- Dados do Cliente ----------")
         nome = input("Nome: ")
-        data_nascimento = input("Data de nascimento: ")
+        data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa )  ")
+        data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
         cpf = cpf_valido()
         senha_operacoes = input("Senha para operações: ")
 
@@ -44,7 +46,8 @@ class TelaPessoa:
     def pega_dados_funcionario(self):
         print("-------- Dados do Funcionário ----------")
         nome = input("Nome: ")
-        data_nascimento = input("Data de nascimento: ")
+        data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa)  ")
+        data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
         cpf = cpf_valido()
         numero_CTPS = input("Número da CTPS: ")
         while len(numero_CTPS)!=8:
