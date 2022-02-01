@@ -25,11 +25,14 @@ class ControladorConta:
     def cadastrar_nova_conta(self):
         codigo = random.randint(1000, 9999)
         dados_conta = self.__tela_conta.pega_dados_conta()
-        #Verificar se o cliente já existe
-        conta = Conta(codigo, dados_conta["cpf_titular"],  dados_conta["tipo_conta"], dados_conta["senha_conta"])
-        self.__contas.append(conta)
-        self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
-        self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
+        cliente = self.__controlador_sistema.retorna_cliente(dados_conta["cpf_titular"])
+        if cliente is not None:
+            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_conta"])
+            self.__contas.append(conta)
+            self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
+            self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
+        else:
+            self.__tela_conta.mostra_mensagem("Cliente não foi encontrado!")
 
     def excluir_conta(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
