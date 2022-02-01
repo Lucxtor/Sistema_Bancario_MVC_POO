@@ -100,6 +100,7 @@ class ControladorConta:
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:
+            print(conta.codigo)
             if conta.codigo == codigo_conta:
                 return conta
         return None
