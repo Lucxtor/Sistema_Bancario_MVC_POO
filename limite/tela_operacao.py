@@ -27,7 +27,7 @@ class TelaOperacao:
         return input("Informe a chave PIX para transferência: ")
 
     def pega_codigo_conta_destino(self):
-        return input("Informe o código da conta destino: ")
+        return int(input("Informe o código da conta destino: "))
 
     def exibe_saldo(self, saldo_final, saldo_depositos, saldo_saques, saldo_transferencia_enviadas, saldo_transferencia_recebidas, saldo_transferencia_entrada_vs_saida):
         print(f'\nO saldo em conta atualmente é R$ {saldo_final:.2f}\n')

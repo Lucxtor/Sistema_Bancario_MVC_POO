@@ -37,7 +37,7 @@ class ControladorOperacao:
         if conta_destino is not None:
             saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
             valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-            operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino)
+            operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, '')
             self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
             self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
             self.__operacoes.append(operacao)
@@ -83,7 +83,7 @@ class ControladorOperacao:
         self.__tela_operacao.exibe_saldo(saldo_final, saldo_depositos, saldo_saques, saldo_transferencia_enviadas, saldo_transferencia_recebidas, saldo_transferencia_entrada_vs_saida)
 
     def abre_tela(self, conta):
-        lista_opcoes = {1: self.teste, 2: self.deposito, 3: self.teste,
+        lista_opcoes = {1: self.saque, 2: self.deposito, 3: self.transferencia,
                         4: self.transferencia_PIX, 5: self.teste, 6: self.consultar_saldo,
                         0: self.retorno_menu}
 
