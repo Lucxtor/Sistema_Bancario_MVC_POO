@@ -20,28 +20,44 @@ class ControladorOperacao:
         saldo_saque = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
         valor = self.__tela_operacao.pega_dados_saida(saldo_saque)
         operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, "", "")
-        self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
-        self.__operacoes.append(operacao)
-        self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+        valida_saldo = self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
+        if valida_saldo:
+            self.__operacoes.append(operacao)
+            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
 
     def deposito(self, conta, opcao_escolhida):
         valor = self.__tela_operacao.pega_dados_deposito()
         operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, "", "")
-        self.__controlador_conta.atualizar_saldo(conta.codigo, valor)
-        self.__operacoes.append(operacao)
-        self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+        valida_saldo = self.__controlador_conta.atualizar_saldo(conta.codigo, valor)
+        if valida_saldo:
+            self.__operacoes.append(operacao)
+            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
 
     def transferencia(self, conta, opcao_escolhida):
         codigo_conta_destino = self.__tela_operacao.pega_codigo_conta_destino()
         conta_destino = self.__controlador_conta.pega_conta_por_codigo(codigo_conta_destino)
         if conta_destino is not None:
-            saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
-            valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-            operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, '')
-            self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
-            self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
-            self.__operacoes.append(operacao)
-            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+            if conta.tipo != 2 and conta_destino.tipo != 2 or conta.titular == conta_destino.titular:
+                if conta.tipo != 3 or conta.titular == conta_destino.titular:
+                    saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
+                    valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
+                    operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, '')
+                    if valor <= 1000 and saldo_transferencia >= valor + 2:
+                        valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 2.0) * (-1)))
+                    elif valor > 1000 and saldo_transferencia >= valor + 3:
+                        valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 3.0) * (-1)))
+                    else:
+                        self.__tela_operacao.mostra_mensagem("Você não possue saldo suficiente para essa transferência!")
+                        valida_saldo_enviado = False
+                    if valida_saldo_enviado:
+                        valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
+                        if valida_saldo_recebido:
+                            self.__operacoes.append(operacao)
+                            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+                else:
+                    self.__tela_operacao.mostra_mensagem("A conta atual, do tipo salario não permite transferências para outra titularidade!")
+            else:
+                 self.__tela_operacao.mostra_mensagem("A conta atual, do tipo poupança não está apta a realizar / receber essa transferencia, ela apenas pode transferir para mesma titularidade!")
         else:
             self.__tela_operacao.mostra_mensagem("O código da conta é invalido ou incorreto!")
 
@@ -49,13 +65,21 @@ class ControladorOperacao:
         chave_PIX = self.__tela_operacao.pega_chave_PIX()
         conta_destino = self.__controlador_conta.pega_conta_por_chave_PIX(chave_PIX)
         if conta_destino is not None:
-            saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
-            valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-            operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, chave_PIX)
-            self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
-            self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
-            self.__operacoes.append(operacao)
-            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+            if conta.tipo != 2 and conta_destino.tipo != 2 or conta.titular == conta_destino.titular:
+                if conta.tipo != 3 or conta.titular == conta_destino.titular:
+                    saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
+                    valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
+                    operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, chave_PIX)
+                    valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
+                    if valida_saldo_enviado:
+                        valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
+                        if valida_saldo_recebido:
+                            self.__operacoes.append(operacao)
+                            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+                else:
+                    self.__tela_operacao.mostra_mensagem("A conta atual, do tipo salario não permite transferências para outra titularidade!")
+            else:
+                 self.__tela_operacao.mostra_mensagem("A conta atual, do tipo poupança não está apta a realizar / receber essa transferencia, ela apenas pode transferir para mesma titularidade!")
         else:
             self.__tela_operacao.mostra_mensagem("A chave PIX é invalida ou incorreta!")
 
