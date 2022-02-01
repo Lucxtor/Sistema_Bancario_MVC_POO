@@ -1,6 +1,7 @@
 from limite.tela_pessoa import TelaPessoa
 from entidade.cliente import Cliente
 from entidade.funcionario import Funcionario
+from datetime import datetime
 
 class ControladorPessoa:
 
@@ -33,9 +34,15 @@ class ControladorPessoa:
             if cliente.cpf == dados_cliente["cpf"]:
                 cpf_unico = False
         if cpf_unico:
-            cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_operacoes"])
-            self.__clientes.append(cliente)
-            self.__tela_pessoa.mostra_mensagem("Cliente cadastrado com sucesso!")
+            data_atual = datetime.now()
+            quantidade_segundos = (data_atual - dados_cliente["data_nascimento"]).total_seconds()
+            anos = ((((quantidade_segundos / 60) / 60) / 24) / 365)
+            if anos > 18:
+                cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_operacoes"])
+                self.__clientes.append(cliente)
+                self.__tela_pessoa.mostra_mensagem("Cliente cadastrado com sucesso!")
+            else:
+                self.__tela_pessoa.mostra_mensagem("Cliente é menor de idade, verifique!")
         else:
             self.__tela_pessoa.mostra_mensagem("O CPF já está cadastrado como cliente, por favor verifique!")
 
@@ -90,9 +97,13 @@ class ControladorPessoa:
             if funcionario.cpf == dados_funcionario["cpf"]:
                 cpf_unico = False
         if cpf_unico:
-            funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
-            self.__funcionarios.append(funcionario)
-            self.__tela_pessoa.mostra_mensagem("Funcionário cadastrado com sucesso!")
+            data_atual = datetime.now()
+            quantidade_segundos = (data_atual - dados_funcionario["data_nascimento"]).total_seconds()
+            anos = ((((quantidade_segundos / 60) / 60) / 24) / 365)
+            if anos > 18:
+                funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
+                self.__funcionarios.append(funcionario)
+                self.__tela_pessoa.mostra_mensagem("Funcionário cadastrado com sucesso!")
         else:
             self.__tela_pessoa.mostra_mensagem("O CPF já está cadastrado como funcionário, por favor verifique!")
 
