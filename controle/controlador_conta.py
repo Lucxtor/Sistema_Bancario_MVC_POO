@@ -38,12 +38,15 @@ class ControladorConta:
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
-                self.__contas.remove(conta)
-                self.__tela_conta.mostra_mensagem("Conta excluida com sucesso!")
+            if (conta.saldo == 0):
+                senha_conta = self.__tela_conta.pega_senha_conta()
+                if conta.senha_conta == senha_conta:
+                    self.__contas.remove(conta)
+                    self.__tela_conta.mostra_mensagem("Conta excluida com sucesso!")
+                else:
+                    self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
             else:
-                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                self.__tela_conta.mostra_mensagem(f"O saldo atual da conta é de R${conta.saldo}. Para encerrar a conta, saque ou transfira todos os fundos")
         else:
             self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
@@ -103,7 +106,6 @@ class ControladorConta:
 
     def pega_conta_por_codigo(self, codigo_conta: int):
         for conta in self.__contas:
-            print(conta.codigo)
             if conta.codigo == codigo_conta:
                 return conta
         return None

@@ -50,6 +50,9 @@ class TelaPessoa:
         data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
         cpf = cpf_valido()
         numero_CTPS = input("Número da CTPS: ")
+        while len(numero_CTPS)!=8:
+            print("Número de documento inválido!")
+            numero_CTPS = input("Número da CTPS: ")
         senha_funcionario = input("Senha para operações: ")
 
         return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "numero_CTPS": numero_CTPS, "senha_funcionario": senha_funcionario}
