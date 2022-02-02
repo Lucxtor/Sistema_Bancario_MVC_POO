@@ -24,13 +24,20 @@ class TelaSistema:
         print("2 - Gerenciar Contas")
         print("0 - Retornar para o menu anterior")
 
-    def area_funcionarios(self):
-        self.menu_area_funcionarios()
+    def area_funcionarios(self, nome_funcionario):
+        self.menu_area_funcionarios(nome_funcionario)
         return valida_opcao([0,1,2])
 
-    def menu_area_funcionarios(self):
+    def menu_area_funcionarios(self, nome_funcionario):
         print("\n-------- Área dos Funcionários  ---------\n")
+        print(f'Bem-vindo {nome_funcionario}')
         print("Escolha a opção que deseja acessar: ")
         print("1 - Listar Contas")
         print("2 - Listar Clientes")
         print("0 - Retornar para o menu anterior")
+
+    def pega_senha_funcionario(self):
+        return input("Informe a senha do funcionario para liberar o acesso: ")
+
+    def mostra_mensagem(self, msg):
+        print(msg)
