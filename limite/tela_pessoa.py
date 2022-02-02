@@ -64,21 +64,25 @@ class TelaPessoa:
 
         return {"nome": nome, "senha_funcionario": senha_funcionario}
 
+    def seleciona_cpf(self):
+        return cpf_valido()
 
+    def pega_senha_pesoa(self):
+        return input("Informe a senha do cliente para gerenciar seu cadastro: ")
 
     def pega_senha_pessoa(self):
         return input("Digite a sua senha para prosseguir com a operação: ")
 
     def lista_cliente(self, dados_cliente):
         print("\nCliente:", dados_cliente["codigo"], "-", dados_cliente["nome"])
-        print("Data de nascimento do cliente:", dados_cliente["data_nascimento"])
+        print("Data de nascimento do cliente:", dados_cliente["data_nascimento"].strftime('%d/%m/%Y'))
         print(f"CPF do cliente: {str(dados_cliente['cpf'])[0:3]}.{str(dados_cliente['cpf'])[3:6]}.{str(dados_cliente['cpf'])[6:9]}-{str(dados_cliente['cpf'])[9:11]}")
         print()
 
     def lista_funcionario(self, dados_funcionario):
         print("Funcionário:", dados_funcionario["codigo"], "-", dados_funcionario["nome"])
-        print("Data de nascimento do funcinário:", dados_funcionario["data_nascimento"])
-        print(f"CPF do cliente: {str(dados_funcionario['cpf'])[0:3]}.{str(dados_funcionario['cpf'])[3:6]}.{str(dados_funcionario['cpf'])[6:9]}-{str(dados_funcionario['cpf'])[9:11]}")
+        print("Data de nascimento do funcinário:", dados_funcionario["data_nascimento"].strftime('%d/%m/%Y'))
+        print(f"CPF do funcionário: {str(dados_funcionario['cpf'])[0:3]}.{str(dados_funcionario['cpf'])[3:6]}.{str(dados_funcionario['cpf'])[6:9]}-{str(dados_funcionario['cpf'])[9:11]}")
         print("Número CTPS do funcinário", dados_funcionario["numero_CTPS"])
         print()
 

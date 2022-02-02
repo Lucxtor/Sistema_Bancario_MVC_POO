@@ -33,14 +33,18 @@ class ControladorSistema:
         self.__controlador_pessoa.listar_clientes()
 
     def exibe_area_funcionarios(self):
-        # necessario exigir senha
-        lista_opcoes = {1: self.teste, 2: self.listar_clientes,
-                        0: self.abre_tela}
+        senha_funcionario = self.__tela_sistema.pega_senha_funcionario()
+        valida_senha, funcionario = self.__controlador_pessoa.valida_senha_funcionario(senha_funcionario)
+        if valida_senha:
+            lista_opcoes = {1: self.listar_clientes, 2: self.listar_clientes,
+                            0: self.abre_tela}
 
-        while True:
-            opcao_escolhida = self.__tela_sistema.area_funcionarios()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            while True:
+                opcao_escolhida = self.__tela_sistema.area_funcionarios(funcionario.nome)
+                funcao_escolhida = lista_opcoes[opcao_escolhida]
+                funcao_escolhida()
+        else:
+            self.__tela_sistema.mostra_mensagem("ATENÇÃO: Senha incorreta!")
 
     def abre_tela(self):
         lista_opcoes = {1: self.gerenciar_cadastros, 2: self.realizar_operacoes, 3: self.exibe_area_funcionarios,
