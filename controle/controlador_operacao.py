@@ -91,10 +91,10 @@ class ControladorOperacao:
                 data = operacao.data_operacao
                 tipo_operacao = operacao.tipo
                 if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
-                    dados_operacao = {"Código": operacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor}
+                    dados_operacao = {"Codigo": operacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor}
                 else:
-                    dados_operacao = {"Código": operacao.conta.codigo, "Tipo": tipo_operacao.ljust(21),
-                                      "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor, "Conta destino": operacao.conta_destino.codigo, "Chave": operacao.chave}
+                    dados_operacao = {"Codigo": operacao.conta.codigo, "Tipo": tipo_operacao.ljust(21),
+                                      "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor, "Conta_destino": operacao.conta_destino.codigo, "Chave": operacao.chave}
                 self.__tela_operacao.exibe_extrato(dados_operacao)
                 #if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
                 #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor}')

@@ -1,6 +1,7 @@
 from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada, TIPOS_OPERACOES
 
 class TelaOperacao:
+    TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
     def tela_opcoes(self, agencia_conta, codigo_conta):
         self.exibe_menu(agencia_conta, codigo_conta)
         return valida_opcao([0,1,2,3,4,5,6])
@@ -41,11 +42,11 @@ class TelaOperacao:
 
     def exibe_extrato(self, dados_operacao):
                 tipo_operacao = {dados_operacao["Tipo"]}
-                if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
-                    print(f'{dados_operacao["Código"]}  {dados_operacao["Tipo"]}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]}')
+                if tipo_operacao == TIPOS_OPERACOES[1] or tipo_operacao == TIPOS_OPERACOES[2]:
+                    print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"]}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]}')
                 else:
                     print(
-                        f'{dados_operacao["Código"]}  {dados_operacao["Tipo"]}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]} {dados_operacao["Conta destino"]} {dados_operacao["Chave"]} ')
+                        f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"]}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]} {dados_operacao["Conta_destino"]} {dados_operacao["Chave"]} ')
 
     def mostra_mensagem(self, msg):
         print(msg)
