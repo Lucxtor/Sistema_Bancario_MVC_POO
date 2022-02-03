@@ -39,6 +39,14 @@ class TelaOperacao:
         print(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')
         fechar = input("\nAperte enter para continuar!")
 
+    def exibe_extrato(self, dados_operacao):
+                tipo_operacao = {dados_operacao["Tipo"]}
+                if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
+                    print(f'{dados_operacao["Código"]}  {dados_operacao["Tipo"]}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]}')
+                else:
+                    print(
+                        f'{dados_operacao["Código"]}  {dados_operacao["Tipo"]}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]} {dados_operacao["Conta destino"]} {dados_operacao["Chave"]} ')
+
     def mostra_mensagem(self, msg):
         print(msg)
 

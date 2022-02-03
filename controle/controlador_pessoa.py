@@ -151,7 +151,7 @@ class ControladorPessoa:
             self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Funcionário não existente!")
 
     def listar_clientes(self):
-        print("lista clientes")
+        self.__tela_pessoa.mostra_mensagem("lista clientes")
         for cliente in self.__clientes:
             dados_cliente = {"codigo":cliente.codigo, "nome": cliente.nome, "data_nascimento": cliente.data_nascimento,
                              "cpf": cliente.cpf}
