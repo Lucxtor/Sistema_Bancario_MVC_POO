@@ -31,18 +31,19 @@ def cpf_valido():
                     aux += 1
                 digito_verificador_01 = int(cpf[9])
                 digito_verificador_02 = int(cpf[10])
-                if (soma * 10) % 11 != digito_verificador_01 or (soma * 10) % 11 == 10 and digito_verificador_01 != 0:
-                    print("O CPF digitado é inválido!")
-                else:
+                if (soma * 10) % 11 == digito_verificador_01 or (soma * 10) % 11 == 10 and digito_verificador_01 == 0:
                     soma = 0
                     aux = 0
                     for i in range(11, 1, -1):
                         soma += int(cpf[aux:aux + 1]) * i
                         aux += 1
-                    if (soma * 10) % 11 != digito_verificador_02 or (soma * 10) % 11 == 10 and digito_verificador_02 != 0:
-                        print("O CPF digitado é inválido!")
-                    else:
+                    if (soma * 10) % 11 == digito_verificador_02 or (
+                            soma * 10) % 11 == 10 and digito_verificador_02 == 0:
                         return cpf
+                    else:
+                        print("O CPF digitado é inválido!")
+                else:
+                    print("O CPF digitado é inválido!")
 
 def valida_operacao_saida(saldo):
     while True:

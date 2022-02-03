@@ -112,7 +112,7 @@ class ControladorPessoa:
         funcionario = self.pega_funcionario_por_cpf(cpf_funcionario)
         if (funcionario is not None):
             senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
-            if funcionario.senha_operacoes == senha_funcionario:
+            if funcionario.senha_funcionario == senha_funcionario:
                 novos_dados_funcionario = self.__tela_pessoa.pega_dados_funcionario_alteracao()
                 funcionario.nome = novos_dados_funcionario["nome"]
                 funcionario.senha_funcionario = novos_dados_funcionario["senha_funcionario"]
@@ -128,7 +128,7 @@ class ControladorPessoa:
         if (funcionario is not None):
             senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
             if funcionario.senha_funcionario == senha_funcionario:
-                self.__funcionario.remove(funcionario)
+                self.__funcionarios.remove(funcionario)
                 self.__tela_pessoa.mostra_mensagem("Funcionário excluido com sucesso!")
             else:
                 self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
@@ -149,6 +149,12 @@ class ControladorPessoa:
                 self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
         else:
             self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Funcionário não existente!")
+
+    def valida_senha_funcionario(self, senha_funcionario):
+        for funcionario in self.__funcionarios:
+            if funcionario.senha_funcionario == senha_funcionario:
+                return True, funcionario
+        return False, ""
 
     def listar_clientes(self):
         self.__tela_pessoa.mostra_mensagem("lista clientes")
