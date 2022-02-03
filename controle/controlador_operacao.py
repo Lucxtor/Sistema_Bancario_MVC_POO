@@ -13,17 +13,15 @@ class ControladorOperacao:
     def retorno_menu(self):
         self.__controlador_conta.retorno_menu_principal()
 
-    def teste(self):
-        print("\nEscolheu uma opção diferente de retornar ao menu anterior\n")
-
     def saque(self, conta, opcao_escolhida):
         saldo_saque = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
         valor = self.__tela_operacao.pega_dados_saida(saldo_saque)
-        operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, "", "")
-        valida_saldo = self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
-        if valida_saldo:
-            self.__operacoes.append(operacao)
-            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+        if valor > 0:
+            operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, "", "")
+            valida_saldo = self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
+            if valida_saldo:
+                self.__operacoes.append(operacao)
+                self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
 
     def deposito(self, conta, opcao_escolhida):
         valor = self.__tela_operacao.pega_dados_deposito()
@@ -41,19 +39,20 @@ class ControladorOperacao:
                 if conta.tipo != 3 or conta.titular == conta_destino.titular:
                     saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
                     valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-                    operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, '')
-                    if valor <= 1000 and saldo_transferencia >= valor + 2:
-                        valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 2.0) * (-1)))
-                    elif valor > 1000 and saldo_transferencia >= valor + 3:
-                        valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 3.0) * (-1)))
-                    else:
-                        self.__tela_operacao.mostra_mensagem("Você não possue saldo suficiente para essa transferência!")
-                        valida_saldo_enviado = False
-                    if valida_saldo_enviado:
-                        valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
-                        if valida_saldo_recebido:
-                            self.__operacoes.append(operacao)
-                            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+                    if valor > 0:
+                        operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, '')
+                        if valor <= 1000 and saldo_transferencia >= valor + 2:
+                            valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 2.0) * (-1)))
+                        elif valor > 1000 and saldo_transferencia >= valor + 3:
+                            valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 3.0) * (-1)))
+                        else:
+                            self.__tela_operacao.mostra_mensagem("Você não possue saldo suficiente para essa transferência!")
+                            valida_saldo_enviado = False
+                        if valida_saldo_enviado:
+                            valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
+                            if valida_saldo_recebido:
+                                self.__operacoes.append(operacao)
+                                self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
                 else:
                     self.__tela_operacao.mostra_mensagem("A conta atual, do tipo salario não permite transferências para outra titularidade!")
             else:
@@ -69,13 +68,14 @@ class ControladorOperacao:
                 if conta.tipo != 3 or conta.titular == conta_destino.titular:
                     saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
                     valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-                    operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, chave_PIX)
-                    valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
-                    if valida_saldo_enviado:
-                        valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
-                        if valida_saldo_recebido:
-                            self.__operacoes.append(operacao)
-                            self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
+                    if valor > 0:
+                        operacao = Operacao(conta, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), valor, conta_destino, chave_PIX)
+                        valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
+                        if valida_saldo_enviado:
+                            valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
+                            if valida_saldo_recebido:
+                                self.__operacoes.append(operacao)
+                                self.__tela_operacao.mostra_mensagem("Operação realizada com sucesso")
                 else:
                     self.__tela_operacao.mostra_mensagem("A conta atual, do tipo salario não permite transferências para outra titularidade!")
             else:
@@ -96,11 +96,6 @@ class ControladorOperacao:
                     dados_operacao = {"Codigo": operacao.conta.codigo, "Tipo": tipo_operacao,
                                       "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor, "Conta_destino": operacao.conta_destino.codigo, "Chave": operacao.chave}
                 self.__tela_operacao.exibe_extrato(dados_operacao)
-                #if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
-                #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor}')
-                #else:
-                #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor} {operacao.conta_destino.codigo} {operacao.chave}')
-
 
     def consultar_saldo(self, conta, opcao_escolhida):
         saldo_final = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
