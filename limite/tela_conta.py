@@ -28,8 +28,12 @@ class TelaConta:
         return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_conta":senha}
 
     def seleciona_codigo(self):
-        #fazer tratamento de excessões(Verificar se só tem números e se tem 4 números)
-        codigo_conta = int(input("Digite o código da conta que deseja acessar: "))
+        while True:
+            try:
+                codigo_conta = int(input("Digite o código da conta que deseja acessar: "))
+                break
+            except:
+                print("O código digitado é inválido!")
         return codigo_conta
 
     def pega_senha_conta(self):
