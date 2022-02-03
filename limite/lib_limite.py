@@ -69,3 +69,19 @@ def valida_operacao_entrada():
         else:
             return valor_operacao
 
+def valida_data(dia, mes, ano):
+    meses_31 = [1, 3, 5, 7, 8, 10, 12]
+    if ano >= 1 and mes <= 12 and mes >= 1 and dia <= 31 and dia >= 1:
+        if mes == 2:
+            if ano % 4 == 0 and dia <= 29:
+                return True
+            elif dia <= 28:
+                return True
+            else:
+                return False
+        if mes in meses_31:
+            return True
+        elif dia <= 30:
+            return True
+    else:
+        return False
