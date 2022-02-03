@@ -84,8 +84,23 @@ class ControladorOperacao:
             self.__tela_operacao.mostra_mensagem("A chave PIX é invalida ou incorreta!")
 
     def consultar_extrato(self, conta, opcao_escolhida):
-        for i in range(len(self.__operacoes)):
-            print(self.__operacoes[i].conta.codigo, self.__operacoes[i].tipo, self.__operacoes[i].data_operacao, self.__operacoes[i].valor, self.__operacoes[i].conta_destino, self.__operacoes[i].chave)
+        self.__tela_operacao.mostra_mensagem(f'Saldo da conta: R${conta.saldo}\n')
+        self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data         Horário   Valor  \n')
+        for operacao in self.__operacoes:
+            if operacao.conta == conta:
+                data = operacao.data_operacao
+                tipo_operacao = operacao.tipo
+                if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
+                    dados_operacao = {"Codigo": operacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor,  "Conta_destino": operacao.conta_destino, "Chave": operacao.chave}
+                else:
+                    dados_operacao = {"Codigo": operacao.conta.codigo, "Tipo": tipo_operacao,
+                                      "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor, "Conta_destino": operacao.conta_destino.codigo, "Chave": operacao.chave}
+                self.__tela_operacao.exibe_extrato(dados_operacao)
+                #if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
+                #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor}')
+                #else:
+                #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor} {operacao.conta_destino.codigo} {operacao.chave}')
+
 
     def consultar_saldo(self, conta, opcao_escolhida):
         saldo_final = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
