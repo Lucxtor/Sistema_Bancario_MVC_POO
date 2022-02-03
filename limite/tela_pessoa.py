@@ -1,4 +1,4 @@
-from limite.lib_limite import valida_opcao, cpf_valido
+from limite.lib_limite import valida_opcao, cpf_valido, valida_data
 from datetime import datetime
 
 class TelaPessoa:
@@ -29,8 +29,20 @@ class TelaPessoa:
     def pega_dados_cliente(self):
         print("-------- Dados do Cliente ----------")
         nome = input("Nome: ")
-        data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa )  ")
-        data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
+        # data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa )  ")
+        while True:
+            try:
+                data_nascimento_dia = int(input("Informe o dia do seu nascimento: "))
+                data_nascimento_mes = int(input("Informe o mês do seu nascimento: "))
+                data_nascimento_ano = int(input("Informe o ano do seu nascimento: "))
+                if valida_data(data_nascimento_dia, data_nascimento_mes, data_nascimento_ano):
+                    data_nascimento_str = f'{data_nascimento_dia}/{data_nascimento_mes}/{data_nascimento_ano}'
+                    data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
+                    break
+                else:
+                    print("Parece que a data informada é invalida, tente novamente!")
+            except:
+                print("Parece que algo deu errado, tente novamente!")
         cpf = cpf_valido()
         senha_operacoes = input("Senha para operações: ")
 
@@ -46,8 +58,20 @@ class TelaPessoa:
     def pega_dados_funcionario(self):
         print("-------- Dados do Funcionário ----------")
         nome = input("Nome: ")
-        data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa)  ")
-        data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
+        # data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa)  ")
+        while True:
+            try:
+                data_nascimento_dia = int(input("Informe o dia do seu nascimento: "))
+                data_nascimento_mes = int(input("Informe o mês do seu nascimento: "))
+                data_nascimento_ano = int(input("Informe o ano do seu nascimento: "))
+                if valida_data(data_nascimento_dia, data_nascimento_mes, data_nascimento_ano):
+                    data_nascimento_str = f'{data_nascimento_dia}/{data_nascimento_mes}/{data_nascimento_ano}'
+                    data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
+                    break
+                else:
+                    print("Parece que a data informada é invalida, tente novamente!")
+            except:
+                print("Parece que algo deu errado, tente novamente!")
         cpf = cpf_valido()
         numero_CTPS = input("Número da CTPS: ")
         while len(numero_CTPS)!=8:
