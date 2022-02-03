@@ -32,11 +32,14 @@ class ControladorSistema:
     def listar_clientes(self):
         self.__controlador_pessoa.listar_clientes()
 
+    def listar_contas(self):
+        self.__controlador_conta.listar_contas()
+
     def exibe_area_funcionarios(self):
         senha_funcionario = self.__tela_sistema.pega_senha_funcionario()
         valida_senha, funcionario = self.__controlador_pessoa.valida_senha_funcionario(senha_funcionario)
         if valida_senha:
-            lista_opcoes = {1: self.listar_clientes, 2: self.listar_clientes,
+            lista_opcoes = {1: self.listar_contas, 2: self.listar_clientes,
                             0: self.abre_tela}
 
             while True:

@@ -57,7 +57,7 @@ class ControladorConta:
             senha_conta = self.__tela_conta.pega_senha_conta()
             if conta.senha_conta == senha_conta:
                 dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
-                                 "cpf": conta.cpf_titular, "tipo": conta.tipo,}
+                                 "cpf": conta.titular.cpf, "tipo": conta.tipo}
                 self.__tela_conta.lista_conta(dados_conta)
             else:
                 self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
@@ -130,3 +130,10 @@ class ControladorConta:
             opcao_escolhida = self.__tela_conta.tela_opcoes()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
+
+    def listar_contas(self):
+        self.__tela_conta.mostra_mensagem("Lista Contas")
+        for conta in self.__contas:
+            dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
+                           "cpf": conta.titular.cpf, "tipo": conta.tipo}
+            self.__tela_conta.lista_conta(dados_conta)
