@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from entidade.pessoa import Pessoa
 
 class Funcionario(Pessoa):
-    def __init__(self, codigo:str, nome: str, data_nascimento, cpf: int, numero_CTPS: int, senha_funcionario: str):
+    def __init__(self, codigo:str, nome: str, data_nascimento, cpf: int, numero_CTPS: str, senha_funcionario: str):
         super().__init__(codigo, nome, data_nascimento, cpf)
         self.__numero_CTPS = numero_CTPS
         self.__senha_funcionario = senha_funcionario

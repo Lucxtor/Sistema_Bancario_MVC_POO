@@ -38,7 +38,7 @@ class ControladorPessoa:
             quantidade_segundos = (data_atual - dados_cliente["data_nascimento"]).total_seconds()
             anos = ((((quantidade_segundos / 60) / 60) / 24) / 365)
             if anos > 18:
-                cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_operacoes"])
+                cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_cadastro"])
                 self.__clientes.append(cliente)
                 self.__tela_pessoa.mostra_mensagem("Cliente cadastrado com sucesso!")
             else:
@@ -50,11 +50,11 @@ class ControladorPessoa:
         cpf_cliente = self.__tela_pessoa.seleciona_cpf()
         cliente = self.pega_cliente_por_cpf(cpf_cliente)
         if (cliente is not None):
-            senha_cliente = self.__tela_pessoa.pega_senha_pesoa()
-            if cliente.senha_operacoes == senha_cliente:
+            senha_cliente = self.__tela_pessoa.pega_senha_pessoa()
+            if cliente.senha_cadastro == senha_cliente:
                 novos_dados_cliente = self.__tela_pessoa.pega_dados_cliente_alteracao()
                 cliente.nome = novos_dados_cliente["nome"]
-                cliente.senha_operacoes = novos_dados_cliente["senha_operacoes"]
+                cliente.senha_cadastro = novos_dados_cliente["senha_cadastro"]
                 self.__tela_pessoa.mostra_mensagem("Cliente atualizado com sucesso!")
             else:
                 self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
@@ -65,8 +65,8 @@ class ControladorPessoa:
         cpf_cliente = self.__tela_pessoa.seleciona_cpf()
         cliente = self.pega_cliente_por_cpf(cpf_cliente)
         if (cliente is not None):
-            senha_cliente = self.__tela_pessoa.pega_senha_pesoa()
-            if cliente.senha_operacoes == senha_cliente:
+            senha_cliente = self.__tela_pessoa.pega_senha_pessoa()
+            if cliente.senha_cadastro == senha_cliente:
                 self.__clientes.remove(cliente)
                 self.__tela_pessoa.mostra_mensagem("Cliente excluido com sucesso!")
             else:
@@ -78,8 +78,8 @@ class ControladorPessoa:
         cpf_cliente = self.__tela_pessoa.seleciona_cpf()
         cliente = self.pega_cliente_por_cpf(cpf_cliente)
         if (cliente is not None):
-            senha_cliente = self.__tela_pessoa.pega_senha_pesoa()
-            if cliente.senha_operacoes == senha_cliente:
+            senha_cliente = self.__tela_pessoa.pega_senha_pessoa()
+            if cliente.senha_cadastro == senha_cliente:
                 dados_cliente = {"codigo": cliente.codigo, "nome": cliente.nome,
                                  "data_nascimento": cliente.data_nascimento, "cpf": cliente.cpf}
                 self.__tela_pessoa.lista_cliente(dados_cliente)

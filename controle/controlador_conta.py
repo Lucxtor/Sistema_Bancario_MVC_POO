@@ -27,7 +27,7 @@ class ControladorConta:
         dados_conta = self.__tela_conta.pega_dados_conta()
         cliente = self.__controlador_sistema.retorna_cliente(dados_conta["cpf_titular"])
         if cliente is not None:
-            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_conta"])
+            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_operacoes"])
             self.__contas.append(conta)
             self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
             self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
@@ -39,8 +39,8 @@ class ControladorConta:
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
             if (conta.saldo == 0):
-                senha_conta = self.__tela_conta.pega_senha_conta()
-                if conta.senha_conta == senha_conta:
+                senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+                if conta.senha_operacoes == senha_operacoes:
                     self.__contas.remove(conta)
                     self.__tela_conta.mostra_mensagem("Conta excluida com sucesso!")
                 else:
@@ -54,8 +54,8 @@ class ControladorConta:
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
+            senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+            if conta.senha_operacoes == senha_operacoes:
                 dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
                                  "cpf": conta.titular.cpf, "tipo": conta.tipo}
                 self.__tela_conta.lista_conta(dados_conta)
@@ -68,8 +68,8 @@ class ControladorConta:
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
+            senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+            if conta.senha_operacoes == senha_operacoes:
                 chave_PIX = self.__tela_conta.pega_chave_PIX()
                 conta.adicionar_chave_PIX(chave_PIX)
             else:
@@ -81,8 +81,8 @@ class ControladorConta:
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
+            senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+            if conta.senha_operacoes == senha_operacoes:
                 self.__controlador_operacao.abre_tela(conta)
             else:
                 self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
@@ -93,8 +93,8 @@ class ControladorConta:
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
             if valor < 0:
-                senha_conta = self.__tela_conta.pega_senha_conta()
-                if conta.senha_conta == senha_conta:
+                senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+                if conta.senha_operacoes == senha_operacoes:
                     conta.saldo += valor
                     return True
                 else:

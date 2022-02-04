@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+
 
 class Pessoa(ABC):
       @abstractmethod
-      def __init__(self, codigo:str, nome: str, data_nascimento, cpf: int):
+      def __init__(self, codigo:str, nome: str, data_nascimento: datetime, cpf: int):
         self.__codigo = codigo
         self.__nome = nome
         self.__data_nascimento = data_nascimento
