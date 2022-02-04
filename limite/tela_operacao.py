@@ -37,10 +37,11 @@ class TelaOperacao:
         print(f'   Transferências enviadas: R$ {saldo_transferencia_enviadas:.2f}')
         print(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}\n')
         print(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')
-        fechar = input("\nAperte enter para continuar!")
+        input("\nAperte enter para continuar!")
 
     def exibe_extrato(self, dados_operacao):
         print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]} {dados_operacao["Conta_destino"]} {dados_operacao["Chave"]} ')
+        input("\nAperte enter para continuar!")
 
     def mostra_mensagem(self, msg):
         print(msg)

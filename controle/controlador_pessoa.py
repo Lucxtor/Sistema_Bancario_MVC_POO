@@ -42,51 +42,45 @@ class ControladorPessoa:
                 self.__clientes.append(cliente)
                 self.__tela_pessoa.mostra_mensagem("Cliente cadastrado com sucesso!")
             else:
-                self.__tela_pessoa.mostra_mensagem("Cliente é menor de idade, verifique!")
+                self.__tela_pessoa.mostra_mensagem("Cadastro interrompido, cliente é menor de idade, verifique!")
         else:
             self.__tela_pessoa.mostra_mensagem("O CPF já está cadastrado como cliente, por favor verifique!")
 
     def alterar_cliente(self):
-        cpf_cliente = self.__tela_pessoa.seleciona_cpf()
-        cliente = self.pega_cliente_por_cpf(cpf_cliente)
-        if (cliente is not None):
-            senha_cliente = self.__tela_pessoa.pega_senha_pessoa()
-            if cliente.senha_cadastro == senha_cliente:
-                novos_dados_cliente = self.__tela_pessoa.pega_dados_cliente_alteracao()
-                cliente.nome = novos_dados_cliente["nome"]
-                cliente.senha_cadastro = novos_dados_cliente["senha_cadastro"]
-                self.__tela_pessoa.mostra_mensagem("Cliente atualizado com sucesso!")
-            else:
-                self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Cliente não existente!")
+        validacao, cliente = self.valida_existencia_e_senha_cliente()
+        if validacao:
+            novos_dados_cliente = self.__tela_pessoa.pega_dados_cliente_alteracao()
+            cliente.nome = novos_dados_cliente["nome"]
+            cliente.senha_cadastro = novos_dados_cliente["senha_cadastro"]
+            self.__tela_pessoa.mostra_mensagem("Cliente atualizado com sucesso!")
+
 
     def excluir_cliente(self):
-        cpf_cliente = self.__tela_pessoa.seleciona_cpf()
-        cliente = self.pega_cliente_por_cpf(cpf_cliente)
-        if (cliente is not None):
-            senha_cliente = self.__tela_pessoa.pega_senha_pessoa()
-            if cliente.senha_cadastro == senha_cliente:
+        validacao, cliente = self.valida_existencia_e_senha_cliente()
+        if validacao:
                 self.__clientes.remove(cliente)
                 self.__tela_pessoa.mostra_mensagem("Cliente excluido com sucesso!")
-            else:
-                self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Cliente não existente!")
 
-    def lista_cliente(self):
+    def valida_existencia_e_senha_cliente(self):
         cpf_cliente = self.__tela_pessoa.seleciona_cpf()
         cliente = self.pega_cliente_por_cpf(cpf_cliente)
         if (cliente is not None):
             senha_cliente = self.__tela_pessoa.pega_senha_pessoa()
             if cliente.senha_cadastro == senha_cliente:
+                return True, cliente
+            else:
+                self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                return False, none
+        else:
+            self.__tela_pessoa.mostra_mensagem(f"ATENÇÃO: cliente não existente!")
+            return False, none
+
+    def lista_cliente(self):
+        validacao, cliente = self.valida_existencia_e_senha_cliente()
+        if validacao:
                 dados_cliente = {"codigo": cliente.codigo, "nome": cliente.nome,
                                  "data_nascimento": cliente.data_nascimento, "cpf": cliente.cpf}
                 self.__tela_pessoa.lista_cliente(dados_cliente)
-            else:
-                self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Cliente não existente!")
 
     def incluir_funcionario(self):
         cpf_unico = True
@@ -104,51 +98,46 @@ class ControladorPessoa:
                 funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
                 self.__funcionarios.append(funcionario)
                 self.__tela_pessoa.mostra_mensagem("Funcionário cadastrado com sucesso!")
+            else:
+                self.__tela_pessoa.mostra_mensagem("Cadastro interrompido, funcionário é menor de idade, verifique!")
         else:
             self.__tela_pessoa.mostra_mensagem("O CPF já está cadastrado como funcionário, por favor verifique!")
 
     def alterar_funcionario(self):
-        cpf_funcionario = self.__tela_pessoa.seleciona_cpf()
-        funcionario = self.pega_funcionario_por_cpf(cpf_funcionario)
-        if (funcionario is not None):
-            senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
-            if funcionario.senha_funcionario == senha_funcionario:
-                novos_dados_funcionario = self.__tela_pessoa.pega_dados_funcionario_alteracao()
-                funcionario.nome = novos_dados_funcionario["nome"]
-                funcionario.senha_funcionario = novos_dados_funcionario["senha_funcionario"]
-                self.__tela_pessoa.mostra_mensagem("Funcionario atualizado com sucesso!")
-            else:
-                self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Funcionário não existente!")
+        validacao, funcionario = self.valida_existencia_e_senha_funcionario()
+        if validacao:
+            novos_dados_funcionario = self.__tela_pessoa.pega_dados_funcionario_alteracao()
+            funcionario.nome = novos_dados_funcionario["nome"]
+            funcionario.senha_funcionario = novos_dados_funcionario["senha_funcionario"]
+            self.__tela_pessoa.mostra_mensagem("Funcionario atualizado com sucesso!")
 
     def excluir_funcionario(self):
+        validacao, funcionario = self.valida_existencia_e_senha_funcionario()
+        if validacao:
+            self.__funcionarios.remove(funcionario)
+            self.__tela_pessoa.mostra_mensagem("Funcionário excluido com sucesso!")
+
+    def valida_existencia_e_senha_funcionario(self):
         cpf_funcionario = self.__tela_pessoa.seleciona_cpf()
         funcionario = self.pega_funcionario_por_cpf(cpf_funcionario)
         if (funcionario is not None):
             senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
             if funcionario.senha_funcionario == senha_funcionario:
-                self.__funcionarios.remove(funcionario)
-                self.__tela_pessoa.mostra_mensagem("Funcionário excluido com sucesso!")
+                return True, funcionario
             else:
                 self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                return False, none
         else:
-            self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Funcionário não existente!")
+            self.__tela_pessoa.mostra_mensagem(f"ATENÇÃO: funcionário não existente!")
+            return False, none
 
     def lista_funcionario(self):
-        cpf_funcionario = self.__tela_pessoa.seleciona_cpf()
-        funcionario = self.pega_funcionario_por_cpf(cpf_funcionario)
-        if (funcionario is not None):
-            senha_funcionario = self.__tela_pessoa.pega_senha_pessoa()
-            if funcionario.senha_funcionario == senha_funcionario:
-                dados_funcionario = {"codigo": funcionario.codigo, "nome": funcionario.nome,
-                                 "data_nascimento": funcionario.data_nascimento, "cpf": funcionario.cpf,
-                                 "numero_CTPS": funcionario.numero_CTPS}
-                self.__tela_pessoa.lista_funcionario(dados_funcionario)
-            else:
-                self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("ATENÇÃO: Funcionário não existente!")
+        validacao, funcionario = self.valida_existencia_e_senha_funcionario()
+        if validacao:
+            dados_funcionario = {"codigo": funcionario.codigo, "nome": funcionario.nome,
+                             "data_nascimento": funcionario.data_nascimento, "cpf": funcionario.cpf,
+                             "numero_CTPS": funcionario.numero_CTPS}
+            self.__tela_pessoa.lista_funcionario(dados_funcionario)
 
     def valida_senha_funcionario(self, senha_funcionario):
         for funcionario in self.__funcionarios:
