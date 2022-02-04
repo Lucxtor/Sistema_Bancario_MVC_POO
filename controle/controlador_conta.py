@@ -27,7 +27,7 @@ class ControladorConta:
         dados_conta = self.__tela_conta.pega_dados_conta()
         cliente = self.__controlador_sistema.retorna_cliente(dados_conta["cpf_titular"])
         if cliente is not None:
-            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_conta"])
+            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_operacoes"])
             self.__contas.append(conta)
             self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
             self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
@@ -68,20 +68,20 @@ class ControladorConta:
     def cadastrar_PIX(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
-                chave_PIX = self.__tela_conta.pega_chave_PIX()
-                conta.adicionar_chave_PIX(chave_PIX)
+            chave_PIX = self.__tela_conta.pega_chave_PIX()
+            conta.adicionar_chave_PIX(chave_PIX)
 
     def realizar_operacoes(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
-                self.__controlador_operacao.abre_tela(conta)
+            self.__controlador_operacao.abre_tela(conta)
 
     def atualizar_saldo(self, codigo_conta, valor):
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
             if valor < 0:
-                senha_conta = self.__tela_conta.pega_senha_conta()
-                if conta.senha_conta == senha_conta:
+                senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+                if conta.senha_operacoes == senha_operacoes:
                     conta.saldo += valor
                     return True
                 else:

@@ -1,13 +1,13 @@
 from entidade.cliente import Cliente
 
 class Conta():
-    def __init__(self, codigo:int, titular: Cliente, tipo: int, senha_conta:str):
+    def __init__(self, codigo:int, titular: Cliente, tipo: int, senha_operacoes:str):
         self.__agencia = "1234"
         self.__codigo = codigo
         self.__saldo = 0.00
         self.__titular = titular
         self.__tipo = tipo
-        self.__senha_conta = senha_conta
+        self.__senha_operacoes = senha_operacoes
         self.__chaves_PIX = []
 
     @property
@@ -35,12 +35,12 @@ class Conta():
         self.__saldo = saldo
 
     @property
-    def senha_conta(self):
-        return self.__senha_conta
+    def senha_operacoes(self):
+        return self.__senha_operacoes
 
-    @senha_conta.setter
-    def senha_conta(self, senha_conta: str):
-        self.__senha_conta = senha_conta
+    @senha_operacoes.setter
+    def senha_operacoes(self, senha_operacoes: str):
+        self.__senha_operacoes = senha_operacoes
 
     @property
     def chaves_PIX(self):
