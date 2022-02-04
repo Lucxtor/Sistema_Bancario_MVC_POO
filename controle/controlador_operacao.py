@@ -43,7 +43,7 @@ class ControladorOperacao:
                     "\nA conta atual, do tipo salario não permite transferências para outra titularidade!")
                 return False, None, None
         else:
-            self.__tela_operacao.mostra_mensagem("\nA conta atual, do tipo poupança não está apta a realizar / receber essa transferencia, ela apenas podem transferir para mesma titularidade!")
+            self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia, ela apenas podem transferir para mesma titularidade!")
             return False, None, None
 
 
@@ -67,7 +67,7 @@ class ControladorOperacao:
                         self.__operacoes.append(operacao)
                         self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
         else:
-            self.__tela_operacao.mostra_mensagem("\nO código da conta é invalido ou incorreto!")
+            self.__tela_operacao.mostra_mensagem("\nO código da conta é invélido ou incorreto!")
 
     def transferencia_PIX(self, conta, opcao_escolhida):
         chave_PIX = self.__tela_operacao.pega_chave_PIX()
