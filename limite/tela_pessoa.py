@@ -44,16 +44,16 @@ class TelaPessoa:
             except:
                 print("Parece que algo deu errado, tente novamente!")
         cpf = cpf_valido()
-        senha_operacoes = input("Senha para operações: ")
+        senha_cadastro = input("Senha para operações: ")
 
-        return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "senha_operacoes": senha_operacoes}
+        return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "senha_cadastro": senha_cadastro}
 
     def pega_dados_cliente_alteracao(self):
         print("-------- Dados Atualizados do Cliente ----------")
         nome = input("Nome: ")
-        senha_operacoes = input("Senha para operações: ")
+        senha_cadastro = input("Senha para operações: ")
 
-        return {"nome": nome, "senha_operacoes": senha_operacoes}
+        return {"nome": nome, "senha_cadastro": senha_cadastro}
 
     def pega_dados_funcionario(self):
         print("-------- Dados do Funcionário ----------")
@@ -90,9 +90,6 @@ class TelaPessoa:
 
     def seleciona_cpf(self):
         return cpf_valido()
-
-    def pega_senha_pesoa(self):
-        return input("Informe a senha do cliente para gerenciar seu cadastro: ")
 
     def pega_senha_pessoa(self):
         return input("Digite a sua senha para prosseguir com a operação: ")
