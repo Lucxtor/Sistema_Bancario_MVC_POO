@@ -40,10 +40,10 @@ class ControladorOperacao:
                     return True, valor, saldo_transferencia
             else:
                 self.__tela_operacao.mostra_mensagem(
-                    "\nA conta atual, do tipo salario não permite transferências para outra titularidade!")
+                    "\nUma das contas envolvidas na transação é do tipo salario e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
                 return False, None, None
         else:
-            self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia, ela apenas podem transferir para mesma titularidade!")
+            self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia. Contas poupança apenas podem transferir para/receber de contas de mesma titularidade!")
             return False, None, None
 
 
