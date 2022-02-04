@@ -34,60 +34,47 @@ class ControladorConta:
         else:
             self.__tela_conta.mostra_mensagem("Cliente não foi encontrado!")
 
-    def excluir_conta(self):
+    def valida_existencia_e_senha_conta(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
+            senha_conta = self.__tela_conta.pega_senha_conta()
+            if conta.senha_conta == senha_conta:
+                return True, conta
+            else:
+                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                return False, none
+        else:
+            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
+            return False, none
+
+    def excluir_conta(self):
+        validacao, conta = self.valida_existencia_e_senha_conta()
+        if validacao:
             if (conta.saldo == 0):
-                senha_conta = self.__tela_conta.pega_senha_conta()
-                if conta.senha_conta == senha_conta:
                     self.__contas.remove(conta)
                     self.__tela_conta.mostra_mensagem("Conta excluida com sucesso!")
-                else:
-                    self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
             else:
                 self.__tela_conta.mostra_mensagem(f"O saldo atual da conta é de R${conta.saldo}. Para encerrar a conta, saque ou transfira todos os fundos")
-        else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
     def listar_informacoes_conta(self):
-        codigo_conta = self.__tela_conta.seleciona_codigo()
-        conta = self.pega_conta_por_codigo(codigo_conta)
-        if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
-                dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
-                                 "cpf": conta.titular.cpf, "tipo": conta.tipo}
-                self.__tela_conta.lista_conta(dados_conta)
-            else:
-                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
+        validacao, conta = self.valida_existencia_e_senha_conta()
+        if validacao:
+            dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
+                             "cpf": conta.titular.cpf, "tipo": conta.tipo}
+            self.__tela_conta.lista_conta(dados_conta)
+
 
     def cadastrar_PIX(self):
-        codigo_conta = self.__tela_conta.seleciona_codigo()
-        conta = self.pega_conta_por_codigo(codigo_conta)
-        if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
+        validacao, conta = self.valida_existencia_e_senha_conta()
+        if validacao:
                 chave_PIX = self.__tela_conta.pega_chave_PIX()
                 conta.adicionar_chave_PIX(chave_PIX)
-            else:
-                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
     def realizar_operacoes(self):
-        codigo_conta = self.__tela_conta.seleciona_codigo()
-        conta = self.pega_conta_por_codigo(codigo_conta)
-        if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
-            if conta.senha_conta == senha_conta:
+        validacao, conta = self.valida_existencia_e_senha_conta()
+        if validacao:
                 self.__controlador_operacao.abre_tela(conta)
-            else:
-                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-        else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
 
     def atualizar_saldo(self, codigo_conta, valor):
         conta = self.pega_conta_por_codigo(codigo_conta)
@@ -137,3 +124,4 @@ class ControladorConta:
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
                            "cpf": conta.titular.cpf, "tipo": conta.tipo}
             self.__tela_conta.lista_conta(dados_conta)
+

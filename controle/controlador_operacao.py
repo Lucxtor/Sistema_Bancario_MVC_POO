@@ -47,7 +47,7 @@ class ControladorOperacao:
                     elif valor > 1000 and saldo_transferencia >= valor + 3:
                         valida_saldo_enviado = self.__controlador_conta.atualizar_saldo(conta.codigo, ((valor + 3.0) * (-1)))
                     else:
-                        self.__tela_operacao.mostra_mensagem("Você não possue saldo suficiente para essa transferência!")
+                        self.__tela_operacao.mostra_mensagem("Você não possui saldo suficiente para essa transferência!")
                         valida_saldo_enviado = False
                     if valida_saldo_enviado:
                         valida_saldo_recebido = self.__controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
@@ -96,11 +96,6 @@ class ControladorOperacao:
                     dados_operacao = {"Codigo": operacao.conta.codigo, "Tipo": tipo_operacao,
                                       "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": operacao.valor, "Conta_destino": operacao.conta_destino.codigo, "Chave": operacao.chave}
                 self.__tela_operacao.exibe_extrato(dados_operacao)
-                #if tipo_operacao == self.TIPOS_OPERACOES[1] or tipo_operacao == self.TIPOS_OPERACOES[2]:
-                #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor}')
-                #else:
-                #    print(f'{operacao.conta.codigo}  {tipo_operacao.ljust(21)}  {data.strftime("%b %d %Y %H:%M:%S")}  R${operacao.valor} {operacao.conta_destino.codigo} {operacao.chave}')
-
 
     def consultar_saldo(self, conta, opcao_escolhida):
         saldo_final = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)

@@ -29,7 +29,6 @@ class TelaPessoa:
     def pega_dados_cliente(self):
         print("-------- Dados do Cliente ----------")
         nome = input("Nome: ")
-        # data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa )  ")
         while True:
             try:
                 data_nascimento_dia = int(input("Informe o dia do seu nascimento: "))
@@ -49,16 +48,15 @@ class TelaPessoa:
         return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "senha_operacoes": senha_operacoes}
 
     def pega_dados_cliente_alteracao(self):
-        print("-------- Dados Atualizados do Cliente ----------")
+        print("\n-------- Dados Atualizados do Cliente ----------\n")
         nome = input("Nome: ")
         senha_operacoes = input("Senha para operações: ")
 
         return {"nome": nome, "senha_operacoes": senha_operacoes}
 
     def pega_dados_funcionario(self):
-        print("-------- Dados do Funcionário ----------")
+        print("\n-------- Dados do Funcionário ----------\n")
         nome = input("Nome: ")
-        # data_nascimento_str = input("Data de nascimento: ( utilizar o formato dd/mm/aaaa)  ")
         while True:
             try:
                 data_nascimento_dia = int(input("Informe o dia do seu nascimento: "))
@@ -82,7 +80,7 @@ class TelaPessoa:
         return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "numero_CTPS": numero_CTPS, "senha_funcionario": senha_funcionario}
 
     def pega_dados_funcionario_alteracao(self):
-        print("-------- Dados Atualizados do Funcionário ----------")
+        print("\n-------- Dados Atualizados do Funcionário ----------\n")
         nome = input("Nome: ")
         senha_funcionario = input("Senha para operações: ")
 
@@ -91,7 +89,7 @@ class TelaPessoa:
     def seleciona_cpf(self):
         return cpf_valido()
 
-    def pega_senha_pesoa(self):
+    def pega_senha_pessoa(self):
         return input("Informe a senha do cliente para gerenciar seu cadastro: ")
 
     def pega_senha_pessoa(self):
@@ -101,14 +99,12 @@ class TelaPessoa:
         print("\nCliente:", dados_cliente["codigo"], "-", dados_cliente["nome"])
         print("Data de nascimento do cliente:", dados_cliente["data_nascimento"].strftime('%d/%m/%Y'))
         print(f"CPF do cliente: {str(dados_cliente['cpf'])[0:3]}.{str(dados_cliente['cpf'])[3:6]}.{str(dados_cliente['cpf'])[6:9]}-{str(dados_cliente['cpf'])[9:11]}")
-        print()
 
     def lista_funcionario(self, dados_funcionario):
         print("Funcionário:", dados_funcionario["codigo"], "-", dados_funcionario["nome"])
         print("Data de nascimento do funcinário:", dados_funcionario["data_nascimento"].strftime('%d/%m/%Y'))
         print(f"CPF do funcionário: {str(dados_funcionario['cpf'])[0:3]}.{str(dados_funcionario['cpf'])[3:6]}.{str(dados_funcionario['cpf'])[6:9]}-{str(dados_funcionario['cpf'])[9:11]}")
         print("Número CTPS do funcinário", dados_funcionario["numero_CTPS"])
-        print()
 
     def mostra_mensagem(self, msg):
         print(msg)
