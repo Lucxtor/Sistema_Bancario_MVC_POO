@@ -41,7 +41,7 @@ class TelaOperacao:
 
     def exibe_extrato(self, dados_operacao):
         print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]} {dados_operacao["Conta_destino"]} {dados_operacao["Chave"]} ')
-        input("\nAperte enter para continuar!")
+
 
     def mostra_mensagem(self, msg):
         print(msg)

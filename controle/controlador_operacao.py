@@ -33,7 +33,7 @@ class ControladorOperacao:
 
     def valida_transferencia(self, conta, conta_destino):
         if conta.tipo != 2 and conta_destino.tipo != 2 or conta.titular == conta_destino.titular:
-            if conta.tipo != 3 or conta.titular == conta_destino.titular:
+            if conta_destino.tipo != 3 or conta.tipo == 3 and conta.titular == conta_destino.titular and conta_destino.tipo != 3:
                 saldo_transferencia = self.__controlador_conta.pega_saldo_por_codigo(conta.codigo)
                 valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
                 if valor > 0:
