@@ -51,6 +51,12 @@ class TelaConta:
         else:
             tipo_conta = "Salário"
         print("\nConta:", dados_conta["codigo"], "-", tipo_conta, "- Agência:", dados_conta["agencia"])
+        chaves = dados_conta["chaves"]
+        if len(chaves) != 0:
+            print("Chaves PIX:", end=" ")
+            for chave in chaves:
+                print(chave, end=" ")
+            print("")
         print(f"CPF do titular: {str(dados_conta['cpf'])[0:3]}.{str(dados_conta['cpf'])[3:6]}.{str(dados_conta['cpf'])[6:9]}-{str(dados_conta['cpf'])[9:11]}")
 
     def pega_chave_PIX(self):

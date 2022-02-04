@@ -38,8 +38,8 @@ class ControladorConta:
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_operacoes()
-            if conta.senha_conta == senha_conta:
+            senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+            if conta.senha_operacoes == senha_operacoes:
                 return True, conta
             else:
                 self.__tela_conta.mostra_mensagem("\nATENÇÃO: Senha incorreta!")
@@ -61,15 +61,19 @@ class ControladorConta:
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
-                             "cpf": conta.titular.cpf, "tipo": conta.tipo}
+                             "cpf": conta.titular.cpf, "tipo": conta.tipo, "chaves": conta.chaves_PIX}
             self.__tela_conta.lista_conta(dados_conta)
 
 
     def cadastrar_PIX(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
-            chave_PIX = self.__tela_conta.pega_chave_PIX()
-            conta.adicionar_chave_PIX(chave_PIX)
+            if conta.tipo != 3:
+                chave_PIX = self.__tela_conta.pega_chave_PIX()
+                conta.adicionar_chave_PIX(chave_PIX)
+                self.__tela_conta.mostra_mensagem("\nChave PIX cadastrada com sucesso!")
+            else:
+                self.__tela_conta.mostra_mensagem("\nContas do tipo salário não podem cadastar chaves PIX, pois não podem receber transferências")
 
     def realizar_operacoes(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
@@ -122,6 +126,6 @@ class ControladorConta:
         self.__tela_conta.mostra_mensagem("\nLista de Contas\n")
         for conta in self.__contas:
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
-                           "cpf": conta.titular.cpf, "tipo": conta.tipo}
+                           "cpf": conta.titular.cpf, "tipo": conta.tipo, "chaves": conta.chaves_PIX}
             self.__tela_conta.lista_conta(dados_conta)
 

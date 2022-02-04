@@ -101,7 +101,7 @@ class TelaPessoa:
         print("\nFuncionário:", dados_funcionario["codigo"], "-", dados_funcionario["nome"])
         print("Data de nascimento do funcinário:", dados_funcionario["data_nascimento"].strftime('%d/%m/%Y'))
         print(f"CPF do funcionário: {str(dados_funcionario['cpf'])[0:3]}.{str(dados_funcionario['cpf'])[3:6]}.{str(dados_funcionario['cpf'])[6:9]}-{str(dados_funcionario['cpf'])[9:11]}")
-        print("Número CTPS do funcinário", dados_funcionario["numero_CTPS"])
+        print("Número CTPS do funcinário:", dados_funcionario["numero_CTPS"])
 
     def mostra_mensagem(self, msg):
         print(msg)
