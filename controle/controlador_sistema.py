@@ -47,7 +47,7 @@ class ControladorSistema:
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
                 funcao_escolhida()
         else:
-            self.__tela_sistema.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+            self.__tela_sistema.mostra_mensagem("\nATENÇÃO: Senha incorreta!")
 
     def abre_tela(self):
         lista_opcoes = {1: self.gerenciar_cadastros, 2: self.realizar_operacoes, 3: self.exibe_area_funcionarios,

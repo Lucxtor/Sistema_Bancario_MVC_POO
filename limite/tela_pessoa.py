@@ -27,7 +27,7 @@ class TelaPessoa:
         print("0 - Retornar para o menu anterior")
 
     def pega_dados_cliente(self):
-        print("-------- Dados do Cliente ----------")
+        print("\n-------- Dados do Cliente ----------\n")
         nome = input("Nome: ")
         while True:
             try:
@@ -43,14 +43,14 @@ class TelaPessoa:
             except:
                 print("Parece que algo deu errado, tente novamente!")
         cpf = cpf_valido()
-        senha_cadastro = input("Senha para operações: ")
+        senha_cadastro = input("Senha para cadastros: ")
 
         return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "senha_cadastro": senha_cadastro}
 
     def pega_dados_cliente_alteracao(self):
         print("\n-------- Dados Atualizados do Cliente ----------\n")
         nome = input("Nome: ")
-        senha_cadastro = input("Senha para operações: ")
+        senha_cadastro = input("Nova senha para cadastros: ")
 
         return {"nome": nome, "senha_cadastro": senha_cadastro}
 
@@ -73,16 +73,16 @@ class TelaPessoa:
         cpf = cpf_valido()
         numero_CTPS = input("Número da CTPS: ")
         while len(numero_CTPS)!=8:
-            print("Número de documento inválido!")
+            print("Número de documento inválido, deve conter 8 dígitos!")
             numero_CTPS = input("Número da CTPS: ")
-        senha_funcionario = input("Senha para operações: ")
+        senha_funcionario = input("Senha para cadastros: ")
 
         return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "numero_CTPS": numero_CTPS, "senha_funcionario": senha_funcionario}
 
     def pega_dados_funcionario_alteracao(self):
         print("\n-------- Dados Atualizados do Funcionário ----------\n")
         nome = input("Nome: ")
-        senha_funcionario = input("Senha para operações: ")
+        senha_funcionario = input("Nova senha para cadastros: ")
 
         return {"nome": nome, "senha_funcionario": senha_funcionario}
 
@@ -98,7 +98,7 @@ class TelaPessoa:
         print(f"CPF do cliente: {str(dados_cliente['cpf'])[0:3]}.{str(dados_cliente['cpf'])[3:6]}.{str(dados_cliente['cpf'])[6:9]}-{str(dados_cliente['cpf'])[9:11]}")
 
     def lista_funcionario(self, dados_funcionario):
-        print("Funcionário:", dados_funcionario["codigo"], "-", dados_funcionario["nome"])
+        print("\nFuncionário:", dados_funcionario["codigo"], "-", dados_funcionario["nome"])
         print("Data de nascimento do funcinário:", dados_funcionario["data_nascimento"].strftime('%d/%m/%Y'))
         print(f"CPF do funcionário: {str(dados_funcionario['cpf'])[0:3]}.{str(dados_funcionario['cpf'])[3:6]}.{str(dados_funcionario['cpf'])[6:9]}-{str(dados_funcionario['cpf'])[9:11]}")
         print("Número CTPS do funcinário", dados_funcionario["numero_CTPS"])

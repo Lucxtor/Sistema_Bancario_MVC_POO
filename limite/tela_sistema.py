@@ -31,7 +31,7 @@ class TelaSistema:
     def menu_area_funcionarios(self, nome_funcionario):
         print("\n-------- Área dos Funcionários  ---------\n")
         print(f'Bem-vindo(a) {nome_funcionario}')
-        print("Escolha a opção que deseja acessar: ")
+        print("\nEscolha a opção que deseja acessar: ")
         print("1 - Listar Contas")
         print("2 - Listar Clientes")
         print("0 - Retornar para o menu anterior")
