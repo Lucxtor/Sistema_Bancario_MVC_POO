@@ -32,30 +32,30 @@ class ControladorConta:
             self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
             self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
         else:
-            self.__tela_conta.mostra_mensagem("Cliente não foi encontrado!")
+            self.__tela_conta.mostra_mensagem("\nCliente não foi encontrado!")
 
     def valida_existencia_e_senha_conta(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
-            senha_conta = self.__tela_conta.pega_senha_conta()
+            senha_conta = self.__tela_conta.pega_senha_operacoes()
             if conta.senha_conta == senha_conta:
                 return True, conta
             else:
-                self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
-                return False, none
+                self.__tela_conta.mostra_mensagem("\nATENÇÃO: Senha incorreta!")
+                return False, None
         else:
-            self.__tela_conta.mostra_mensagem("ATENÇÃO: Conta não existente!")
-            return False, none
+            self.__tela_conta.mostra_mensagem("\nATENÇÃO: Conta não existente!")
+            return False, None
 
     def excluir_conta(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
             if (conta.saldo == 0):
                     self.__contas.remove(conta)
-                    self.__tela_conta.mostra_mensagem("Conta excluida com sucesso!")
+                    self.__tela_conta.mostra_mensagem("\nConta excluida com sucesso!")
             else:
-                self.__tela_conta.mostra_mensagem(f"O saldo atual da conta é de R${conta.saldo}. Para encerrar a conta, saque ou transfira todos os fundos")
+                self.__tela_conta.mostra_mensagem(f"\nO saldo atual da conta é de R${conta.saldo}. Para encerrar a conta, saque ou transfira todos os fundos")
 
     def listar_informacoes_conta(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
@@ -85,7 +85,7 @@ class ControladorConta:
                     conta.saldo += valor
                     return True
                 else:
-                    self.__tela_conta.mostra_mensagem("ATENÇÃO: Senha incorreta!")
+                    self.__tela_conta.mostra_mensagem("\nATENÇÃO: Senha incorreta!")
                     return False
             else:
                 conta.saldo += valor
@@ -119,7 +119,7 @@ class ControladorConta:
             funcao_escolhida()
 
     def listar_contas(self):
-        self.__tela_conta.mostra_mensagem("Lista Contas")
+        self.__tela_conta.mostra_mensagem("\nLista de Contas\n")
         for conta in self.__contas:
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
                            "cpf": conta.titular.cpf, "tipo": conta.tipo}
