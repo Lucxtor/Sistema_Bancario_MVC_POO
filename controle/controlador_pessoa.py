@@ -148,7 +148,7 @@ class ControladorPessoa:
         return False, ""
 
     def listar_clientes(self):
-        self.__tela_pessoa.mostra_mensagem("\nLista de clientes\n")
+        self.__tela_pessoa.mostra_mensagem("\nLista de clientes")
         for cliente in self.__clientes:
             dados_cliente = {"codigo":cliente.codigo, "nome": cliente.nome, "data_nascimento": cliente.data_nascimento,
                              "cpf": cliente.cpf}

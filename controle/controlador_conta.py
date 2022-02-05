@@ -117,7 +117,7 @@ class ControladorConta:
             funcao_escolhida()
 
     def listar_contas(self):
-        self.__tela_conta.mostra_mensagem("\nLista de Contas\n")
+        self.__tela_conta.mostra_mensagem("\nLista de Contas")
         for conta in self.__contas:
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
                            "cpf": conta.titular.cpf, "tipo": conta.tipo, "chaves": conta.chaves_PIX}
