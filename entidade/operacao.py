@@ -1,19 +1,14 @@
 from datetime import datetime
 from entidade.conta import Conta
+from entidade.movimentacao import Movimentacao
 
 class Operacao():
 
-    def __init__(self, conta: Conta, tipo: str, data_operacao: datetime, valor: float, conta_destino: Conta, chave: str):
-        self.__conta = conta
+    def __init__(self, tipo: str, data_operacao: datetime, chave: str = ""):
         self.__tipo = tipo
         self.__data_operacao = data_operacao
-        self.__valor = valor
-        self.__conta_destino = conta_destino
         self.__chave = chave
-
-    @property
-    def conta(self):
-      return self.__conta
+        self.__movimentacao = []
 
     @property
     def tipo(self):
@@ -24,13 +19,13 @@ class Operacao():
       return self.__data_operacao
 
     @property
-    def valor(self):
-        return self.__valor
-
-    @property
-    def conta_destino(self):
-      return self.__conta_destino
-
-    @property
     def chave(self):
         return self.__chave
+
+    @property
+    def movimentacao(self):
+        return self.__movimentacao
+
+    def adicionar_movimentacao(self, conta: Conta, valor: float):
+        movimentacao = Movimentacao(conta, valor)
+        self.__movimentacao.append(movimentacao)
