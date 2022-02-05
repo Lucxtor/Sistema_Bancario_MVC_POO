@@ -34,20 +34,23 @@ class ControladorOperacao:
             self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
 
     def valida_transferencia(self, conta, conta_destino):
-        if conta.tipo != 2 and conta_destino.tipo != 2 or conta.titular == conta_destino.titular:
-            if conta_destino.tipo != 3 or conta.tipo == 3 and conta.titular == conta_destino.titular and conta_destino.tipo != 3:
-                saldo_transferencia = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
-                valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-                if valor > 0:
-                    return True, valor, saldo_transferencia
+        if conta.codigo != conta_destino.codigo:
+            if conta.tipo != 2 and conta_destino.tipo != 2 or conta.titular == conta_destino.titular:
+                if conta_destino.tipo != 3 and conta.tipo != 3 or conta.tipo == 3 and conta.titular == conta_destino.titular and conta_destino.tipo != 3:
+                    saldo_transferencia = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
+                    valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
+                    if valor > 0:
+                        return True, valor, saldo_transferencia
+                else:
+                    self.__tela_operacao.mostra_mensagem(
+                        "\nUma das contas envolvidas na transação é do tipo salario e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
+                    return False, None, None
             else:
-                self.__tela_operacao.mostra_mensagem(
-                    "\nUma das contas envolvidas na transação é do tipo salario e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
+                self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia. Contas poupança apenas podem transferir para/receber de contas de mesma titularidade!")
                 return False, None, None
         else:
-            self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia. Contas poupança apenas podem transferir para/receber de contas de mesma titularidade!")
+            self.__tela_operacao.mostra_mensagem("\nNão se pode enviar uma transferência para essa mesma conta!")
             return False, None, None
-
 
     def transferencia(self, conta, opcao_escolhida):
         codigo_conta_destino = self.__tela_operacao.pega_codigo_conta_destino()
