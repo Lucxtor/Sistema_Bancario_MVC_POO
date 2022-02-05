@@ -1,6 +1,7 @@
 from limite.tela_sistema import TelaSistema
 from controle.controlador_pessoa import ControladorPessoa
 from controle.controlador_conta import ControladorConta
+from controle.controlador_operacao import ControladorOperacao
 
 class ControladorSistema:
 
@@ -8,6 +9,7 @@ class ControladorSistema:
         self.__tela_sistema = TelaSistema()
         self.__controlador_conta = ControladorConta(self)
         self.__controlador_pessoa = ControladorPessoa(self)
+        self.__controlador_operacao = ControladorOperacao(self)
 
     @property
     def controlador_conta(self):
@@ -16,6 +18,10 @@ class ControladorSistema:
     @property
     def controlador_pessoa(self):
         return self.__controlador_pessoa
+
+    @property
+    def controlador_operacao(self):
+        return self.__controlador_operacao
 
     def inicializa_sistema(self):
         self.abre_tela()
@@ -66,9 +72,6 @@ class ControladorSistema:
 
     def retorno_menu(self):
         self.abre_tela()
-
-    def retorna_cliente(self, cpf):
-        return self.__controlador_pessoa.pega_cliente_por_cpf(cpf)
 
     def abre_tela_cadastros(self):
         lista_opcoes = {1: self.gerenciar_pessoas, 2: self.gerenciar_contas,

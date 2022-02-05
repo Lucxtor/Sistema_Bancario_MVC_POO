@@ -1,5 +1,4 @@
 from limite.tela_conta import TelaConta
-from controle.controlador_operacao import ControladorOperacao
 from entidade.conta import Conta
 
 import random
@@ -10,11 +9,6 @@ class ControladorConta:
         self.__contas = []
         self.__tela_conta = TelaConta()
         self.__controlador_sistema = controlador_sistema
-        self.__controlador_operacao = ControladorOperacao(self)
-
-    @property
-    def controlador_operacao(self):
-        return self.__controlador_operacao
 
     def retorno_menu(self):
         self.__controlador_sistema.abre_tela_cadastros()
@@ -25,7 +19,7 @@ class ControladorConta:
     def cadastrar_nova_conta(self):
         codigo = random.randint(1000, 9999)
         dados_conta = self.__tela_conta.pega_dados_conta()
-        cliente = self.__controlador_sistema.retorna_cliente(dados_conta["cpf_titular"])
+        cliente = self.__controlador_sistema.controlador_pessoa.pega_cliente_por_cpf(dados_conta["cpf_titular"])
         if cliente is not None:
             conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_operacoes"])
             self.__contas.append(conta)
@@ -78,7 +72,7 @@ class ControladorConta:
     def realizar_operacoes(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
-            self.__controlador_operacao.abre_tela(conta)
+            self.__controlador_sistema.controlador_operacao.abre_tela(conta)
 
     def atualizar_saldo(self, codigo_conta, valor):
         conta = self.pega_conta_por_codigo(codigo_conta)
