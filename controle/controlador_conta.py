@@ -45,6 +45,7 @@ class ControladorConta:
     def excluir_conta(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
+            #Regra de Negócio: Para que uma conta seja excluída, ela deve estar com um saldo de 0 reais
             if (conta.saldo == 0):
                     self.__contas.remove(conta)
                     self.__tela_conta.mostra_mensagem("\nConta excluida com sucesso!")
@@ -71,6 +72,7 @@ class ControladorConta:
 
     def realizar_operacoes(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
+        # Regras de Negócio: As transferências, saques e consultas a uma determinada conta só podem ocorrer mediante senha do Titular.
         if validacao:
             self.__controlador_sistema.controlador_operacao.abre_tela(conta)
 

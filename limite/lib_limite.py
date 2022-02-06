@@ -12,6 +12,7 @@ def valida_opcao(opcoesValidas):
         else:
             return opcao
 
+#Regra de negócio: O cadastro da Pessoa deve utilizar um CPF válido
 def cpf_valido():
     while True:
         cpf = input("CPF ( Digite o CPF contendo apenas números ): ")
@@ -50,16 +51,17 @@ def valida_operacao_saida(saldo):
         while True:
             try:
                 valor_operacao = float(input("Digite qual o valor da operação: "))
+                #Regra de Negócio: Não é permitida a transferência de valores negativos + Qualquer operação de saída apenas pode ocorrer enquanto houver saldo disponível
                 while(valor_operacao > saldo or valor_operacao <= 0):
                     print("Valor inválido, tente novamente!")
                     valor_operacao = float(input("Digite qual o valor da operação: "))
             except:
                 print("A opção digitada é invalida, por favor, tente novamente!")
             else:
-                return valor_operacao
+                return True, valor_operacao
     else:
         print("Saldo insuficiente!")
-        return 0
+        return False, None
 
 def valida_operacao_entrada():
     while True:

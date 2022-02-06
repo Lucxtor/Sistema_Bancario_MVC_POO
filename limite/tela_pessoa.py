@@ -72,6 +72,7 @@ class TelaPessoa:
                 print("Parece que algo deu errado, tente novamente!")
         cpf = cpf_valido()
         numero_CTPS = input("Número da CTPS: ")
+        #Regra de Negócio: O número CTPS deve ter 8 dígitos
         while len(numero_CTPS)!=8:
             print("Número de documento inválido, deve conter 8 dígitos!")
             numero_CTPS = input("Número da CTPS: ")
