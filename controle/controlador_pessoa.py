@@ -31,6 +31,7 @@ class ControladorPessoa:
         codigo = self.__qtde_clientes
         dados_cliente = self.__tela_pessoa.pega_dados_cliente()
         for cliente in self.__clientes:
+            # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
             if cliente.cpf == dados_cliente["cpf"]:
                 cpf_unico = False
         if cpf_unico:
@@ -92,10 +93,12 @@ class ControladorPessoa:
         codigo = self.__qtde_funcionarios
         dados_funcionario = self.__tela_pessoa.pega_dados_funcionario()
         for funcionario in self.__funcionarios:
+            # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
             if funcionario.cpf == dados_funcionario["cpf"]:
                 cpf_unico = False
         if cpf_unico:
             idade = self.calcula_idade(dados_funcionario["data_nascimento"])
+            #Regra de Negócio: O cadastro de Pessoa exige idade mínima de 18 anos ✔
             if idade > 18:
                 funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
                 self.__funcionarios.append(funcionario)
@@ -107,6 +110,7 @@ class ControladorPessoa:
 
     def alterar_funcionario(self):
         validacao, funcionario = self.valida_existencia_e_senha_funcionario()
+        #Regras de Negócio: Todas as funcionalidades relacionadas a usuários do sistema exigirão senha
         if validacao:
             novos_dados_funcionario = self.__tela_pessoa.pega_dados_funcionario_alteracao()
             funcionario.nome = novos_dados_funcionario["nome"]
@@ -115,6 +119,7 @@ class ControladorPessoa:
 
     def excluir_funcionario(self):
         validacao, funcionario = self.valida_existencia_e_senha_funcionario()
+        # Regras de Negócio: Todas as funcionalidades relacionadas a usuários do sistema exigirão senha
         if validacao:
             self.__funcionarios.remove(funcionario)
             self.__tela_pessoa.mostra_mensagem("\nFuncionário excluído com sucesso!")
@@ -135,6 +140,7 @@ class ControladorPessoa:
 
     def lista_funcionario(self):
         validacao, funcionario = self.valida_existencia_e_senha_funcionario()
+        # Regras de Negócio: Todas as funcionalidades relacionadas a usuários do sistema exigirão senha
         if validacao:
             dados_funcionario = {"codigo": funcionario.codigo, "nome": funcionario.nome,
                              "data_nascimento": funcionario.data_nascimento, "cpf": funcionario.cpf,

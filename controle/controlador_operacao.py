@@ -4,7 +4,7 @@ from entidade.operacao import Operacao
 from datetime import datetime
 
 class ControladorOperacao:
-    TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
+    TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX", 5:"Taxa Transferência"}
     def __init__(self, controlador_sistema):
         self.__operacoes = []
         self.__tela_operacao = TelaOperacao()
@@ -16,7 +16,7 @@ class ControladorOperacao:
     def saque(self, conta, opcao_escolhida):
         saldo_saque = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
         valor = self.__tela_operacao.pega_dados_saida(saldo_saque)
-        if valor > 0:
+        if valor is not None:
             operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
             operacao.adicionar_movimentacao(conta, (valor * -1))
             valida_saldo = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
@@ -35,11 +35,13 @@ class ControladorOperacao:
 
     def valida_transferencia(self, conta, conta_destino):
         if conta.codigo != conta_destino.codigo:
+            #Regra de Negócio: Contas do tipo poupança não podem fazer ou receber transferências de contas com outra titularidade
             if conta.tipo != 2 and conta_destino.tipo != 2 or conta.titular == conta_destino.titular:
+                #Regra de Negócio: Contas Salário apenas permite a transferência para uma conta corrente ou poupança de mesma titularidade ou saques.
                 if conta_destino.tipo != 3 and conta.tipo != 3 or conta.tipo == 3 and conta.titular == conta_destino.titular and conta_destino.tipo != 3:
                     saldo_transferencia = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
                     valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-                    if valor > 0:
+                    if valor is not None:
                         return True, valor, saldo_transferencia
                 else:
                     self.__tela_operacao.mostra_mensagem(
@@ -56,27 +58,38 @@ class ControladorOperacao:
         codigo_conta_destino = self.__tela_operacao.pega_codigo_conta_destino()
         conta_destino = self.__controlador_sistema.controlador_conta.pega_conta_por_codigo(codigo_conta_destino)
         if conta_destino is not None:
-            validacao, valor, saldo_transferencia =  self.valida_transferencia(conta, conta_destino)
+            validacao, valor, saldo_transferencia = self.valida_transferencia(conta, conta_destino)
             if validacao:
                 operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
                 operacao.adicionar_movimentacao(conta, (valor * -1))
                 operacao.adicionar_movimentacao(conta_destino, valor)
-                if valor <= 1000 and saldo_transferencia >= valor + 2:
-                    valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, ((valor + 2.0) * (-1)))
-                    operacao.adicionar_movimentacao(conta, (-2))
-                elif valor > 1000 and saldo_transferencia >= valor + 3:
-                    valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, ((valor + 3.0) * (-1)))
-                    operacao.adicionar_movimentacao(conta, (-3))
-                else:
-                    self.__tela_operacao.mostra_mensagem("\nVocê não possui saldo suficiente para essa transferência!")
-                    valida_saldo_enviado = False
-                if valida_saldo_enviado:
-                    valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
-                    if valida_saldo_recebido:
-                        self.__operacoes.append(operacao)
-                        self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+                if self.calcula_e_adiciona_taxa(valor, saldo_transferencia, conta):
+                    valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(
+                    conta_destino.codigo, valor)
+                if valida_saldo_recebido:
+                    self.__operacoes.append(operacao)
+                    self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+
         else:
-            self.__tela_operacao.mostra_mensagem("\nO código da conta é invélido ou incorreto!")
+            self.__tela_operacao.mostra_mensagem("\nO código da conta é inválido ou incorreto!")
+
+
+    def calcula_e_adiciona_taxa(self, valor, saldo_transferencia, conta):
+        operacao = Operacao(self.TIPOS_OPERACOES[5], datetime.now())
+        if valor <= 1000 and saldo_transferencia >= valor + 2:
+            valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo,((valor + 2.0) * (-1)))
+            operacao.adicionar_movimentacao(conta, (-2))
+            self.__operacoes.append(operacao)
+            return valida_saldo_enviado
+        elif valor > 1000 and saldo_transferencia >= valor + 3:
+            valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo,((valor + 3.0) * (-1)))
+            operacao.adicionar_movimentacao(conta, (-3))
+            self.__operacoes.append(operacao)
+            return valida_saldo_enviado
+        else:
+            self.__tela_operacao.mostra_mensagem("\nVocê não possui saldo suficiente para essa transferência!")
+            valida_saldo_enviado = False
+            return valida_saldo_enviado
 
     def transferencia_PIX(self, conta, opcao_escolhida):
         chave_PIX = self.__tela_operacao.pega_chave_PIX()
