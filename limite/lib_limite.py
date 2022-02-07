@@ -58,10 +58,10 @@ def valida_operacao_saida(saldo):
             except:
                 print("A opção digitada é invalida, por favor, tente novamente!")
             else:
-                return True, valor_operacao
+                return valor_operacao
     else:
         print("Saldo insuficiente!")
-        return False, None
+        return 0
 
 def valida_operacao_entrada():
     while True:

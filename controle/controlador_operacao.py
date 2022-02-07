@@ -41,8 +41,10 @@ class ControladorOperacao:
                 if conta_destino.tipo != 3 and conta.tipo != 3 or conta.tipo == 3 and conta.titular == conta_destino.titular and conta_destino.tipo != 3:
                     saldo_transferencia = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
                     valor = self.__tela_operacao.pega_dados_saida(saldo_transferencia)
-                    if valor is not None:
+                    if valor > 0:
                         return True, valor, saldo_transferencia
+                    else:
+                        return False, None, None
                 else:
                     self.__tela_operacao.mostra_mensagem(
                         "\nUma das contas envolvidas na transação é do tipo salario e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
@@ -66,9 +68,9 @@ class ControladorOperacao:
                 if self.calcula_e_adiciona_taxa(valor, saldo_transferencia, conta, operacao):
                     valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(
                     conta_destino.codigo, valor)
-                if valida_saldo_recebido:
-                    self.__operacoes.append(operacao)
-                    self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+                    if valida_saldo_recebido:
+                        self.__operacoes.append(operacao)
+                        self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
 
         else:
             self.__tela_operacao.mostra_mensagem("\nO código da conta é inválido ou incorreto!")
