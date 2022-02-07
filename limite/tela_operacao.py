@@ -17,11 +17,8 @@ class TelaOperacao:
 
     def pega_dados_saida(self, saldo):
         print(f'Saldo disponível R$ {saldo:.2f}')
-        is_saldo_positivo, valor = valida_operacao_saida(saldo)
-        if is_saldo_positivo:
-            return valor
-        else:
-            return None
+        return valida_operacao_saida(saldo)
+
 
     def pega_dados_deposito(self):
         print("Realizar depósito:")
