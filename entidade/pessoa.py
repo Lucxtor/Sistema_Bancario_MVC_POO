@@ -14,29 +14,29 @@ class Pessoa(ABC):
       def codigo(self):
         return self.__codigo
 
-      @property
-      def nome(self):
-          return self.__nome
-
-      @property
-      def data_nascimento(self):
-        return self.__data_nascimento
-
-      @property
-      def cpf(self):
-        return self.__cpf
-
       @codigo.setter
       def codigo(self, codigo: str):
         self.__codigo = codigo
+
+      @property
+      def nome(self):
+        return self.__nome
 
       @nome.setter
       def nome(self, nome: str):
         self.__nome = nome
 
+      @property
+      def data_nascimento(self):
+        return self.__data_nascimento
+
       @data_nascimento.setter
       def data_nascimento(self, data_nascimento: str):
         self.__data_nascimento = data_nascimento
+
+      @property
+      def cpf(self):
+        return self.__cpf
 
       @cpf.setter
       def cpf(self, cpf: str):
