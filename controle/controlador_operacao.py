@@ -47,10 +47,10 @@ class ControladorOperacao:
                         return False, None, None
                 else:
                     self.__tela_operacao.mostra_mensagem(
-                        "\nUma das contas envolvidas na transação é do tipo salário e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
+                        "\nUma das contas envolvidas na transação é do tipo salário e,\npor isso, não está apta a realizar/receber essa transferencia.\nContas salário só podem transferir para contas de mesma titularidade")
                     return False, None, None
             else:
-                self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia. Contas poupança apenas podem transferir para/receber de contas de mesma titularidade!")
+                self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e,\npor isso, não está apta a realizar/receber essa transferencia.\nContas poupança apenas podem transferir para/receber de contas de mesma titularidade!")
                 return False, None, None
         else:
             self.__tela_operacao.mostra_mensagem("\nNão se pode enviar uma transferência para essa mesma conta!")
@@ -110,7 +110,7 @@ class ControladorOperacao:
 
     def consultar_extrato(self, conta, opcao_escolhida):
         self.__tela_operacao.mostra_mensagem(f'Saldo da conta: R${conta.saldo}\n')
-        self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data        Horário   Valor         Descrição Chave PIX     \n')
+        self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data        Horário   Valor         Descrição  Chave PIX\n')
         for operacao in self.__operacoes:
             for movimentacao in operacao.movimentacao:
                 if movimentacao.conta == conta:

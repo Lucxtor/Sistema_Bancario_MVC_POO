@@ -51,7 +51,7 @@ class TelaOperacao:
 
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])
-        print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)} {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')
+        print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')
 
 
     def mostra_mensagem(self, msg):
