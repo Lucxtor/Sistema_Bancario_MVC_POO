@@ -17,8 +17,11 @@ class TelaOperacao:
 
     def pega_dados_saida(self, saldo):
         print(f'Saldo disponível R$ {saldo:.2f}')
-        return valida_operacao_saida(saldo)
-
+        is_saldo_positivo, valor = valida_operacao_saida(saldo)
+        if is_saldo_positivo:
+            return valor
+        else:
+            return None
 
     def pega_dados_deposito(self):
         print("Realizar depósito:")
@@ -41,7 +44,8 @@ class TelaOperacao:
         input("\nAperte enter para continuar!")
 
     def exibe_extrato(self, dados_operacao):
-        print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${dados_operacao["Valor"]} {dados_operacao["Chave"]} , {dados_operacao["Desc"]}')
+        valor_str = str(dados_operacao["Valor"])
+        print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)} {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')
 
 
     def mostra_mensagem(self, msg):

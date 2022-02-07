@@ -67,7 +67,7 @@ class TelaPessoa:
                     data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
                     break
                 else:
-                    print("Parece que a data informada é invalida, tente novamente!")
+                    print("Parece que a data informada é inválida, tente novamente!")
             except:
                 print("Parece que algo deu errado, tente novamente!")
         cpf = cpf_valido()

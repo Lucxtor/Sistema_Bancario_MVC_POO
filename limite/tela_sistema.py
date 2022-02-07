@@ -37,7 +37,7 @@ class TelaSistema:
         print("0 - Retornar para o menu anterior")
 
     def pega_senha_funcionario(self):
-        return input("Informe a senha do funcionario para liberar o acesso: ")
+        return input("Informe a senha do funcionário para liberar o acesso: ")
 
     def mostra_mensagem(self, msg):
         print(msg)
