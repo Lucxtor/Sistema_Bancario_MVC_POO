@@ -4,7 +4,7 @@ from entidade.operacao import Operacao
 from datetime import datetime
 
 class ControladorOperacao:
-    TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX", 5:"Taxa Transferência"}
+    TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
     def __init__(self, controlador_sistema):
         self.__operacoes = []
         self.__tela_operacao = TelaOperacao()
@@ -18,20 +18,20 @@ class ControladorOperacao:
         valor = self.__tela_operacao.pega_dados_saida(saldo_saque)
         if valor is not None:
             operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
-            operacao.adicionar_movimentacao(conta, (valor * -1))
+            operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
             valida_saldo = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
             if valida_saldo:
                 self.__operacoes.append(operacao)
-                self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+                self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
 
     def deposito(self, conta, opcao_escolhida):
         valor = self.__tela_operacao.pega_dados_deposito()
         operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
-        operacao.adicionar_movimentacao(conta, valor)
+        operacao.adicionar_movimentacao(conta, valor, "Entrada")
         valida_saldo = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, valor)
         if valida_saldo:
             self.__operacoes.append(operacao)
-            self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+            self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
 
     def valida_transferencia(self, conta, conta_destino):
         if conta.codigo != conta_destino.codigo:
@@ -47,7 +47,7 @@ class ControladorOperacao:
                         return False, None, None
                 else:
                     self.__tela_operacao.mostra_mensagem(
-                        "\nUma das contas envolvidas na transação é do tipo salario e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
+                        "\nUma das contas envolvidas na transação é do tipo salário e, por isso, não está apta a realizar/receber essa transferencia. Contas salário só podem transferir para contas de mesma titularidade")
                     return False, None, None
             else:
                 self.__tela_operacao.mostra_mensagem("\nUma das contas envolvidas na transação é do tipo poupança e, por isso, não está apta a realizar/receber essa transferencia. Contas poupança apenas podem transferir para/receber de contas de mesma titularidade!")
@@ -70,7 +70,7 @@ class ControladorOperacao:
                     conta_destino.codigo, valor)
                     if valida_saldo_recebido:
                         self.__operacoes.append(operacao)
-                        self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+                        self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
 
         else:
             self.__tela_operacao.mostra_mensagem("\nO código da conta é inválido ou incorreto!")
@@ -104,13 +104,13 @@ class ControladorOperacao:
                     valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
                     if valida_saldo_recebido:
                         self.__operacoes.append(operacao)
-                        self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso")
+                        self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
         else:
-            self.__tela_operacao.mostra_mensagem("\nA chave PIX é invalida ou incorreta!")
+            self.__tela_operacao.mostra_mensagem("\nA chave PIX informada é inválida ou incorreta!")
 
     def consultar_extrato(self, conta, opcao_escolhida):
         self.__tela_operacao.mostra_mensagem(f'Saldo da conta: R${conta.saldo}\n')
-        self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data         Horário   Valor  \n')
+        self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data        Horário   Valor         Descrição Chave PIX     \n')
         for operacao in self.__operacoes:
             for movimentacao in operacao.movimentacao:
                 if movimentacao.conta == conta:
