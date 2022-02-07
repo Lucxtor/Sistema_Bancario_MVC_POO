@@ -61,9 +61,9 @@ class ControladorOperacao:
             validacao, valor, saldo_transferencia = self.valida_transferencia(conta, conta_destino)
             if validacao:
                 operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
-                operacao.adicionar_movimentacao(conta, (valor * -1))
-                operacao.adicionar_movimentacao(conta_destino, valor)
-                if self.calcula_e_adiciona_taxa(valor, saldo_transferencia, conta):
+                operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
+                operacao.adicionar_movimentacao(conta_destino, valor, "Entrada")
+                if self.calcula_e_adiciona_taxa(valor, saldo_transferencia, conta, operacao):
                     valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(
                     conta_destino.codigo, valor)
                 if valida_saldo_recebido:
@@ -74,17 +74,14 @@ class ControladorOperacao:
             self.__tela_operacao.mostra_mensagem("\nO código da conta é inválido ou incorreto!")
 
 
-    def calcula_e_adiciona_taxa(self, valor, saldo_transferencia, conta):
-        operacao = Operacao(self.TIPOS_OPERACOES[5], datetime.now())
+    def calcula_e_adiciona_taxa(self, valor, saldo_transferencia, conta, operacao):
         if valor <= 1000 and saldo_transferencia >= valor + 2:
             valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo,((valor + 2.0) * (-1)))
-            operacao.adicionar_movimentacao(conta, (-2))
-            self.__operacoes.append(operacao)
+            operacao.adicionar_movimentacao(conta, (-2), "Taxa")
             return valida_saldo_enviado
         elif valor > 1000 and saldo_transferencia >= valor + 3:
             valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo,((valor + 3.0) * (-1)))
-            operacao.adicionar_movimentacao(conta, (-3))
-            self.__operacoes.append(operacao)
+            operacao.adicionar_movimentacao(conta, (-3), "Taxa")
             return valida_saldo_enviado
         else:
             self.__tela_operacao.mostra_mensagem("\nVocê não possui saldo suficiente para essa transferência!")
@@ -98,8 +95,8 @@ class ControladorOperacao:
             validacao, valor, saldo_transferencia = self.valida_transferencia(conta, conta_destino)
             if validacao:
                 operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), chave_PIX)
-                operacao.adicionar_movimentacao(conta, (valor * -1))
-                operacao.adicionar_movimentacao(conta_destino, valor)
+                operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
+                operacao.adicionar_movimentacao(conta_destino, valor, "Entrada")
                 valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
                 if valida_saldo_enviado:
                     valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
@@ -118,17 +115,17 @@ class ControladorOperacao:
                     data = operacao.data_operacao
                     tipo_operacao = operacao.tipo
                     if tipo_operacao == self.TIPOS_OPERACOES[1]:
-                        dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": (movimentacao.valor * -1), "Chave": operacao.chave}
+                        dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": (movimentacao.valor * -1), "Chave": operacao.chave, "Desc": movimentacao.descricao}
                     elif tipo_operacao == self.TIPOS_OPERACOES[2]:
-                        dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": movimentacao.valor, "Chave": operacao.chave}
+                        dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao.ljust(21), "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": movimentacao.valor, "Chave": operacao.chave, "Desc": movimentacao.descricao}
                     else:
                         if movimentacao.valor > 0:
                             dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao,
-                                          "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": movimentacao.valor, "Chave": operacao.chave}
+                                          "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": movimentacao.valor, "Chave": operacao.chave, "Desc": movimentacao.descricao}
                         else:
                             dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao,
                                               "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": (movimentacao.valor * -1),
-                                              "Chave": operacao.chave}
+                                              "Chave": operacao.chave, "Desc": movimentacao.descricao}
                     self.__tela_operacao.exibe_extrato(dados_operacao)
 
     def consultar_saldo(self, conta, opcao_escolhida):
