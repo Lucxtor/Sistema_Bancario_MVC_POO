@@ -26,6 +26,6 @@ class Operacao():
     def movimentacao(self):
         return self.__movimentacao
 
-    def adicionar_movimentacao(self, conta: Conta, valor: float):
-        movimentacao = Movimentacao(conta, valor)
+    def adicionar_movimentacao(self, conta: Conta, valor: float, desc: str=""):
+        movimentacao = Movimentacao(conta, valor, desc)
         self.__movimentacao.append(movimentacao)
