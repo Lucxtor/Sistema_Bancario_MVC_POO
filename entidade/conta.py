@@ -1,6 +1,7 @@
 from entidade.cliente import Cliente
 
 class Conta():
+    #criar constantes para tipos de contas
     def __init__(self, codigo:int, titular: Cliente, tipo: int, senha_operacoes:str):
         #Regra de Negócio: Todas as operações ocorrerão na mesma agência
         self.__agencia = "1234"

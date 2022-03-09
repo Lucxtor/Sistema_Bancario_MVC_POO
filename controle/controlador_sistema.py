@@ -41,6 +41,14 @@ class ControladorSistema:
     def listar_contas(self):
         self.__controlador_conta.listar_contas()
 
+    def valida_e_executa_funcao(self, opcao_escolhida, lista_opcoes):
+        if opcao_escolhida != None:
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            self.__tela_sistema.close()
+            funcao_escolhida()
+        else:
+            exit(0)
+
     def exibe_area_funcionarios(self):
         senha_funcionario = self.__tela_sistema.pega_senha_funcionario()
         valida_senha, funcionario = self.__controlador_pessoa.valida_senha_funcionario(senha_funcionario)
@@ -60,9 +68,8 @@ class ControladorSistema:
                         0: self.encerra_sistema}
 
         while True:
-            opcao_escolhida = self.__tela_sistema.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            opcao_escolhida = self.__tela_sistema.exibe_menu_sistema()
+            self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes)
 
     def gerenciar_pessoas(self):
         self.__controlador_pessoa.abre_tela()
@@ -78,6 +85,5 @@ class ControladorSistema:
                         0: self.retorno_menu}
 
         while True:
-            opcao_escolhida = self.__tela_sistema.tela_opcoes_cadastros()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            opcao_escolhida = self.__tela_sistema.exibe_menu_cadastros()
+            self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes)

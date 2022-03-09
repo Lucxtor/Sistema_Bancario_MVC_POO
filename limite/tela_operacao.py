@@ -1,19 +1,38 @@
 from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada, TIPOS_OPERACOES
+import PySimpleGUI as sg
 
 class TelaOperacao:
-    def tela_opcoes(self, agencia_conta, codigo_conta):
-        self.exibe_menu(agencia_conta, codigo_conta)
-        return valida_opcao([0,1,2,3,4,5,6])
+    def close(self):
+        self.__window.Close()
 
-    def exibe_menu(self, agencia_conta, codigo_conta):
-        print("\n-------- Área de Operações ---------\n")
-        print(f'   Agência: {agencia_conta}     Conta: {codigo_conta}\n')
-        print("Escolha a operação que deseja efetuar: ")
-        for opcao, descricao in TIPOS_OPERACOES.items():
-            print(opcao, "-", descricao)
-        print("5 - Consultar Extrato")
-        print("6 - Consultar Saldo")
-        print("0 - Retornar para o menu anterior")
+    def exibe_menu_operacoes(self, agencia_conta, codigo_conta):
+        self.menu_operacoes(agencia_conta, codigo_conta)
+        botao, valores = self.__window.Read()
+        return botao
+
+
+    def menu_operacoes(self, agencia_conta, codigo_conta):
+        layout = [
+            [sg.Text('Área de Operações')],
+            [sg.Text(f'   Agência: {agencia_conta}     Conta: {codigo_conta}')],
+            [sg.Text('Escolha a operação que deseja efetuar')],
+            [sg.Submit('Saque', key=1)],
+            [sg.Submit('Depósito', key=2)],
+            [sg.Submit('Transferência Ted/Doc', key=3)],
+            [sg.Submit('Transferência PIX', key=4)],
+            [sg.Submit('Consultar Extrato', key=5)],
+            [sg.Submit('Consultar Saldo', key=6)],
+            [sg.Cancel('Finalizar Sistema', key=0)],
+        ]
+        self.__window = sg.Window('Área de Operações').Layout(layout)
+        #print("\n-------- Área de Operações ---------\n")
+        #print(f'   Agência: {agencia_conta}     Conta: {codigo_conta}\n')
+        #print("Escolha a operação que deseja efetuar: ")
+        #for opcao, descricao in TIPOS_OPERACOES.items():
+        #    print(opcao, "-", descricao)
+        #print("5 - Consultar Extrato")
+        #print("6 - Consultar Saldo")
+        #print("0 - Retornar para o menu anterior")
 
     def pega_dados_saida(self, saldo):
         print(f'Saldo disponível R$ {saldo:.2f}')
@@ -56,5 +75,4 @@ class TelaOperacao:
 
     def mostra_mensagem(self, msg):
         print(msg)
-
 

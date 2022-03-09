@@ -25,11 +25,21 @@ precadastroContas = [conta01, conta02, conta03, conta04, conta05, conta06, conta
 
 class ControladorConta:
 
+    TIPOS_CONTAS = {1:"Corrente", 2:"Popupança", 3:"Salário" }
+
     def __init__(self, controlador_sistema):
         #self.__contas = []
         self.__contas = precadastroContas
         self.__tela_conta = TelaConta()
         self.__controlador_sistema = controlador_sistema
+
+    def valida_e_executa_funcao(self, opcao_escolhida, lista_opcoes):
+        if opcao_escolhida != None:
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            self.__tela_conta.close()
+            funcao_escolhida()
+        else:
+            exit(0)
 
     def retorno_menu(self):
         self.__controlador_sistema.abre_tela_cadastros()
@@ -42,7 +52,7 @@ class ControladorConta:
         dados_conta = self.__tela_conta.pega_dados_conta()
         cliente = self.__controlador_sistema.controlador_pessoa.pega_cliente_por_cpf(dados_conta["cpf_titular"])
         if cliente is not None:
-            conta = Conta(codigo, cliente,  dados_conta["tipo_conta"], dados_conta["senha_operacoes"])
+            conta = Conta(codigo, cliente,  self.TIPOS_CONTAS[dados_conta["tipo_conta"]], dados_conta["senha_operacoes"])
             self.__contas.append(conta)
             self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
             self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
@@ -84,7 +94,7 @@ class ControladorConta:
     def cadastrar_PIX(self):
         validacao, conta = self.valida_existencia_e_senha_conta()
         if validacao:
-            if conta.tipo != 3:
+            if conta.tipo != self.TIPOS_CONTAS[3]:
                 chave_PIX = self.__tela_conta.pega_chave_PIX()
                 conta.adicionar_chave_PIX(chave_PIX)
                 self.__tela_conta.mostra_mensagem("\nChave PIX cadastrada com sucesso!")
@@ -135,9 +145,8 @@ class ControladorConta:
                         0: self.retorno_menu}
 
         while True:
-            opcao_escolhida = self.__tela_conta.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            opcao_escolhida = self.__tela_conta.exibe_menu_conta()
+            self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes)
 
     def listar_contas(self):
         self.__tela_conta.mostra_mensagem("\nLista de Contas")

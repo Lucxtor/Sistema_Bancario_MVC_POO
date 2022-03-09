@@ -1,4 +1,5 @@
 TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
+TIPOS_CONTAS = {1:"Corrente", 2:"Popupança", 3:"Salário" }
 
 def valida_opcao(opcoesValidas):
     while True:
