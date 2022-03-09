@@ -1,18 +1,34 @@
-from limite.lib_limite import valida_opcao, cpf_valido
+from limite.lib_limite import valida_opcao, cpf_valido, TIPOS_CONTAS
+import PySimpleGUI as sg
 
 class TelaConta:
-    def tela_opcoes(self):
-        self.exibe_menu()
-        return valida_opcao([0,1,2,3,4])
+    def close(self):
+        self.__window.Close()
 
-    def exibe_menu(self):
-        print("\n-------- Gerenciamento de conta ---------\n")
-        print("Escolha como deseja gerenciar a conta: ")
-        print("1 - Cadastrar nova conta")
-        print("2 - Excluir conta")
-        print("3 - Listar informações")
-        print("4 - Cadastrar chave PIX")
-        print("0 - Retornar para o menu anterior")
+    def exibe_menu_conta(self):
+        self.menu_conta()
+        botao, valores = self.__window.Read()
+        return botao
+
+    def menu_conta(self):
+        layout = [
+            [sg.Text('Gerenciamento de Conta')],
+
+            [sg.Text('Escolha como deseja gerenciar a conta')],
+            [sg.Submit('Cadastrar nova conta', key=1)],
+            [sg.Submit('Excluir conta', key=2)],
+            [sg.Submit('Listar informações', key=3)],
+            [sg.Submit('Cadastrar chave PIX', key=4)],
+            [sg.Cancel('Finalizar Sistema', key=0)],
+        ]
+        self.__window = sg.Window('Gerenciamento de Conta').Layout(layout)
+        #print("\n-------- Gerenciamento de conta ---------\n")
+        #print("Escolha como deseja gerenciar a conta: ")
+        #print("1 - Cadastrar nova conta")
+        #print("2 - Excluir conta")
+        #print("3 - Listar informações")
+        #print("4 - Cadastrar chave PIX")
+        #print("0 - Retornar para o menu anterior")
 
 
 
@@ -20,9 +36,8 @@ class TelaConta:
         print("\n-------- Dados da Conta ----------\n")
         cpf_titular = cpf_valido()
         print("\nEscolha qual tipo de conta deseja criar: ")
-        print("1 - Conta Corrente")
-        print("2 - Conta Poupança")
-        print("3 - Conta Salário")
+        for opcao, descricao in TIPOS_CONTAS.items():
+            print(opcao, "- Conta", descricao)
         tipo_conta = valida_opcao([1,2,3])
         senha = input("Digite sua senha da conta: ")
         return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_operacoes":senha}
@@ -45,11 +60,11 @@ class TelaConta:
     def lista_conta(self, dados_conta):
         tipo_escolhido = dados_conta["tipo"]
         if tipo_escolhido == 1:
-            tipo_conta = "Corrente"
+            tipo_conta = TIPOS_CONTAS[1]
         elif tipo_escolhido == 2:
-            tipo_conta = "Poupança"
+            tipo_conta = TIPOS_CONTAS[2]
         else:
-            tipo_conta = "Salário"
+            tipo_conta = TIPOS_CONTAS[3]
         print("\nConta:", dados_conta["codigo"], "-", tipo_conta, "- Agência:", dados_conta["agencia"])
         chaves = dados_conta["chaves"]
         if len(chaves) != 0:

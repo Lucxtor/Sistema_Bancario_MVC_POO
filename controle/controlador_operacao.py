@@ -62,6 +62,7 @@ class ControladorOperacao:
         if conta_destino is not None:
             validacao, valor, saldo_transferencia = self.valida_transferencia(conta, conta_destino)
             if validacao:
+                #Transformar entrada e saída em variáveis
                 operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
                 operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
                 operacao.adicionar_movimentacao(conta_destino, valor, "Entrada")
@@ -157,9 +158,12 @@ class ControladorOperacao:
                         0: self.retorno_menu}
 
         while True:
-            opcao_escolhida = self.__tela_operacao.tela_opcoes(conta.agencia, conta.codigo)
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            if opcao_escolhida != 0:
-                funcao_escolhida(conta, opcao_escolhida)
+            opcao_escolhida = self.__tela_operacao.exibe_menu_operacoes(conta.agencia, conta.codigo)
+            if opcao_escolhida != None:
+                funcao_escolhida = lista_opcoes[opcao_escolhida]
+                if opcao_escolhida != 0:
+                    funcao_escolhida(conta, opcao_escolhida)
+                else:
+                    funcao_escolhida()
             else:
-                funcao_escolhida()
+                exit(0)
