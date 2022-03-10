@@ -25,17 +25,9 @@ class TelaOperacao:
             [sg.Cancel('Finalizar Sistema', key=0)],
         ]
         self.__window = sg.Window('Área de Operações').Layout(layout)
-        #print("\n-------- Área de Operações ---------\n")
-        #print(f'   Agência: {agencia_conta}     Conta: {codigo_conta}\n')
-        #print("Escolha a operação que deseja efetuar: ")
-        #for opcao, descricao in TIPOS_OPERACOES.items():
-        #    print(opcao, "-", descricao)
-        #print("5 - Consultar Extrato")
-        #print("6 - Consultar Saldo")
-        #print("0 - Retornar para o menu anterior")
 
     def pega_dados_saida(self, saldo):
-        print(f'Saldo disponível R$ {saldo:.2f}')
+        self.mostra_mensagem(f'Saldo disponível R$ {saldo:.2f}')
         is_saldo_positivo, valor = valida_operacao_saida(saldo)
         if is_saldo_positivo:
             return valor
@@ -43,30 +35,38 @@ class TelaOperacao:
             return None
 
     def pega_dados_deposito(self):
-        print("Realizar depósito:")
+        self.mostra_mensagem("Realizar depósito:")
         return valida_operacao_entrada()
 
     def pega_chave_PIX(self):
-        return input("Informe a chave PIX para transferência: ")
+        return self.layout_input("Informe a chave PIX para transferência", "Chave PIX", "Chave PIX")
 
     def pega_codigo_conta_destino(self):
         while True:
             try:
-                codigo_conta_destino = int(input("Informe o código da conta destino: "))
+                codigo_conta_destino = int(self.layout_input("Informe o código da conta destino", "Código", "Código Conta Destino"))
                 break
             except:
-                print("O código digitado é inválido!")
+                self.mostra_mensagem("O código digitado é inválido!")
         return codigo_conta_destino
 
     def exibe_saldo(self, saldo_final, saldo_depositos, saldo_saques, saldo_transferencia_enviadas, saldo_transferencia_recebidas, saldo_transferencia_entrada_vs_saida):
-        print(f'\nO saldo em conta atualmente é R$ {saldo_final:.2f}\n')
-        print("O saldo de movimentações é:")
-        print(f'   Saques: R$ {saldo_saques:.2f}   Depósitos: R$ {saldo_depositos:.2f}\n')
-        print("O saldo entre transferências é:")
-        print(f'   Transferências enviadas: R$ {saldo_transferencia_enviadas:.2f}')
-        print(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}\n')
-        print(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')
-        input("\nAperte enter para continuar!")
+        layout = [
+            [sg.Text(f'\nO saldo em conta atualmente é R$ {saldo_final:.2f}\n')]
+            [sg.Text(f'O saldo de movimentações é:')]
+            [sg.Text(f'   Saques: R$ {saldo_saques:.2f}   Depósitos: R$ {saldo_depositos:.2f}\n')]
+            [sg.Text(f'O saldo entre transferências é:')]
+            [sg.Text(f'   Transferências enviadas: R$ {saldo_transferencia_enviadas:.2f}')]
+            [sg.Text(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}\n')]
+            [sg.Text(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')]
+            [sg.Submit('Ok')]
+        ]
+        self.__window = sg.Window('Exibe Saldo').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return valor['valor']
 
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])
@@ -74,5 +74,26 @@ class TelaOperacao:
 
 
     def mostra_mensagem(self, msg):
-        print(msg)
+        layout = [
+            [sg.Text(msg)],
+            [sg.Submit('Ok')]
+        ]
+        self.__window = sg.Window('Mensagem').Layout(layout)
+        botao = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return botao
 
+    def layout_input(self, instrucao, valor, titulo):
+        layout = [
+            [sg.Text(instrucao)],
+            [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        self.__window = sg.Window(titulo).Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return valor['valor']

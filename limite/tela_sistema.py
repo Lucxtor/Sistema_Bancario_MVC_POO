@@ -24,21 +24,9 @@ class TelaSistema:
         ]
         self.__window = sg.Window('Sistema Bancário').Layout(layout)
 
-    #def tela_opcoes(self):
-    #    self.exibe_menu()
-    #    return valida_opcao([0,1,2,3])
-
-    #def exibe_menu(self):
-    #    print("\n-------- Sistema Bancário  ---------\n")
-    #    print("Escolha a área que deseja acessar: ")
-    #    print("1 - Área de Cadastros")
-    #    print("2 - Área de Operações")
-    #    print("3 - Área de Funcionários")
-    #    print("0 - Finalizar sistema")
-
     def exibe_menu_cadastros(self):
         self.menu_cadastros()
-        botao, valores = self.__window.Read()
+        botao, valor = self.__window.Read()
         return botao
 
     def menu_cadastros(self):
@@ -52,26 +40,48 @@ class TelaSistema:
         ]
         self.__window = sg.Window('Área de Cadastros').Layout(layout)
 
-        # print("\n-------- Área de Cadastros ---------\n")
-        # print("Escolha o cadastro que deseja gerenciar: ")
-        # print("1 - Gerenciar Pessoas")
-        # print("2 - Gerenciar Contas")
-        # print("0 - Retornar para o menu anterior")
-
     def exibe_menu_area_funcionarios(self, nome_funcionario):
         self.menu_area_funcionarios(nome_funcionario)
-        return valida_opcao([0,1,2])
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return botao
 
     def menu_area_funcionarios(self, nome_funcionario):
-        print("\n-------- Área dos Funcionários  ---------\n")
-        print(f'Bem-vindo(a) {nome_funcionario}')
-        print("\nEscolha a opção que deseja acessar: ")
-        print("1 - Listar Contas")
-        print("2 - Listar Clientes")
-        print("0 - Retornar para o menu anterior")
+        layout = [
+            [sg.Text('Área dos Funcionários')],
 
+            [sg.Text(f'Bem-vindo(a) {nome_funcionario}!')],
+            [sg.Text('Escolha o cadastro que deseja gerenciar')],
+            [sg.Submit('Listar Contas', key=1)],
+            [sg.Submit('Listar Clientes', key=2)],
+            [sg.Cancel('Retornar para o menu anterior', key=0)],
+        ]
+        self.__window = sg.Window('Área dos Funcionários').Layout(layout)
+
+    #EXEMPLO INPUT
     def pega_senha_funcionario(self):
-        return input("Informe a senha do funcionário para liberar o acesso: ")
+        layout = [
+            [sg.Text('Informe a senha do funcionário para liberar o acesso')],
+            [sg.Text('Senha:'), sg.InputText('', key='senha')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        self.__window = sg.Window('Área de Cadastros').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return valor['senha']
 
     def mostra_mensagem(self, msg):
-        print(msg)
+        layout = [
+            [sg.Text(msg)],
+            [sg.Submit('Ok')]
+        ]
+        self.__window = sg.Window('Mensagem').Layout(layout)
+        botao = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return botao

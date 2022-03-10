@@ -61,9 +61,11 @@ class ControladorConta:
 
     def valida_existencia_e_senha_conta(self):
         codigo_conta = self.__tela_conta.seleciona_codigo()
+        self.__tela_conta.close()
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
             senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+            self.__tela_conta.close()
             if conta.senha_operacoes == senha_operacoes:
                 return True, conta
             else:
@@ -97,6 +99,7 @@ class ControladorConta:
             if conta.tipo != self.TIPOS_CONTAS[3]:
                 chave_PIX = self.__tela_conta.pega_chave_PIX()
                 conta.adicionar_chave_PIX(chave_PIX)
+                self.__tela_conta.close()
                 self.__tela_conta.mostra_mensagem("\nChave PIX cadastrada com sucesso!")
             else:
                 self.__tela_conta.mostra_mensagem("\nContas do tipo salário não podem cadastar chaves PIX, pois não podem receber transferências")
