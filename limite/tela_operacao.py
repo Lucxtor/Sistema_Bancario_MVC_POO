@@ -1,7 +1,8 @@
-from limite.lib_limite import valida_opcao, valida_operacao_saida, valida_operacao_entrada, TIPOS_OPERACOES
+from limite.tela import Tela
 import PySimpleGUI as sg
 
-class TelaOperacao:
+class TelaOperacao(Tela):
+
     def close(self):
         self.__window.Close()
 
@@ -28,7 +29,7 @@ class TelaOperacao:
 
     def pega_dados_saida(self, saldo):
         self.mostra_mensagem(f'Saldo disponível R$ {saldo:.2f}')
-        is_saldo_positivo, valor = valida_operacao_saida(saldo)
+        is_saldo_positivo, valor = super().valida_operacao_saida(saldo)
         if is_saldo_positivo:
             return valor
         else:
@@ -36,7 +37,7 @@ class TelaOperacao:
 
     def pega_dados_deposito(self):
         self.mostra_mensagem("Realizar depósito:")
-        return valida_operacao_entrada()
+        return super().valida_operacao_entrada()
 
     def pega_chave_PIX(self):
         return self.layout_input("Informe a chave PIX para transferência", "Chave PIX", "Chave PIX")
@@ -71,19 +72,6 @@ class TelaOperacao:
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])
         print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')
-
-
-    def mostra_mensagem(self, msg):
-        layout = [
-            [sg.Text(msg)],
-            [sg.Submit('Ok')]
-        ]
-        self.__window = sg.Window('Mensagem').Layout(layout)
-        botao = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return botao
 
     def layout_input(self, instrucao, valor, titulo):
         layout = [
