@@ -2,6 +2,8 @@ from limite.tela_pessoa import TelaPessoa
 from entidade.cliente import Cliente
 from entidade.funcionario import Funcionario
 from datetime import datetime
+from persistencia.cliente_dao import ClienteDAO
+from persistencia.funcionario_dao import FuncionarioDAO
 
 cliente01 = Cliente(10, "Teste 01", datetime.strptime('09/06/2002', '%d/%m/%Y'), 99999999999, '123')
 cliente02 = Cliente(11, "Teste 02", datetime.strptime('09/06/2002', '%d/%m/%Y'), 88888888888, '123')
@@ -14,22 +16,24 @@ class ControladorPessoa:
 
     def __init__(self, controlador_sistema):
         #self.__clientes = []
-        self.__clientes = precadastroCliente
-        self.__qtde_clientes = 0
+        #self.__clientes = precadastroCliente
+        self.__clientes_dao = ClienteDAO()
+        self.__qtde_clientes = list(self.__clientes_dao.get_all())[len(self.__clientes_dao.get_all())-1].codigo
         #self.__funcionarios = []
-        self.__funcionarios = precadastroFuncionario
-        self.__qtde_funcionarios = 0
+        #self.__funcionarios = precadastroFuncionario
+        self.__funcionarios_dao = FuncionarioDAO()
+        self.__qtde_funcionarios = list(self.__funcionarios_dao.get_all())[len(self.__funcionarios_dao.get_all())-1].codigo
         self.__tela_pessoa = TelaPessoa()
         self.__controlador_sistema = controlador_sistema
 
     def pega_cliente_por_cpf(self, cpf:int):
-        for cliente in self.__clientes:
+        for cliente in self.__clientes_dao.get_all():
             if cliente.cpf == cpf:
                 return cliente
         return None
 
     def pega_funcionario_por_cpf(self, cpf:int):
-        for funcionario in self.__funcionarios:
+        for funcionario in self.__funcionarios_dao.get_all():
             if funcionario.cpf == cpf:
                 return funcionario
         return None
@@ -39,7 +43,7 @@ class ControladorPessoa:
         self.__qtde_clientes += 1
         codigo = self.__qtde_clientes
         dados_cliente = self.__tela_pessoa.pega_dados_cliente()
-        for cliente in self.__clientes:
+        for cliente in self.__clientes_dao.get_all():
             # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
             if cliente.cpf == dados_cliente["cpf"]:
                 cpf_unico = False
@@ -47,7 +51,7 @@ class ControladorPessoa:
             idade = self.calcula_idade(dados_cliente["data_nascimento"])
             if idade > 18:
                 cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_cadastro"])
-                self.__clientes.append(cliente)
+                self.__clientes_dao.add(cliente)
                 self.__tela_pessoa.mostra_mensagem("\nCliente cadastrado com sucesso!")
             else:
                 self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, cliente é menor de idade, verifique!")
@@ -66,7 +70,7 @@ class ControladorPessoa:
     def excluir_cliente(self):
         validacao, cliente = self.valida_existencia_e_senha_cliente()
         if validacao:
-                self.__clientes.remove(cliente)
+                self.__clientes_dao.remove(cliente.codigo)
                 self.__tela_pessoa.mostra_mensagem("\nCliente excluido com sucesso!")
 
     def valida_existencia_e_senha_cliente(self):
@@ -101,7 +105,7 @@ class ControladorPessoa:
         self.__qtde_funcionarios += 1
         codigo = self.__qtde_funcionarios
         dados_funcionario = self.__tela_pessoa.pega_dados_funcionario()
-        for funcionario in self.__funcionarios:
+        for funcionario in self.__funcionarios_dao.get_all():
             # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
             if funcionario.cpf == dados_funcionario["cpf"]:
                 cpf_unico = False
@@ -110,7 +114,7 @@ class ControladorPessoa:
             #Regra de Negócio: O cadastro de Pessoa exige idade mínima de 18 anos ✔
             if idade > 18:
                 funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
-                self.__funcionarios.append(funcionario)
+                self.__funcionarios_dao.add(funcionario)
                 self.__tela_pessoa.mostra_mensagem("\nFuncionário cadastrado com sucesso!")
             else:
                 self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, funcionário é menor de idade, verifique!")
@@ -130,7 +134,7 @@ class ControladorPessoa:
         validacao, funcionario = self.valida_existencia_e_senha_funcionario()
         # Regras de Negócio: Todas as funcionalidades relacionadas a usuários do sistema exigirão senha
         if validacao:
-            self.__funcionarios.remove(funcionario)
+            self.__funcionarios_dao.remove(funcionario.codigo)
             self.__tela_pessoa.mostra_mensagem("\nFuncionário excluído com sucesso!")
 
     def valida_existencia_e_senha_funcionario(self):
@@ -157,14 +161,14 @@ class ControladorPessoa:
             self.__tela_pessoa.lista_funcionario(dados_funcionario)
 
     def valida_senha_funcionario(self, senha_funcionario):
-        for funcionario in self.__funcionarios:
+        for funcionario in self.__funcionarios_dao.get_all():
             if funcionario.senha_funcionario == senha_funcionario:
                 return True, funcionario
         return False, ""
 
     def listar_clientes(self):
         self.__tela_pessoa.mostra_mensagem("\nLista de clientes")
-        for cliente in self.__clientes:
+        for cliente in self.__clientes_dao.get_all():
             dados_cliente = {"codigo":cliente.codigo, "nome": cliente.nome, "data_nascimento": cliente.data_nascimento,
                              "cpf": cliente.cpf}
             self.__tela_pessoa.lista_cliente(dados_cliente)
