@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from dao import DAO
-from funcionario import Funcionario
+from persistencia.dao import DAO
+from entidade.funcionario import Funcionario
 
 class FuncionarioDAO(DAO):
     def __init__(self):

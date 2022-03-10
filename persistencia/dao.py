@@ -4,18 +4,18 @@ import pickle
 class DAO(ABC):
     @abstractmethod
     def __init__(self, datasource=""):
-        self.datasource = datasource
-        self.cache = ()
+        self.__datasource = datasource
+        self.__cache = {}
         try:
-            self.load()
+            self.__load()
         except FileNotFoundError:
-            self.dump()
+            self.__dump()
 
     def __dump(self):
-        pickle.dump(self. cache, open(self.__datasource, 'wb'))
+        pickle.dump(self.__cache, open(self.__datasource, 'wb'))
 
     def __load(self):
-        self.cache = pickle.load(open(self.__datasource, 'rb'))
+        self.__cache = pickle.load(open(self.__datasource, 'rb'))
 
     def add(self, key, obj):
         self.__cache[key] = obj
