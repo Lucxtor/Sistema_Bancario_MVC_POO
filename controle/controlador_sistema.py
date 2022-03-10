@@ -51,13 +51,14 @@ class ControladorSistema:
 
     def exibe_area_funcionarios(self):
         senha_funcionario = self.__tela_sistema.pega_senha_funcionario()
+        self.__tela_sistema.close()
         valida_senha, funcionario = self.__controlador_pessoa.valida_senha_funcionario(senha_funcionario)
         if valida_senha:
             lista_opcoes = {1: self.listar_contas, 2: self.listar_clientes,
                             0: self.abre_tela}
 
             while True:
-                opcao_escolhida = self.__tela_sistema.area_funcionarios(funcionario.nome)
+                opcao_escolhida = self.__tela_sistema.exibe_menu_area_funcionarios(funcionario.nome)
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
                 funcao_escolhida()
         else:

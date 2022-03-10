@@ -1,3 +1,5 @@
+import PySimpleGUI as sg
+
 TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
 TIPOS_CONTAS = {1:"Corrente", 2:"Popupança", 3:"Salário" }
 
@@ -6,7 +8,7 @@ def valida_opcao(opcoesValidas):
         try:
             opcao = int(input("\nEscolha a opção: "))
             while opcao not in opcoesValidas:
-                print("A opção escolhida é inválida, por favor, tente novamente!")
+                mostra_mensagem("A opção escolhida é inválida, por favor, tente novamente!")
                 opcao = int(input("\nEscolha uma nova opção: "))
         except:
             print("A opção digitada é invalida, por favor, tente novamente!")
@@ -16,15 +18,15 @@ def valida_opcao(opcoesValidas):
 #Regra de negócio: O cadastro da Pessoa deve utilizar um CPF válido
 def cpf_valido():
     while True:
-        cpf = input("CPF ( Digite o CPF contendo apenas números ): ")
+        cpf = layout_input('Digite o CPF (contendo apenas números)', 'CPF', 'Pega CPF')
         if len(cpf) != 11:
-            print("Número de dígitos incorreto, verifique!")
+            mostra_mensagem("Número de dígitos incorreto, verifique!")
         else:
             try:
                 for i in range(11):
                     teste = int(cpf[i])
             except:
-                print("O CPF possui dígitos incorretos, verifique!")
+                mostra_mensagem("O CPF possui dígitos incorretos, verifique!")
             else:
                 soma = 0
                 aux = 0
@@ -43,36 +45,37 @@ def cpf_valido():
                             soma * 10) % 11 == 10 and digito_verificador_02 == 0:
                         return cpf
                     else:
-                        print("O CPF digitado é inválido!")
+                        mostra_mensagem("O CPF digitado é inválido!")
                 else:
-                    print("O CPF digitado é inválido!")
+                    mostra_mensagem("O CPF digitado é inválido!")
 
 def valida_operacao_saida(saldo):
     if saldo > 0:
         while True:
             try:
-                valor_operacao = float(input("Digite qual o valor da operação: "))
+                valor_operacao = float(layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
                 #Regra de Negócio: Não é permitida a transferência de valores negativos + Qualquer operação de saída apenas pode ocorrer enquanto houver saldo disponível
                 while(valor_operacao > saldo or valor_operacao <= 0):
-                    print("Valor inválido, tente novamente!")
-                    valor_operacao = float(input("Digite qual o valor da operação: "))
+                    mostra_mensagem("Valor inválido, tente novamente!")
+                    valor_operacao = float(layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
+
             except:
-                print("A opção digitada é invalida, por favor, tente novamente!")
+                mostra_mensagem("A opção digitada é invalida, por favor, tente novamente!")
             else:
                 return True, valor_operacao
     else:
-        print("Saldo insuficiente!")
+        mostra_mensagem("Saldo insuficiente!")
         return False, None
 
 def valida_operacao_entrada():
     while True:
         try:
-            valor_operacao = float(input("Digite qual o valor da operação: "))
+            valor_operacao = float(layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
             while(valor_operacao <= 0):
-                print("Valor inválido, tente novamente!")
-                valor_operacao = float(input("Digite qual o valor da operação: "))
+                mostra_mensagem("Valor inválido, tente novamente!")
+                valor_operacao = float(layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
         except:
-            print("A opção digitada é inválida, por favor, tente novamente!")
+            mostra_mensagem("A opção digitada é inválida, por favor, tente novamente!")
         else:
             return valor_operacao
 
@@ -92,3 +95,28 @@ def valida_data(dia, mes, ano):
             return True
     else:
         return False
+
+def mostra_mensagem(msg):
+    layout = [
+        [sg.Text(msg)],
+        [sg.Submit('Ok')]
+    ]
+    self.__window = sg.Window('Mensagem').Layout(layout)
+    botao = self.__window.Read()
+    if botao == None:
+        exit(0)
+    else:
+        return botao
+
+def layout_input(instrucao, valor, titulo):
+    layout = [
+        [sg.Text(instrucao)],
+        [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
+        [sg.Submit(), sg.Cancel()],
+    ]
+    self.__window = sg.Window(titulo).Layout(layout)
+    botao, valor = self.__window.Read()
+    if botao == None:
+        exit(0)
+    else:
+        return valor['valor']
