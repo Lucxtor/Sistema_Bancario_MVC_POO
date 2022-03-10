@@ -1,10 +1,14 @@
-from limite.lib_limite import valida_opcao, cpf_valido, valida_data
+from limite.tela import Tela
 from datetime import datetime
 
 class TelaPessoa:
+
+    def close(self):
+        self.__window.Close()
+
     def tela_opcoes(self):
         self.exibe_menu()
-        return valida_opcao([0,1,2])
+        return super().valida_opcao([0,1,2])
 
     def exibe_menu(self):
         print("\n-------- Gerenciamento de Pessoas ---------\n")
@@ -15,7 +19,7 @@ class TelaPessoa:
 
     def tela_opcoes_gerencia(self, tipo):
         self.exibe_menu_gerencia(tipo)
-        return valida_opcao([0,1,2,3,4])
+        return super().valida_opcao([0,1,2,3,4])
 
     def exibe_menu_gerencia(self, tipo):
         print("\n-------- Gerenciamento de", tipo, " ---------\n")
@@ -34,7 +38,7 @@ class TelaPessoa:
                 data_nascimento_dia = int(input("Informe o dia do seu nascimento: "))
                 data_nascimento_mes = int(input("Informe o mês do seu nascimento: "))
                 data_nascimento_ano = int(input("Informe o ano do seu nascimento: "))
-                if valida_data(data_nascimento_dia, data_nascimento_mes, data_nascimento_ano):
+                if super().valida_data(data_nascimento_dia, data_nascimento_mes, data_nascimento_ano):
                     data_nascimento_str = f'{data_nascimento_dia}/{data_nascimento_mes}/{data_nascimento_ano}'
                     data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
                     break
@@ -42,7 +46,7 @@ class TelaPessoa:
                     print("Parece que a data informada é invalida, tente novamente!")
             except:
                 print("Parece que algo deu errado, tente novamente!")
-        cpf = cpf_valido()
+        cpf = super().cpf_valido()
         senha_cadastro = input("Senha para cadastros: ")
 
         return {"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "senha_cadastro": senha_cadastro}
@@ -62,7 +66,7 @@ class TelaPessoa:
                 data_nascimento_dia = int(input("Informe o dia do seu nascimento: "))
                 data_nascimento_mes = int(input("Informe o mês do seu nascimento: "))
                 data_nascimento_ano = int(input("Informe o ano do seu nascimento: "))
-                if valida_data(data_nascimento_dia, data_nascimento_mes, data_nascimento_ano):
+                if super().valida_data(data_nascimento_dia, data_nascimento_mes, data_nascimento_ano):
                     data_nascimento_str = f'{data_nascimento_dia}/{data_nascimento_mes}/{data_nascimento_ano}'
                     data_nascimento = datetime.strptime(data_nascimento_str, '%d/%m/%Y')
                     break
@@ -103,6 +107,3 @@ class TelaPessoa:
         print("Data de nascimento do funcinário:", dados_funcionario["data_nascimento"].strftime('%d/%m/%Y'))
         print(f"CPF do funcionário: {str(dados_funcionario['cpf'])[0:3]}.{str(dados_funcionario['cpf'])[3:6]}.{str(dados_funcionario['cpf'])[6:9]}-{str(dados_funcionario['cpf'])[9:11]}")
         print("Número CTPS do funcinário:", dados_funcionario["numero_CTPS"])
-
-    def mostra_mensagem(self, msg):
-        print(msg)

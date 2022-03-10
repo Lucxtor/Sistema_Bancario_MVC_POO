@@ -5,22 +5,11 @@ from datetime import datetime
 from persistencia.cliente_dao import ClienteDAO
 from persistencia.funcionario_dao import FuncionarioDAO
 
-cliente01 = Cliente(10, "Teste 01", datetime.strptime('09/06/2002', '%d/%m/%Y'), 99999999999, '123')
-cliente02 = Cliente(11, "Teste 02", datetime.strptime('09/06/2002', '%d/%m/%Y'), 88888888888, '123')
-precadastroCliente = [cliente01, cliente02]
-
-funcionario01 = Funcionario(10, "Teste 01", datetime.strptime('09/06/2002', '%d/%m/%Y'), 99999999999, '12345678', '123')
-precadastroFuncionario = [funcionario01]
-
 class ControladorPessoa:
 
     def __init__(self, controlador_sistema):
-        #self.__clientes = []
-        #self.__clientes = precadastroCliente
         self.__clientes_dao = ClienteDAO()
         self.__qtde_clientes = list(self.__clientes_dao.get_all())[len(self.__clientes_dao.get_all())-1].codigo
-        #self.__funcionarios = []
-        #self.__funcionarios = precadastroFuncionario
         self.__funcionarios_dao = FuncionarioDAO()
         self.__qtde_funcionarios = list(self.__funcionarios_dao.get_all())[len(self.__funcionarios_dao.get_all())-1].codigo
         self.__tela_pessoa = TelaPessoa()

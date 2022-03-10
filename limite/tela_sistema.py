@@ -1,6 +1,7 @@
+from limite.tela import Tela
 import PySimpleGUI as sg
 
-class TelaSistema:
+class TelaSistema(Tela):
     def __init__(self):
         self.__window = None
 
@@ -73,15 +74,3 @@ class TelaSistema:
             exit(0)
         else:
             return valor['senha']
-
-    def mostra_mensagem(self, msg):
-        layout = [
-            [sg.Text(msg)],
-            [sg.Submit('Ok')]
-        ]
-        self.__window = sg.Window('Mensagem').Layout(layout)
-        botao = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return botao

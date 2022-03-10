@@ -1,7 +1,8 @@
-from limite.lib_limite import valida_opcao, cpf_valido, TIPOS_CONTAS
+from limite.tela import Tela
 import PySimpleGUI as sg
 
-class TelaConta:
+class TelaConta(Tela):
+
     def close(self):
         self.__window.Close()
 
@@ -25,11 +26,11 @@ class TelaConta:
 
     def pega_dados_conta(self):
         print("\n-------- Dados da Conta ----------\n")
-        cpf_titular = cpf_valido()
+        cpf_titular = super().cpf_valido()
         print("\nEscolha qual tipo de conta deseja criar: ")
-        for opcao, descricao in TIPOS_CONTAS.items():
+        for opcao, descricao in super().TIPOS_CONTAS.items():
             print(opcao, "- Conta", descricao)
-        tipo_conta = valida_opcao([1,2,3])
+        tipo_conta = super().valida_opcao([1,2,3])
         senha = input("Digite sua senha da conta: ")
         return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_operacoes":senha}
 
@@ -56,26 +57,14 @@ class TelaConta:
         else:
             return valor['senha']
 
-    def mostra_mensagem(self, msg):
-        layout = [
-            [sg.Text(msg)],
-            [sg.Submit('Ok')]
-        ]
-        self.__window = sg.Window('Mensagem').Layout(layout)
-        botao = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return botao
-
     def lista_conta(self, dados_conta):
         tipo_escolhido = dados_conta["tipo"]
         if tipo_escolhido == 1:
-            tipo_conta = TIPOS_CONTAS[1]
+            tipo_conta = super().TIPOS_CONTAS[1]
         elif tipo_escolhido == 2:
-            tipo_conta = TIPOS_CONTAS[2]
+            tipo_conta = super().TIPOS_CONTAS[2]
         else:
-            tipo_conta = TIPOS_CONTAS[3]
+            tipo_conta = super().TIPOS_CONTAS[3]
         print("\nConta:", dados_conta["codigo"], "-", tipo_conta, "- Agência:", dados_conta["agencia"])
         chaves = dados_conta["chaves"]
         if len(chaves) != 0:
