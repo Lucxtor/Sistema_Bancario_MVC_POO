@@ -4,7 +4,8 @@ import PySimpleGUI as sg
 class TelaConta(Tela):
 
     def close(self):
-        self.__window.Close()
+        #self.__window.Close()
+        pass
 
     def exibe_menu_conta(self):
         self.menu_conta()
@@ -37,7 +38,7 @@ class TelaConta(Tela):
     def seleciona_codigo(self):
         while True:
             try:
-                codigo_conta = self.layout_input('Digite o código da conta que deseja acessar: ', 'Código', 'Pega Código Conta')
+                codigo_conta = super().layout_input('Digite o código da conta que deseja acessar: ', 'Código', 'Pega Código Conta')
                 codigo_conta = int(codigo_conta)
                 break
             except:
@@ -74,18 +75,5 @@ class TelaConta(Tela):
             print("")
         print(f"CPF do titular: {str(dados_conta['cpf'])[0:3]}.{str(dados_conta['cpf'])[3:6]}.{str(dados_conta['cpf'])[6:9]}-{str(dados_conta['cpf'])[9:11]}")
 
-    def layout_input(self, instrucao, valor, titulo):
-        layout = [
-            [sg.Text(instrucao)],
-            [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
-            [sg.Submit(), sg.Cancel()],
-        ]
-        self.__window = sg.Window(titulo).Layout(layout)
-        botao, valor = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return valor['valor']
-
     def pega_chave_PIX(self):
-        self.layout_input('Digite a chave PIX que deseja cadastrar:', 'Chave PIX', 'Cadastro Chave PIX')
+        super().layout_input('Digite a chave PIX que deseja cadastrar:', 'Chave PIX', 'Cadastro Chave PIX')

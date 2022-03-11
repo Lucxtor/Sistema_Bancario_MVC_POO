@@ -28,7 +28,7 @@ class TelaOperacao(Tela):
         self.__window = sg.Window('Área de Operações').Layout(layout)
 
     def pega_dados_saida(self, saldo):
-        self.mostra_mensagem(f'Saldo disponível R$ {saldo:.2f}')
+        super().mostra_mensagem(f'Saldo disponível R$ {saldo:.2f}')
         is_saldo_positivo, valor = super().valida_operacao_saida(saldo)
         if is_saldo_positivo:
             return valor
@@ -36,29 +36,29 @@ class TelaOperacao(Tela):
             return None
 
     def pega_dados_deposito(self):
-        self.mostra_mensagem("Realizar depósito:")
+        super().mostra_mensagem("Realizar depósito:")
         return super().valida_operacao_entrada()
 
     def pega_chave_PIX(self):
-        return self.layout_input("Informe a chave PIX para transferência", "Chave PIX", "Chave PIX")
+        return super().layout_input("Informe a chave PIX para transferência", "Chave PIX", "Chave PIX")
 
     def pega_codigo_conta_destino(self):
         while True:
             try:
-                codigo_conta_destino = int(self.layout_input("Informe o código da conta destino", "Código", "Código Conta Destino"))
+                codigo_conta_destino = int(super().layout_input("Informe o código da conta destino", "Código", "Código Conta Destino"))
                 break
             except:
-                self.mostra_mensagem("O código digitado é inválido!")
+                super().mostra_mensagem("O código digitado é inválido!")
         return codigo_conta_destino
 
     def exibe_saldo(self, saldo_final, saldo_depositos, saldo_saques, saldo_transferencia_enviadas, saldo_transferencia_recebidas, saldo_transferencia_entrada_vs_saida):
         layout = [
-            [sg.Text(f'\nO saldo em conta atualmente é R$ {saldo_final:.2f}\n')]
+            [sg.Text(f'O saldo em conta atualmente é R$ {saldo_final:.2f}')]
             [sg.Text(f'O saldo de movimentações é:')]
-            [sg.Text(f'   Saques: R$ {saldo_saques:.2f}   Depósitos: R$ {saldo_depositos:.2f}\n')]
+            [sg.Text(f'   Saques: R$ {saldo_saques:.2f}   Depósitos: R$ {saldo_depositos:.2f}')]
             [sg.Text(f'O saldo entre transferências é:')]
             [sg.Text(f'   Transferências enviadas: R$ {saldo_transferencia_enviadas:.2f}')]
-            [sg.Text(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}\n')]
+            [sg.Text(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}')]
             [sg.Text(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')]
             [sg.Submit('Ok')]
         ]
@@ -72,16 +72,3 @@ class TelaOperacao(Tela):
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])
         print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')
-
-    def layout_input(self, instrucao, valor, titulo):
-        layout = [
-            [sg.Text(instrucao)],
-            [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
-            [sg.Submit(), sg.Cancel()],
-        ]
-        self.__window = sg.Window(titulo).Layout(layout)
-        botao, valor = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return valor['valor']
