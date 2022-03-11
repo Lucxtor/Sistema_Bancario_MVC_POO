@@ -9,9 +9,15 @@ class ControladorPessoa:
 
     def __init__(self, controlador_sistema):
         self.__clientes_dao = ClienteDAO()
-        self.__qtde_clientes = list(self.__clientes_dao.get_all())[len(self.__clientes_dao.get_all())-1].codigo
+        if len(self.__clientes_dao.get_all()) != 0:
+            self.__qtde_clientes = list(self.__clientes_dao.get_all())[len(self.__clientes_dao.get_all())-1].codigo
+        else:
+            self.__qtde_clientes = 0
         self.__funcionarios_dao = FuncionarioDAO()
-        self.__qtde_funcionarios = list(self.__funcionarios_dao.get_all())[len(self.__funcionarios_dao.get_all())-1].codigo
+        if len(self.__funcionarios_dao.get_all()) != 0:
+            self.__qtde_funcionarios = list(self.__funcionarios_dao.get_all())[len(self.__funcionarios_dao.get_all())-1].codigo
+        else:
+            self.__qtde_funcionarios = 0
         self.__tela_pessoa = TelaPessoa()
         self.__controlador_sistema = controlador_sistema
 
@@ -46,6 +52,7 @@ class ControladorPessoa:
                 self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, cliente é menor de idade, verifique!")
         else:
             self.__tela_pessoa.mostra_mensagem("\nO CPF já está cadastrado como cliente, por favor verifique!")
+        self.__tela_pessoa.close()
 
     def alterar_cliente(self):
         validacao, cliente = self.valida_existencia_e_senha_cliente()
@@ -54,6 +61,7 @@ class ControladorPessoa:
             cliente.nome = novos_dados_cliente["nome"]
             cliente.senha_cadastro = novos_dados_cliente["senha_cadastro"]
             self.__tela_pessoa.mostra_mensagem("\nCliente atualizado com sucesso!")
+            self.__tela_pessoa.close()
 
 
     def excluir_cliente(self):
@@ -109,6 +117,7 @@ class ControladorPessoa:
                 self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, funcionário é menor de idade, verifique!")
         else:
             self.__tela_pessoa.mostra_mensagem("\nO CPF já está cadastrado como funcionário, por favor verifique!")
+        self.__tela_pessoa.close()
 
     def alterar_funcionario(self):
         validacao, funcionario = self.valida_existencia_e_senha_funcionario()
@@ -118,6 +127,7 @@ class ControladorPessoa:
             funcionario.nome = novos_dados_funcionario["nome"]
             funcionario.senha_funcionario = novos_dados_funcionario["senha_funcionario"]
             self.__tela_pessoa.mostra_mensagem("\nFuncionario atualizado com sucesso!")
+        self.__tela_pessoa.close()
 
     def excluir_funcionario(self):
         validacao, funcionario = self.valida_existencia_e_senha_funcionario()
@@ -170,9 +180,8 @@ class ControladorPessoa:
                         0: self.retorno_menu}
 
         while True:
-            opcao_escolhida = self.__tela_pessoa.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
+            opcao_escolhida = self.__tela_pessoa.exibe_menu()
+            self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes)
 
     def abre_tela_cliente(self):
         lista_opcoes_cliente = {1: self.incluir_cliente, 2: self.alterar_cliente,
@@ -180,9 +189,8 @@ class ControladorPessoa:
                                 0: self.abre_tela}
 
         while True:
-            opcao_escolhida = self.__tela_pessoa.tela_opcoes_gerencia('cliente')
-            funcao_escolhida = lista_opcoes_cliente[opcao_escolhida]
-            funcao_escolhida()
+            opcao_escolhida = self.__tela_pessoa.exibe_menu_gerencia('cliente')
+            self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes_cliente)
 
     def abre_tela_funcionario(self):
         lista_opcoes_funcionario = {1: self.incluir_funcionario, 2: self.alterar_funcionario,
@@ -190,6 +198,13 @@ class ControladorPessoa:
                                     0: self.abre_tela}
 
         while True:
-            opcao_escolhida = self.__tela_pessoa.tela_opcoes_gerencia('funcionário')
-            funcao_escolhida = lista_opcoes_funcionario[opcao_escolhida]
+            opcao_escolhida = self.__tela_pessoa.exibe_menu_gerencia('funcionário')
+            self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes_funcionario)
+
+    def valida_e_executa_funcao(self, opcao_escolhida, lista_opcoes):
+        if opcao_escolhida != None:
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            self.__tela_pessoa.close()
             funcao_escolhida()
+        else:
+            exit(0)

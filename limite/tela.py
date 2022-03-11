@@ -102,17 +102,7 @@ class Tela(ABC):
             return False
 
     def mostra_mensagem(self, msg):
-        layout = [
-            [sg.Text(msg)],
-            [sg.Submit('Ok')]
-        ]
-        window = sg.Window('Mensagem').Layout(layout)
-        botao = window.Read()
-        self.close()
-        if botao == None:
-            exit(0)
-        else:
-            return botao
+        sg.Popup(msg)
 
     def layout_input(self, instrucao, valor, titulo):
         layout = [
