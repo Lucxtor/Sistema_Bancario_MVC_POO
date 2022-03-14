@@ -95,8 +95,9 @@ class TelaPessoa(Tela):
                     [sg.Text('Cadastro de Funcionários')],
 
                     [sg.Text('Nome: '), sg.InputText('', key='nome')],
-                    [sg.Text('Data de nascimento: '), sg.InputText('Dia', key='dia', size=(4, 1)),
-                     sg.InputText('Mês', key='mes', size=(4, 1)), sg.InputText('Ano', key='ano', size=(4, 1))],
+                    [sg.Text('Data de nascimento: '), sg.Text('Dia:'), sg.InputText(key='dia', size=(4, 1)),
+                     sg.Text('Mês:'), sg.InputText(key='mes', size=(4, 1)), sg.Text('Ano:'),
+                     sg.InputText(key='ano', size=(4, 1))],
                     [sg.Text('Senha: '), sg.InputText('', key='senha_funcionario')],
                     [sg.Text('Número CTPS: '), sg.InputText('', key='numero_CTPS')],
                     [sg.Submit(), sg.Cancel()],
@@ -143,7 +144,19 @@ class TelaPessoa(Tela):
         return super().cpf_valido()
 
     def pega_senha_pessoa(self):
-        return super().layout_input('Digite a senha para prosseguir com a edição: ', 'Senha', 'Pega Senha Cliente')
+        layout = [
+            [sg.Text('Digite a senha para prosseguir com a operação:')],
+            [sg.Text('Senha:'), sg.InputText('', key='senha')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        self.__window = sg.Window('Pega Senha').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        elif botao == 'Cancel':
+            return botao
+        else:
+            return valor['senha']
 
     def lista_cliente(self, dados_cliente):
         layout = [
@@ -156,6 +169,17 @@ class TelaPessoa(Tela):
         ]
         self.__window = sg.Window('Lista Clientes').Layout(layout)
         botao, valores = self.__window.Read()
+
+    def lista_clientes(self, clientes):
+        cabecalho = [[sg.Text('Código', size=(8, 1))] + [sg.Text('Nome', size=(20,1))] + [sg.Text('Data de Nascimento', size=(20,1))] + [sg.Text('CPF', size=(15,1))]]
+        linhas = []
+        for cliente in clientes:
+            linhas += [[sg.Text(cliente.codigo, size=(8, 1))] + [sg.Text(cliente.nome, size=(20, 1))] + [sg.Text(cliente.data_nascimento, size=(20, 1))] + [sg.Text(cliente.cpf, size=(15, 1))]]
+
+        layout = cabecalho + linhas
+
+        self.__window = sg.Window('Lista de Clientes').Layout(layout)
+        botao, valor = self.__window.Read()
 
     def lista_funcionario(self, dados_funcionario):
         layout = [
