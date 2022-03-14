@@ -3,6 +3,10 @@ from datetime import datetime
 import PySimpleGUI as sg
 
 class TelaPessoa(Tela):
+
+    def __init__(self):
+        super().__init__()
+
     def close(self):
         self.__window.Close()
 

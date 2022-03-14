@@ -3,8 +3,8 @@ import PySimpleGUI as sg
 
 class TelaOperacao(Tela):
 
-    def close(self):
-        self.__window.Close()
+    def __init__(self):
+        super().__init__()
 
     def exibe_menu_operacoes(self, agencia_conta, codigo_conta):
         self.menu_operacoes(agencia_conta, codigo_conta)
@@ -23,7 +23,7 @@ class TelaOperacao(Tela):
             [sg.Submit('Transferência PIX', key=4)],
             [sg.Submit('Consultar Extrato', key=5)],
             [sg.Submit('Consultar Saldo', key=6)],
-            [sg.Cancel('Finalizar Sistema', key=0)],
+            [sg.Cancel('Retornar para o menu anterior', key=0)],
         ]
         self.__window = sg.Window('Área de Operações').Layout(layout)
 
@@ -52,21 +52,19 @@ class TelaOperacao(Tela):
 
     def exibe_saldo(self, saldo_final, saldo_depositos, saldo_saques, saldo_transferencia_enviadas, saldo_transferencia_recebidas, saldo_transferencia_entrada_vs_saida):
         layout = [
-            [sg.Text(f'O saldo em conta atualmente é R$ {saldo_final:.2f}')]
-            [sg.Text(f'O saldo de movimentações é:')]
-            [sg.Text(f'   Saques: R$ {saldo_saques:.2f}   Depósitos: R$ {saldo_depositos:.2f}')]
-            [sg.Text(f'O saldo entre transferências é:')]
-            [sg.Text(f'   Transferências enviadas: R$ {saldo_transferencia_enviadas:.2f}')]
-            [sg.Text(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}')]
-            [sg.Text(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')]
-            [sg.Submit('Ok')]
+            [sg.Text(f'O saldo em conta atualmente é R$ {saldo_final:.2f}')],
+            [sg.Text(f'O saldo de movimentações é:')],
+            [sg.Text(f'   Saques: R$ {saldo_saques:.2f}   Depósitos: R$ {saldo_depositos:.2f}')],
+            [sg.Text(f'O saldo entre transferências é:')],
+            [sg.Text(f'   Transferências enviadas: R$ {saldo_transferencia_enviadas:.2f}')],
+            [sg.Text(f'   Transferências recebidas: R$ {saldo_transferencia_recebidas:.2f}')],
+            [sg.Text(f'O saldo de transferências entre entradas e saídas: R$ {saldo_transferencia_entrada_vs_saida:.2f}')],
+            [sg.Submit('Ok')],
         ]
         self.__window = sg.Window('Exibe Saldo').Layout(layout)
         botao, valor = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return valor['valor']
+        self.__window.Close()
+        return botao
 
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])

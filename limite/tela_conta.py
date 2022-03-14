@@ -3,9 +3,11 @@ import PySimpleGUI as sg
 
 class TelaConta(Tela):
 
+    def __init__(self):
+        super().__init__()
+
     def close(self):
-        #self.__window.Close()
-        pass
+        self.__window.Close()
 
     def exibe_menu_conta(self):
         self.menu_conta()
@@ -21,7 +23,8 @@ class TelaConta(Tela):
             [sg.Submit('Excluir conta', key=2)],
             [sg.Submit('Listar informações', key=3)],
             [sg.Submit('Cadastrar chave PIX', key=4)],
-            [sg.Cancel('Voltar ao menu anterior', key=0)],
+            [sg.Cancel('Retornar para o menu anterior', key=0)],
+
         ]
         self.__window = sg.Window('Gerenciamento de Conta').Layout(layout)
 
@@ -92,3 +95,16 @@ class TelaConta(Tela):
 
     def pega_chave_PIX(self):
         super().layout_input('Digite a chave PIX que deseja cadastrar:', 'Chave PIX', 'Cadastro Chave PIX')
+
+    def layout_input(self, instrucao, valor, titulo):
+        layout = [
+            [sg.Text(instrucao)],
+            [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        window = sg.Window(titulo).Layout(layout)
+        botao, valor = window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return valor['valor']

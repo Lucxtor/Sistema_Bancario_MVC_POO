@@ -2,8 +2,9 @@ from limite.tela import Tela
 import PySimpleGUI as sg
 
 class TelaSistema(Tela):
+
     def __init__(self):
-        self.__window = None
+        super().__init__()
 
     def close(self):
         self.__window.Close()

@@ -159,6 +159,7 @@ class ControladorOperacao:
 
         while True:
             opcao_escolhida = self.__tela_operacao.exibe_menu_operacoes(conta.agencia, conta.codigo)
+            self.__tela_operacao.close()
             if opcao_escolhida != None:
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
                 if opcao_escolhida != 0:
