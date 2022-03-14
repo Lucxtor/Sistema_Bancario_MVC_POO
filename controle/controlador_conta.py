@@ -3,6 +3,7 @@ from datetime import datetime
 from entidade.cliente import Cliente
 from limite.tela_conta import TelaConta
 from entidade.conta import Conta
+from persistencia.conta_dao import ContaDAO
 
 import random
 
@@ -28,8 +29,7 @@ class ControladorConta:
     TIPOS_CONTAS = {1:"Corrente", 2:"Popupança", 3:"Salário" }
 
     def __init__(self, controlador_sistema):
-        #self.__contas = []
-        self.__contas = precadastroContas
+        self.__conta_dao = ContaDAO()
         self.__tela_conta = TelaConta()
         self.__controlador_sistema = controlador_sistema
 
@@ -53,7 +53,7 @@ class ControladorConta:
         cliente = self.__controlador_sistema.controlador_pessoa.pega_cliente_por_cpf(dados_conta["cpf_titular"])
         if cliente is not None:
             conta = Conta(codigo, cliente,  self.TIPOS_CONTAS[dados_conta["tipo_conta"]], dados_conta["senha_operacoes"])
-            self.__contas.append(conta)
+            self.__conta_dao.add(conta)
             self.__tela_conta.mostra_mensagem("\nConta criada com sucesso!")
             self.__tela_conta.mostra_mensagem(f'O código da sua conta é {codigo}')
         else:
@@ -80,7 +80,7 @@ class ControladorConta:
         if validacao:
             #Regra de Negócio: Para que uma conta seja excluída, ela deve estar com um saldo de 0 reais
             if (conta.saldo == 0):
-                    self.__contas.remove(conta)
+                    self.__conta_dao.remove(conta.codigo)
                     self.__tela_conta.mostra_mensagem("\nConta excluida com sucesso!")
             else:
                 self.__tela_conta.mostra_mensagem(f"\nO saldo atual da conta é de R${conta.saldo}. Para encerrar a conta, saque ou transfira todos os fundos")
@@ -126,13 +126,13 @@ class ControladorConta:
                 return True
 
     def pega_conta_por_codigo(self, codigo_conta: int):
-        for conta in self.__contas:
+        for conta in self.__conta_dao.get_all():
             if conta.codigo == codigo_conta:
                 return conta
         return None
 
     def pega_conta_por_chave_PIX(self, chave_PIX):
-        for conta in self.__contas:
+        for conta in self.__conta_dao.get_all():
             for chave in conta.chaves_PIX:
                 if chave == chave_PIX:
                     return conta
@@ -153,7 +153,7 @@ class ControladorConta:
 
     def listar_contas(self):
         self.__tela_conta.mostra_mensagem("\nLista de Contas")
-        for conta in self.__contas:
+        for conta in self.__conta_dao.get_all():
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
                            "cpf": conta.titular.cpf, "tipo": conta.tipo, "chaves": conta.chaves_PIX}
             self.__tela_conta.lista_conta(dados_conta)

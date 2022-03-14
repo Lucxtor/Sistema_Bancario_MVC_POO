@@ -36,7 +36,6 @@ class TelaOperacao(Tela):
             return None
 
     def pega_dados_deposito(self):
-        super().mostra_mensagem("Realizar depósito:")
         return super().valida_operacao_entrada()
 
     def pega_chave_PIX(self):
@@ -71,4 +70,13 @@ class TelaOperacao(Tela):
 
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])
-        print(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')
+        layout = [
+            [sg.Text(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')]
+            [sg.Submit('Ok')]
+        ]
+        self.__window = sg.Window('Exibe Extrato').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        else:
+            return valor['valor']
