@@ -35,6 +35,8 @@ class Tela(ABC):
             botao, valor = self.__window.Read()
             cpf = valor['cpf']
             self.__window.Close()
+            if botao == None:
+                exit(0)
             if len(cpf) != 11:
                 self.mostra_mensagem("Número de dígitos incorreto, verifique!")
             else:

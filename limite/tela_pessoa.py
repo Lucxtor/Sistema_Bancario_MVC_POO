@@ -62,7 +62,7 @@ class TelaPessoa(Tela):
 
                 if botao == None or botao == 'Cancel':
                     return None
-                
+
                 data_nascimento_dia = int(valor['dia'])
                 data_nascimento_mes = int(valor['mes'])
                 data_nascimento_ano = int(valor['ano'])
