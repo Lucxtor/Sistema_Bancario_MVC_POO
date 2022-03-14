@@ -24,18 +24,34 @@ class TelaConta(Tela):
             [sg.Submit('Listar informações', key=3)],
             [sg.Submit('Cadastrar chave PIX', key=4)],
             [sg.Cancel('Retornar para o menu anterior', key=0)],
+
         ]
         self.__window = sg.Window('Gerenciamento de Conta').Layout(layout)
 
     def pega_dados_conta(self):
-        print("\n-------- Dados da Conta ----------\n")
         cpf_titular = super().cpf_valido()
-        print("\nEscolha qual tipo de conta deseja criar: ")
-        for opcao, descricao in super().TIPOS_CONTAS.items():
-            print(opcao, "- Conta", descricao)
-        tipo_conta = super().valida_opcao([1,2,3])
-        senha = input("Digite sua senha da conta: ")
-        return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_operacoes":senha}
+        layout = [
+                [sg.Text('Dados da Conta')],
+                [sg.Text("Escolha qual tipo de conta deseja criar: ")],
+                [sg.Combo(['Corrente', 'Poupança', 'Salário'],
+                          key='Tipo_Conta',
+                          default_value='Escolha uma opção',
+                          size=(20, 1))],
+                [sg.Text('Senha:'), sg.InputText('', key='senha')],
+                [sg.Submit(), sg.Cancel()],
+                ]
+        self.__window = sg.Window('Pega Dados Conta').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao != None:
+            if valor['Tipo_Conta'] == 'Corrente':
+                tipo_conta = 1
+            elif valor['Tipo_Conta'] == 'Poupança':
+                tipo_conta = 2
+            elif valor['Tipo_Conta'] == 'Salário':
+                tipo_conta = 3
+            return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_operacoes": 'senha'}
+        else:
+            exit(0)
 
     def seleciona_codigo(self):
         while True:

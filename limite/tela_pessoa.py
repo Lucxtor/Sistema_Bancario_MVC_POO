@@ -52,7 +52,7 @@ class TelaPessoa(Tela):
                     [sg.Text('Cadastro de Clientes')],
 
                     [sg.Text('Nome: '), sg.InputText('', key='nome')],
-                    [sg.Text('Data de nascimento: '), sg.InputText('Dia', key='dia', size=(4,1)), sg.InputText('Mês', key='mes', size=(4,1)), sg.InputText('Ano', key='ano', size=(4,1))],
+                    [sg.Text('Data de nascimento: '), sg.Text('Dia:'),sg.InputText(key='dia', size=(4,1)),sg.Text('Mês:'), sg.InputText(key='mes', size=(4,1)),sg.Text('Ano:'), sg.InputText(key='ano', size=(4,1))],
                     [sg.Text('Senha para Edição: '), sg.InputText('', key='senha_cadastro')],
                     [sg.Submit(), sg.Cancel()],
                 ]
