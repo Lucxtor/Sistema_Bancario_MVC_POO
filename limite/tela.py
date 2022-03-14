@@ -29,7 +29,7 @@ class Tela(ABC):
             layout = [
                 [sg.Text('Digite o CPF (contendo apenas números)')],
                 [sg.Text('CPF:'), sg.InputText('', key='cpf')],
-                [sg.Submit(), sg.Cancel()],
+                [sg.Submit()],
             ]
             self.__window = sg.Window('Pega CPF').Layout(layout)
             botao, valor = self.__window.Read()

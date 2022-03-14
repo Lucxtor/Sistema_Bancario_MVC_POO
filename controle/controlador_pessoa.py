@@ -38,20 +38,21 @@ class ControladorPessoa:
         self.__qtde_clientes += 1
         codigo = self.__qtde_clientes
         dados_cliente = self.__tela_pessoa.pega_dados_cliente()
-        for cliente in self.__clientes_dao.get_all():
-            # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
-            if cliente.cpf == dados_cliente["cpf"]:
-                cpf_unico = False
-        if cpf_unico:
-            idade = self.calcula_idade(dados_cliente["data_nascimento"])
-            if idade > 18:
-                cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_cadastro"])
-                self.__clientes_dao.add(cliente)
-                self.__tela_pessoa.mostra_mensagem("\nCliente cadastrado com sucesso!")
+        if dados_cliente != None:
+            for cliente in self.__clientes_dao.get_all():
+                # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
+                if cliente.cpf == dados_cliente["cpf"]:
+                    cpf_unico = False
+            if cpf_unico:
+                idade = self.calcula_idade(dados_cliente["data_nascimento"])
+                if idade > 18:
+                    cliente = Cliente(codigo, dados_cliente["nome"], dados_cliente["data_nascimento"], dados_cliente["cpf"], dados_cliente["senha_cadastro"])
+                    self.__clientes_dao.add(cliente)
+                    self.__tela_pessoa.mostra_mensagem("\nCliente cadastrado com sucesso!")
+                else:
+                    self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, cliente é menor de idade, verifique!")
             else:
-                self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, cliente é menor de idade, verifique!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("\nO CPF já está cadastrado como cliente, por favor verifique!")
+                self.__tela_pessoa.mostra_mensagem("\nO CPF já está cadastrado como cliente, por favor verifique!")
         self.__tela_pessoa.close()
 
     def alterar_cliente(self):
@@ -106,21 +107,22 @@ class ControladorPessoa:
         self.__qtde_funcionarios += 1
         codigo = self.__qtde_funcionarios
         dados_funcionario = self.__tela_pessoa.pega_dados_funcionario()
-        for funcionario in self.__funcionarios_dao.get_all():
-            # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
-            if funcionario.cpf == dados_funcionario["cpf"]:
-                cpf_unico = False
-        if cpf_unico:
-            idade = self.calcula_idade(dados_funcionario["data_nascimento"])
-            #Regra de Negócio: O cadastro de Pessoa exige idade mínima de 18 anos ✔
-            if idade > 18:
-                funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
-                self.__funcionarios_dao.add(funcionario)
-                self.__tela_pessoa.mostra_mensagem("\nFuncionário cadastrado com sucesso!")
+        if dados_funcionario != None:
+            for funcionario in self.__funcionarios_dao.get_all():
+                # Regra de Negócio: É permitido cadastro de apenas uma pessoa por CPF
+                if funcionario.cpf == dados_funcionario["cpf"]:
+                    cpf_unico = False
+            if cpf_unico:
+                idade = self.calcula_idade(dados_funcionario["data_nascimento"])
+                #Regra de Negócio: O cadastro de Pessoa exige idade mínima de 18 anos ✔
+                if idade > 18:
+                    funcionario = Funcionario(codigo, dados_funcionario["nome"], dados_funcionario["data_nascimento"], dados_funcionario["cpf"], dados_funcionario["numero_CTPS"], dados_funcionario["senha_funcionario"])
+                    self.__funcionarios_dao.add(funcionario)
+                    self.__tela_pessoa.mostra_mensagem("\nFuncionário cadastrado com sucesso!")
+                else:
+                    self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, funcionário é menor de idade, verifique!")
             else:
-                self.__tela_pessoa.mostra_mensagem("\nCadastro interrompido, funcionário é menor de idade, verifique!")
-        else:
-            self.__tela_pessoa.mostra_mensagem("\nO CPF já está cadastrado como funcionário, por favor verifique!")
+                self.__tela_pessoa.mostra_mensagem("\nO CPF já está cadastrado como funcionário, por favor verifique!")
         self.__tela_pessoa.close()
 
     def alterar_funcionario(self):
