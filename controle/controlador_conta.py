@@ -50,6 +50,7 @@ class ControladorConta:
     def cadastrar_nova_conta(self):
         codigo = random.randint(1000, 9999)
         dados_conta = self.__tela_conta.pega_dados_conta()
+        self.__tela_conta.close()
         cliente = self.__controlador_sistema.controlador_pessoa.pega_cliente_por_cpf(dados_conta["cpf_titular"])
         if cliente is not None:
             conta = Conta(codigo, cliente,  self.TIPOS_CONTAS[dados_conta["tipo_conta"]], dados_conta["senha_operacoes"])
@@ -59,12 +60,24 @@ class ControladorConta:
         else:
             self.__tela_conta.mostra_mensagem("\nCliente não foi encontrado!")
 
-    def valida_existencia_e_senha_conta(self):
-        codigo_conta = self.__tela_conta.seleciona_codigo()
-        self.__tela_conta.close()
+    def valida_existencia_e_senha_conta(self, retorno):
+        while True:
+            codigo_conta = self.__tela_conta.seleciona_codigo()
+            if codigo_conta == 'Cancel':
+                self.__tela_conta.close()
+                retorno()
+            try:
+                self.__tela_conta.close()
+                codigo_conta = int(codigo_conta)
+                break
+            except:
+                self.__tela_conta.mostra_mensagem("O código digitado é inválido!")
         conta = self.pega_conta_por_codigo(codigo_conta)
         if (conta is not None):
             senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+            if senha_operacoes == 'Cancel':
+                self.__tela_conta.close()
+                retorno()
             self.__tela_conta.close()
             if conta.senha_operacoes == senha_operacoes:
                 return True, conta
@@ -76,7 +89,7 @@ class ControladorConta:
             return False, None
 
     def excluir_conta(self):
-        validacao, conta = self.valida_existencia_e_senha_conta()
+        validacao, conta = self.valida_existencia_e_senha_conta(self.abre_tela)
         if validacao:
             #Regra de Negócio: Para que uma conta seja excluída, ela deve estar com um saldo de 0 reais
             if (conta.saldo == 0):
@@ -86,18 +99,21 @@ class ControladorConta:
                 self.__tela_conta.mostra_mensagem(f"\nO saldo atual da conta é de R${conta.saldo}. Para encerrar a conta, saque ou transfira todos os fundos")
 
     def listar_informacoes_conta(self):
-        validacao, conta = self.valida_existencia_e_senha_conta()
+        validacao, conta = self.valida_existencia_e_senha_conta(self.abre_tela)
         if validacao:
             dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
                              "cpf": conta.titular.cpf, "tipo": conta.tipo, "chaves": conta.chaves_PIX}
             self.__tela_conta.lista_conta(dados_conta)
+            self.__tela_conta.close()
 
 
     def cadastrar_PIX(self):
-        validacao, conta = self.valida_existencia_e_senha_conta()
+        validacao, conta = self.valida_existencia_e_senha_conta(self.abre_tela)
         if validacao:
             if conta.tipo != self.TIPOS_CONTAS[3]:
                 chave_PIX = self.__tela_conta.pega_chave_PIX()
+                if chave_PIX == 'Cancel':
+                    self.abre_tela()
                 conta.adicionar_chave_PIX(chave_PIX)
                 self.__tela_conta.close()
                 self.__tela_conta.mostra_mensagem("\nChave PIX cadastrada com sucesso!")
@@ -105,7 +121,7 @@ class ControladorConta:
                 self.__tela_conta.mostra_mensagem("\nContas do tipo salário não podem cadastar chaves PIX, pois não podem receber transferências")
 
     def realizar_operacoes(self):
-        validacao, conta = self.valida_existencia_e_senha_conta()
+        validacao, conta = self.valida_existencia_e_senha_conta(self.retorno_menu_principal)
         # Regras de Negócio: As transferências, saques e consultas a uma determinada conta só podem ocorrer mediante senha do Titular.
         if validacao:
             self.__controlador_sistema.controlador_operacao.abre_tela(conta)
@@ -115,6 +131,9 @@ class ControladorConta:
         if (conta is not None):
             if valor < 0:
                 senha_operacoes = self.__tela_conta.pega_senha_operacoes()
+                self.__tela_conta.close()
+                if senha_operacoes == 'Cancel':
+                    return False
                 if conta.senha_operacoes == senha_operacoes:
                     conta.saldo += valor
                     return True
@@ -123,6 +142,7 @@ class ControladorConta:
                     return False
             else:
                 conta.saldo += valor
+                self.__conta_dao.add(conta)
                 return True
 
     def pega_conta_por_codigo(self, codigo_conta: int):

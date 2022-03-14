@@ -49,19 +49,24 @@ class TelaConta(Tela):
                 tipo_conta = 2
             elif valor['Tipo_Conta'] == 'Salário':
                 tipo_conta = 3
-            return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_operacoes": 'senha'}
+            return {"tipo_conta": tipo_conta, "cpf_titular": cpf_titular, "senha_operacoes": valor['senha']}
         else:
             exit(0)
 
     def seleciona_codigo(self):
-        while True:
-            try:
-                codigo_conta = super().layout_input('Digite o código da conta que deseja acessar: ', 'Código', 'Pega Código Conta')
-                codigo_conta = int(codigo_conta)
-                break
-            except:
-                self.mostra_mensagem("O código digitado é inválido!")
-        return codigo_conta
+        layout = [
+            [sg.Text('Digite o código da conta que deseja acessar: ')],
+            [sg.Text('Código:'), sg.InputText('', key='codigo')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        self.__window = sg.Window('Pega Código Conta').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        elif botao == 'Cancel':
+            return botao
+        else:
+            return valor['codigo']
 
     def pega_senha_operacoes(self):
         layout = [
@@ -69,10 +74,12 @@ class TelaConta(Tela):
             [sg.Text('Senha:'), sg.InputText('', key='senha')],
             [sg.Submit(), sg.Cancel()],
         ]
-        self.__window = sg.Window('Área de Cadastros').Layout(layout)
+        self.__window = sg.Window('Área de Operações').Layout(layout)
         botao, valor = self.__window.Read()
         if botao == None:
             exit(0)
+        elif botao == 'Cancel':
+            return botao
         else:
             return valor['senha']
 
@@ -84,27 +91,29 @@ class TelaConta(Tela):
             tipo_conta = super().TIPOS_CONTAS[2]
         else:
             tipo_conta = super().TIPOS_CONTAS[3]
-        print("\nConta:", dados_conta["codigo"], "-", tipo_conta, "- Agência:", dados_conta["agencia"])
         chaves = dados_conta["chaves"]
-        if len(chaves) != 0:
-            print("Chaves PIX:", end=" ")
-            for chave in chaves:
-                print(chave, end=" ")
-            print("")
-        print(f"CPF do titular: {str(dados_conta['cpf'])[0:3]}.{str(dados_conta['cpf'])[3:6]}.{str(dados_conta['cpf'])[6:9]}-{str(dados_conta['cpf'])[9:11]}")
+        layout = [
+            [sg.Text('Lista Conta')],
+
+            [sg.Text((str(dados_conta["codigo"]) + " - Conta " + tipo_conta + "Agência " + dados_conta["agencia"]))],
+            [sg.Text("chaves PIX: " + str(chaves))],
+            [sg.Text((f"CPF do titular: {str(dados_conta['cpf'])[0:3]}.{str(dados_conta['cpf'])[3:6]}.{str(dados_conta['cpf'])[6:9]}-{str(dados_conta['cpf'])[9:11]}"))],
+            [sg.Submit("Ok")],
+        ]
+        self.__window = sg.Window('Lista Conta').Layout(layout)
+        botao, valores = self.__window.Read()
 
     def pega_chave_PIX(self):
-        super().layout_input('Digite a chave PIX que deseja cadastrar:', 'Chave PIX', 'Cadastro Chave PIX')
-
-    def layout_input(self, instrucao, valor, titulo):
         layout = [
-            [sg.Text(instrucao)],
-            [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
+            [sg.Text('Digite a chave PIX que deseja cadastrar: ')],
+            [sg.Text('Chave PIX:'), sg.InputText('', key='chave')],
             [sg.Submit(), sg.Cancel()],
         ]
-        window = sg.Window(titulo).Layout(layout)
-        botao, valor = window.Read()
+        self.__window = sg.Window('Cadastro Chave PIX').Layout(layout)
+        botao, valor = self.__window.Read()
         if botao == None:
             exit(0)
+        elif botao == 'Cancel':
+            return botao
         else:
-            return valor['valor']
+            return valor['chave']

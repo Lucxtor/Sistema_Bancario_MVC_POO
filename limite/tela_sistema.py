@@ -69,9 +69,11 @@ class TelaSistema(Tela):
             [sg.Text('Senha:'), sg.InputText('', key='senha')],
             [sg.Submit(), sg.Cancel()],
         ]
-        self.__window = sg.Window('Área de Cadastros').Layout(layout)
+        self.__window = sg.Window('Área de Funcionários').Layout(layout)
         botao, valor = self.__window.Read()
         if botao == None:
             exit(0)
+        elif botao == 'Cancel':
+            return botao
         else:
             return valor['senha']

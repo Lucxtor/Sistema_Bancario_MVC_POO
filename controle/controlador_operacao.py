@@ -1,13 +1,18 @@
 from limite.tela_operacao import TelaOperacao
 from entidade.operacao import Operacao
+from persistencia.operacao_dao import OperacaoDAO
 
 from datetime import datetime
 
 class ControladorOperacao:
     TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
     def __init__(self, controlador_sistema):
-        self.__operacoes = []
+        self.__operacao_dao = OperacaoDAO()
         self.__tela_operacao = TelaOperacao()
+        if len(self.__operacao_dao.get_all()) != 0:
+            self.__codigo_operacao = list(self.__operacao_dao.get_all())[len(self.__operacao_dao.get_all())-1].codigo
+        else:
+            self.__codigo_operacao = 0
         self.__controlador_sistema = controlador_sistema
 
     def retorno_menu(self):
@@ -17,20 +22,32 @@ class ControladorOperacao:
         saldo_saque = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
         valor = self.__tela_operacao.pega_dados_saida(saldo_saque)
         if valor is not None:
-            operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
+            self.__codigo_operacao += 1
+            operacao = Operacao(self.__codigo_operacao, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
             operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
             valida_saldo = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
             if valida_saldo:
-                self.__operacoes.append(operacao)
+                self.__operacao_dao.add(operacao)
                 self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
 
     def deposito(self, conta, opcao_escolhida):
-        valor = self.__tela_operacao.pega_dados_deposito()
-        operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
+        while True:
+            valor = self.__tela_operacao.pega_dados_deposito()
+            if valor == 'Cancel':
+                self.__tela_operacao.close()
+                self.abre_tela(conta)
+            try:
+                self.__tela_operacao.close()
+                valor = int(valor)
+                break
+            except:
+                self.__tela_operacao.mostra_mensagem("A opção digitada é inválida, por favor, tente novamente!")
+        self.__codigo_operacao += 1
+        operacao = Operacao(self.__codigo_operacao, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
         operacao.adicionar_movimentacao(conta, valor, "Entrada")
         valida_saldo = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, valor)
         if valida_saldo:
-            self.__operacoes.append(operacao)
+            self.__operacao_dao.add(operacao)
             self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
 
     def valida_transferencia(self, conta, conta_destino):
@@ -58,19 +75,22 @@ class ControladorOperacao:
 
     def transferencia(self, conta, opcao_escolhida):
         codigo_conta_destino = self.__tela_operacao.pega_codigo_conta_destino()
+        if codigo_conta_destino == 'Cancel':
+            self.abre_tela(conta)
         conta_destino = self.__controlador_sistema.controlador_conta.pega_conta_por_codigo(codigo_conta_destino)
         if conta_destino is not None:
             validacao, valor, saldo_transferencia = self.valida_transferencia(conta, conta_destino)
             if validacao:
                 #Transformar entrada e saída em variáveis
-                operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
+                self.__codigo_operacao += 1
+                operacao = Operacao(self.__codigo_operacao, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now())
                 operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
                 operacao.adicionar_movimentacao(conta_destino, valor, "Entrada")
                 if self.calcula_e_adiciona_taxa(valor, saldo_transferencia, conta, operacao):
                     valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(
                     conta_destino.codigo, valor)
                     if valida_saldo_recebido:
-                        self.__operacoes.append(operacao)
+                        self.__operacao_dao.add(operacao)
                         self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
 
         else:
@@ -93,18 +113,22 @@ class ControladorOperacao:
 
     def transferencia_PIX(self, conta, opcao_escolhida):
         chave_PIX = self.__tela_operacao.pega_chave_PIX()
+        self.__tela_operacao.close()
+        if chave_PIX == 'Cancel':
+            self.abre_tela(conta)
         conta_destino = self.__controlador_sistema.controlador_conta.pega_conta_por_chave_PIX(chave_PIX)
         if conta_destino is not None:
             validacao, valor, saldo_transferencia = self.valida_transferencia(conta, conta_destino)
             if validacao:
-                operacao = Operacao(self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), chave_PIX)
+                self.__codigo_operacao += 1
+                operacao = Operacao(self.__codigo_operacao, self.TIPOS_OPERACOES[opcao_escolhida], datetime.now(), chave_PIX)
                 operacao.adicionar_movimentacao(conta, (valor * -1), "Saída")
                 operacao.adicionar_movimentacao(conta_destino, valor, "Entrada")
                 valida_saldo_enviado = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta.codigo, (valor * (-1)))
                 if valida_saldo_enviado:
                     valida_saldo_recebido = self.__controlador_sistema.controlador_conta.atualizar_saldo(conta_destino.codigo, valor)
                     if valida_saldo_recebido:
-                        self.__operacoes.append(operacao)
+                        self.__operacao_dao.add(operacao)
                         self.__tela_operacao.mostra_mensagem("\nOperação realizada com sucesso!")
         else:
             self.__tela_operacao.mostra_mensagem("\nA chave PIX informada é inválida ou incorreta!")
@@ -112,7 +136,7 @@ class ControladorOperacao:
     def consultar_extrato(self, conta, opcao_escolhida):
         self.__tela_operacao.mostra_mensagem(f'Saldo da conta: R${conta.saldo}\n')
         self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data        Horário   Valor         Descrição  Chave PIX\n')
-        for operacao in self.__operacoes:
+        for operacao in self.__operacao_dao.get_all():
             for movimentacao in operacao.movimentacao:
                 if movimentacao.conta == conta:
                     data = operacao.data_operacao
@@ -132,14 +156,14 @@ class ControladorOperacao:
                     self.__tela_operacao.exibe_extrato(dados_operacao)
 
     def consultar_saldo(self, conta, opcao_escolhida):
-        saldo_final = self.__controlador_sistema.controlador_conta.pega_saldo_por_codigo(conta.codigo)
+        saldo_final = conta.saldo
         saldo_depositos = 0
         saldo_saques = 0
         saldo_transferencia_enviadas = 0
         saldo_transferencia_recebidas = 0
-        for operacao in self.__operacoes:
+        for operacao in self.__operacao_dao.get_all():
             for movimentacao in operacao.movimentacao:
-                if movimentacao.conta == conta:
+                if movimentacao.conta.codigo == conta.codigo:
                     if operacao.tipo == self.TIPOS_OPERACOES[1]:
                         saldo_saques += (movimentacao.valor * -1)
                     elif operacao.tipo == self.TIPOS_OPERACOES[2]:

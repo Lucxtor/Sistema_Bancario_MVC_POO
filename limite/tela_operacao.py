@@ -6,6 +6,9 @@ class TelaOperacao(Tela):
     def __init__(self):
         super().__init__()
 
+    def close(self):
+        self.__window.Close()
+
     def exibe_menu_operacoes(self, agencia_conta, codigo_conta):
         self.menu_operacoes(agencia_conta, codigo_conta)
         botao, valores = self.__window.Read()
@@ -15,7 +18,7 @@ class TelaOperacao(Tela):
     def menu_operacoes(self, agencia_conta, codigo_conta):
         layout = [
             [sg.Text('Área de Operações')],
-            [sg.Text(f'   Agência: {agencia_conta}     Conta: {codigo_conta}')],
+            [sg.Text(f'Agência: {agencia_conta}     Conta: {codigo_conta}')],
             [sg.Text('Escolha a operação que deseja efetuar')],
             [sg.Submit('Saque', key=1)],
             [sg.Submit('Depósito', key=2)],
@@ -29,26 +32,63 @@ class TelaOperacao(Tela):
 
     def pega_dados_saida(self, saldo):
         super().mostra_mensagem(f'Saldo disponível R$ {saldo:.2f}')
-        is_saldo_positivo, valor = super().valida_operacao_saida(saldo)
+        is_saldo_positivo, valor = self.valida_operacao_saida(saldo)
         if is_saldo_positivo:
             return valor
         else:
             return None
 
     def pega_dados_deposito(self):
-        return super().valida_operacao_entrada()
+        layout = [
+            [sg.Text('Digite qual o valor da operação: ')],
+            [sg.Text('Valor:'), sg.InputText('', key='valor')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        self.__window = sg.Window('Pega Valor').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        elif botao == 'Cancel':
+            return botao
+        else:
+            return valor['valor']
 
     def pega_chave_PIX(self):
-        return super().layout_input("Informe a chave PIX para transferência", "Chave PIX", "Chave PIX")
+        layout = [
+            [sg.Text('Informe a chave PIX para transferência')],
+            [sg.Text('Chave PIX:'), sg.InputText('', key='chave')],
+            [sg.Submit(), sg.Cancel()],
+        ]
+        self.__window = sg.Window('Cadastro Chave PIX').Layout(layout)
+        botao, valor = self.__window.Read()
+        if botao == None:
+            exit(0)
+        elif botao == 'Cancel':
+            return botao
+        else:
+            return valor['chave']
 
     def pega_codigo_conta_destino(self):
         while True:
             try:
-                codigo_conta_destino = int(super().layout_input("Informe o código da conta destino", "Código", "Código Conta Destino"))
+                layout = [
+                    [sg.Text('Informe o código da conta destino: ')],
+                    [sg.Text('Código:'), sg.InputText('', key='codigo')],
+                    [sg.Submit(), sg.Cancel()],
+                ]
+                self.__window = sg.Window('Pega Código Conta Destino').Layout(layout)
+                botao, valor = self.__window.Read()
+                self.__window.Close()
+                if botao == None:
+                    exit(0)
+                elif botao == 'Cancel':
+                    return botao
+                else:
+                    return int(valor['codigo'])
                 break
             except:
+                self.__window.Close()
                 super().mostra_mensagem("O código digitado é inválido!")
-        return codigo_conta_destino
 
     def exibe_saldo(self, saldo_final, saldo_depositos, saldo_saques, saldo_transferencia_enviadas, saldo_transferencia_recebidas, saldo_transferencia_entrada_vs_saida):
         layout = [
@@ -69,7 +109,7 @@ class TelaOperacao(Tela):
     def exibe_extrato(self, dados_operacao):
         valor_str = str(dados_operacao["Valor"])
         layout = [
-            [sg.Text(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')]
+            [sg.Text(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')],
             [sg.Submit('Ok')]
         ]
         self.__window = sg.Window('Exibe Extrato').Layout(layout)
@@ -78,3 +118,30 @@ class TelaOperacao(Tela):
             exit(0)
         else:
             return valor['valor']
+
+    def valida_operacao_saida(self, saldo):
+        if saldo > 0:
+            while True:
+                try:
+                    layout = [
+                        [sg.Text('Digite qual o valor da operação: ')],
+                        [sg.Text('Valor:'), sg.InputText('', key='valor')],
+                        [sg.Submit(), sg.Cancel()],
+                    ]
+                    self.__window = sg.Window('Pega Valor').Layout(layout)
+                    botao, valor = self.__window.Read()
+                    valor_operacao = float(valor['valor'])
+
+                    #Regra de Negócio: Não é permitida a transferência de valores negativos + Qualquer operação de saída apenas pode ocorrer enquanto houver saldo disponível
+                    if(valor_operacao > saldo or valor_operacao <= 0):
+                        raise ValueError #AVISO: Trocar para uma exceção de regra de negócio
+
+                except:
+                    self.mostra_mensagem("O valor digitado é invalida, por favor, tente novamente!")
+                    self.__window.Close()
+                else:
+                    self.__window.Close()
+                    return True, valor_operacao
+        else:
+            self.mostra_mensagem("Saldo insuficiente!")
+            return False, None

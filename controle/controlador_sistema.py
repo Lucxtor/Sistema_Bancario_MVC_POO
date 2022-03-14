@@ -52,6 +52,8 @@ class ControladorSistema:
     def exibe_area_funcionarios(self):
         senha_funcionario = self.__tela_sistema.pega_senha_funcionario()
         self.__tela_sistema.close()
+        if senha_funcionario == "Cancel":
+            self.retorno_menu()
         valida_senha, funcionario = self.__controlador_pessoa.valida_senha_funcionario(senha_funcionario)
         if valida_senha:
             lista_opcoes = {1: self.listar_contas, 2: self.listar_clientes,
@@ -60,6 +62,7 @@ class ControladorSistema:
             while True:
                 opcao_escolhida = self.__tela_sistema.exibe_menu_area_funcionarios(funcionario.nome)
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
+                self.__tela_sistema.close()
                 funcao_escolhida()
         else:
             self.__tela_sistema.mostra_mensagem("\nATENÇÃO: Senha incorreta!")

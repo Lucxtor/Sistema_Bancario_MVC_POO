@@ -3,7 +3,7 @@ import PySimpleGUI as sg
 
 class Tela(ABC):
     TIPOS_OPERACOES = {1: "Saque", 2: "Depósito", 3: "Transferência Ted/Doc", 4: "Transferência PIX"}
-    TIPOS_CONTAS = {1:"Corrente", 2:"Popupança", 3:"Salário" }
+    TIPOS_CONTAS = {1:"Corrente", 2:"Popupança", 3:"Salário"}
 
     def __init__(self):
         self.__window = None
@@ -26,7 +26,15 @@ class Tela(ABC):
     #Regra de negócio: O cadastro da Pessoa deve utilizar um CPF válido
     def cpf_valido(self):
         while True:
-            cpf = self.layout_input('Digite o CPF (contendo apenas números)', 'CPF', 'Pega CPF')
+            layout = [
+                [sg.Text('Digite o CPF (contendo apenas números)')],
+                [sg.Text('CPF:'), sg.InputText('', key='cpf')],
+                [sg.Submit(), sg.Cancel()],
+            ]
+            self.__window = sg.Window('Pega CPF').Layout(layout)
+            botao, valor = self.__window.Read()
+            cpf = valor['cpf']
+            self.__window.Close()
             if len(cpf) != 11:
                 self.mostra_mensagem("Número de dígitos incorreto, verifique!")
             else:
@@ -57,36 +65,6 @@ class Tela(ABC):
                     else:
                         self.mostra_mensagem("O CPF digitado é inválido!")
 
-    def valida_operacao_saida(self, saldo):
-        if saldo > 0:
-            while True:
-                try:
-                    valor_operacao = float(self.layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
-                    #Regra de Negócio: Não é permitida a transferência de valores negativos + Qualquer operação de saída apenas pode ocorrer enquanto houver saldo disponível
-                    while(valor_operacao > saldo or valor_operacao <= 0):
-                        self.mostra_mensagem("Valor inválido, tente novamente!")
-                        valor_operacao = float(self.layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
-
-                except:
-                    self.mostra_mensagem("A opção digitada é invalida, por favor, tente novamente!")
-                else:
-                    return True, valor_operacao
-        else:
-            self.mostra_mensagem("Saldo insuficiente!")
-            return False, None
-
-    def valida_operacao_entrada(self):
-        while True:
-            try:
-                valor_operacao = float(self.layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
-                while(valor_operacao <= 0):
-                    self.mostra_mensagem("Valor inválido, tente novamente!")
-                    valor_operacao = float(self.layout_input('Digite qual o valor da operação', 'Valor', 'Pega Valor'))
-            except:
-                self.mostra_mensagem("A opção digitada é inválida, por favor, tente novamente!")
-            else:
-                return valor_operacao
-
     def valida_data(self, dia, mes, ano):
         meses_31 = [1, 3, 5, 7, 8, 10, 12]
         if ano >= 1 and mes <= 12 and mes >= 1 and dia <= 31 and dia >= 1:
@@ -106,16 +84,3 @@ class Tela(ABC):
 
     def mostra_mensagem(self, msg):
         sg.Popup(msg)
-
-    def layout_input(self, instrucao, valor, titulo):
-        layout = [
-            [sg.Text(instrucao)],
-            [sg.Text(f'{valor}:'), sg.InputText('', key='valor')],
-            [sg.Submit(), sg.Cancel()],
-        ]
-        window = sg.Window(titulo).Layout(layout)
-        botao, valor = window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return valor['valor']
