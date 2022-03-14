@@ -84,8 +84,10 @@ class TelaPessoa(Tela):
         self.__window = sg.Window('Cadastro de Clientes').Layout(layout)
 
         botao, valor = self.__window.Read()
-
-        return {"nome": valor['nome'], "senha_cadastro": valor['senha_cadastro']}
+        if botao == "Cancel":
+            self.menu_gerencia('cliente')
+        else:
+            return {"nome": valor['nome'], "senha_cadastro": valor['senha_cadastro']}
 
     def pega_dados_funcionario(self):
         cpf = super().cpf_valido()
