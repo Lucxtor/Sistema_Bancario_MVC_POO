@@ -59,6 +59,10 @@ class TelaPessoa(Tela):
                 self.__window = sg.Window('Cadastro de Clientes').Layout(layout)
 
                 botao, valor = self.__window.Read()
+
+                if botao == None or botao == 'Cancel':
+                    return None
+
                 data_nascimento_dia = int(valor['dia'])
                 data_nascimento_mes = int(valor['mes'])
                 data_nascimento_ano = int(valor['ano'])
@@ -108,6 +112,8 @@ class TelaPessoa(Tela):
 
                 botao, valor = self.__window.Read()
 
+                if botao == None or botao == 'Cancel':
+                    return None
                 # Regra de Negócio: O número CTPS deve ter 8 dígitos
                 if len(valor['numero_CTPS']) != 8:
                     sg.Popup("Número de documento inválido, deve conter 8 dígitos!")
