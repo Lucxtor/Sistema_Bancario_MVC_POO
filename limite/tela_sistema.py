@@ -19,10 +19,10 @@ class TelaSistema(Tela):
             [sg.Text('Sistema Bancário')],
 
             [sg.Text('Escolha a área que deseja acessar')],
-            [sg.Submit('Área de Cadastros', key=1)],
-            [sg.Submit('Área de Operações', key=2)],
-            [sg.Submit('Área de Funcionários', key=3)],
-            [sg.Cancel('Finalizar Sistema', key=0)],
+            [sg.Submit('Área de Cadastros', key=1, size=(26, 1))],
+            [sg.Submit('Área de Operações', key=2, size=(26, 1))],
+            [sg.Submit('Área de Funcionários', key=3, size=(26, 1))],
+            [sg.Cancel('Finalizar Sistema', key=0, size=(26, 1))],
         ]
         self.__window = sg.Window('Sistema Bancário').Layout(layout)
 
@@ -36,9 +36,9 @@ class TelaSistema(Tela):
             [sg.Text('Área de Cadastros')],
 
             [sg.Text('Escolha o cadastro que deseja gerenciar')],
-            [sg.Submit('Gerenciar Pessoas', key=1)],
-            [sg.Submit('Gerenciar Contas', key=2)],
-            [sg.Cancel('Retornar para o menu anterior', key=0)],
+            [sg.Submit('Gerenciar Pessoas', key=1, size=(30, 1))],
+            [sg.Submit('Gerenciar Contas', key=2, size=(30, 1))],
+            [sg.Cancel('Retornar para o menu anterior', key=0, size=(30, 1))],
         ]
         self.__window = sg.Window('Área de Cadastros').Layout(layout)
 
