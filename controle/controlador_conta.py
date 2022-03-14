@@ -172,9 +172,4 @@ class ControladorConta:
             self.valida_e_executa_funcao(opcao_escolhida, lista_opcoes)
 
     def listar_contas(self):
-        self.__tela_conta.mostra_mensagem("\nLista de Contas")
-        for conta in self.__conta_dao.get_all():
-            dados_conta = {"codigo": conta.codigo, "agencia": conta.agencia,
-                           "cpf": conta.titular.cpf, "tipo": conta.tipo, "chaves": conta.chaves_PIX}
-            self.__tela_conta.lista_conta(dados_conta)
-
+        self.__tela_conta.lista_contas(self.__conta_dao.get_all())

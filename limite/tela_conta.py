@@ -103,6 +103,20 @@ class TelaConta(Tela):
         self.__window = sg.Window('Lista Conta').Layout(layout)
         botao, valores = self.__window.Read()
 
+    def lista_contas(self, contas):
+        cabecalho = [[sg.Text('Código', size=(8, 1))] + [sg.Text('Tipo Conta', size=(15, 1))] +
+                     [sg.Text('Agência', size=(8, 1))] + [sg.Text('CPF titular', size=(15, 1))] +
+                     [sg.Text('Chaves PIX', size=(15, 1))]]
+        linhas = []
+        for conta in contas:
+            linhas += [[sg.Text(conta.codigo, size=(8, 1))] + [sg.Text(conta.tipo, size=(15, 1))] +
+                       [sg.Text(conta.agencia, size=(8, 1))] + [sg.Text(conta.titular.cpf, size=(15, 1))] +
+                       [sg.Text(str(conta.chaves_PIX))]]
+        layout = cabecalho + linhas
+
+        self.__window = sg.Window('Lista de Contas').Layout(layout)
+        botao, valor = self.__window.Read()
+
     def pega_chave_PIX(self):
         layout = [
             [sg.Text('Digite a chave PIX que deseja cadastrar: ')],
