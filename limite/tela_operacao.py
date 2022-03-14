@@ -1,5 +1,7 @@
 from limite.tela import Tela
 import PySimpleGUI as sg
+from excecao.valorNegativoException import ValorNegativoException
+from excecao.saldoIndisponivelException import SaldoIndisponivelException
 
 class TelaOperacao(Tela):
 
@@ -106,18 +108,20 @@ class TelaOperacao(Tela):
         self.__window.Close()
         return botao
 
-    def exibe_extrato(self, dados_operacao):
-        valor_str = str(dados_operacao["Valor"])
-        layout = [
-            [sg.Text(f'{dados_operacao["Codigo"]}  {dados_operacao["Tipo"].ljust(21)}  {dados_operacao["Data"]}  R${valor_str.ljust(10)}  {dados_operacao["Desc"].ljust(10)} {dados_operacao["Chave"]}')],
-            [sg.Submit('Ok')]
-        ]
+    def exibe_extrato(self, saldo, operacoes):
+        linhaSaldo = [[sg.Text("O saldo em conta é R$ " + str(saldo), size=(50, 2))]]
+        cabecalho = [[sg.Text('Código', size=(8, 1))] + [sg.Text('Tipo da Operação', size=(21, 1))] + [
+            sg.Text('Data da Operação', size=(20, 1))] + [sg.Text('Valor ( R$ )', size=(10, 1))] + [sg.Text('Descrição', size=(10, 1))] + [sg.Text('Chave', size=(10, 1))]]
+        linhas = []
+        for operacao in operacoes:
+            linhas += [[sg.Text(operacao['Codigo'], size=(8, 1))] + [sg.Text(operacao['Tipo'], size=(21, 1))] + [
+                sg.Text(operacao['Data'], size=(20, 1))] + [sg.Text("R$ " + str(operacao['Valor']), size=(10, 1))] + [
+                sg.Text(operacao['Desc'], size=(10, 1))] + [sg.Text(operacao['Chave'], size=(10, 1))]]
+
+        layout = linhaSaldo + cabecalho + linhas
+
         self.__window = sg.Window('Exibe Extrato').Layout(layout)
         botao, valor = self.__window.Read()
-        if botao == None:
-            exit(0)
-        else:
-            return valor['valor']
 
     def valida_operacao_saida(self, saldo):
         if saldo > 0:
@@ -133,12 +137,23 @@ class TelaOperacao(Tela):
                     valor_operacao = float(valor['valor'])
 
                     #Regra de Negócio: Não é permitida a transferência de valores negativos + Qualquer operação de saída apenas pode ocorrer enquanto houver saldo disponível
-                    if(valor_operacao > saldo or valor_operacao <= 0):
-                        raise ValueError #AVISO: Trocar para uma exceção de regra de negócio
+                    if valor_operacao > saldo:
+                        raise SaldoIndisponivelException
+                    if valor_operacao <= 0:
+                        raise ValorNegativoException
+
+                except SaldoIndisponivelException:
+                    self.mostra_mensagem("O valor digitado é superior ao saldo para transferencias, por favor, tente novamente!")
+                    self.__window.Close()
+
+                except ValorNegativoException:
+                    self.mostra_mensagem("O valor digitado é negativo, por favor, tente novamente!")
+                    self.__window.Close()
 
                 except:
-                    self.mostra_mensagem("O valor digitado é invalida, por favor, tente novamente!")
+                    self.mostra_mensagem("O valor digitado é invalido, por favor, tente novamente!")
                     self.__window.Close()
+
                 else:
                     self.__window.Close()
                     return True, valor_operacao

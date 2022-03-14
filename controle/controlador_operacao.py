@@ -134,11 +134,10 @@ class ControladorOperacao:
             self.__tela_operacao.mostra_mensagem("\nA chave PIX informada é inválida ou incorreta!")
 
     def consultar_extrato(self, conta, opcao_escolhida):
-        self.__tela_operacao.mostra_mensagem(f'Saldo da conta: R${conta.saldo}\n')
-        self.__tela_operacao.mostra_mensagem(f'Conta Operação               Data        Horário   Valor         Descrição  Chave PIX\n')
+        operacoes = []
         for operacao in self.__operacao_dao.get_all():
             for movimentacao in operacao.movimentacao:
-                if movimentacao.conta == conta:
+                if movimentacao.conta.codigo == conta.codigo:
                     data = operacao.data_operacao
                     tipo_operacao = operacao.tipo
                     if tipo_operacao == self.TIPOS_OPERACOES[1]:
@@ -153,7 +152,8 @@ class ControladorOperacao:
                             dados_operacao = {"Codigo": movimentacao.conta.codigo, "Tipo": tipo_operacao,
                                               "Data": data.strftime("%b %d %Y %H:%M:%S"), "Valor": (movimentacao.valor * -1),
                                               "Chave": operacao.chave, "Desc": movimentacao.descricao}
-                    self.__tela_operacao.exibe_extrato(dados_operacao)
+                    operacoes.append(dados_operacao)
+        self.__tela_operacao.exibe_extrato(conta.saldo, operacoes)
 
     def consultar_saldo(self, conta, opcao_escolhida):
         saldo_final = conta.saldo
